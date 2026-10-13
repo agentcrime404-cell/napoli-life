@@ -16,6 +16,7 @@ function icon(name){if(name==='phone'){const svg=document.createElementNS('http:
 export function installHUD(ctx){
  const {net,api,renderer,livingUI,modal,button,el,notify,profile,social,openMap,toggleVoice,getUser,getMe,calls,setControls}=ctx;
  const $=id=>document.getElementById(id);
+ const needsBadge=document.createElement('span');needsBadge.id='hud-needs';needsBadge.title='Fame e sete';needsBadge.setAttribute('aria-label','Fame e sete');needsBadge.textContent='🍽️ 100 · 💧 100';document.querySelector('.identity .id-main')?.append(needsBadge);
  for(const [id,name] of Object.entries({profile:'profile',friends:'friends','chat-toggle':'chat',voice:'mic',interact:'hand',run:'run',inventory:'bag',phone:'phone','chat-mic':'mic','chat-send':'send',emote:'smile'})){
   const b=$(id);for(const child of [...b.childNodes])if(child.nodeType===3)b.removeChild(child);b.prepend(icon(name));
  }
@@ -26,6 +27,15 @@ export function installHUD(ctx){
  $('map-plus').onclick=()=>renderer.miniZoom=Math.min(3,(renderer.miniZoom||1)+.5);
  $('map-minus').onclick=()=>renderer.miniZoom=Math.max(1,(renderer.miniZoom||1)-.5);
  $('wallet-plus').onclick=()=>{const box=modal('Monete, gemme e livello');box.append(el('p','Cammina per guadagnare esperienza: 100 metri = un livello. Dopo 500 XP ricevi il titolo community VIP, gratuito e senza vantaggi competitivi.'),el('p','Ogni giorno, dopo 100 metri, puoi riscuotere 30 monete e 1 gemma. Nessuna valuta è convertibile in denaro.'),button('Riscuoti premio',async()=>{await api('/reward','POST',{});await refresh();notify('Premio ricevuto: 30 monete e 1 gemma');}),button('Apri inventario / negozio',()=>livingUI.inventory()));};
+ // Gli stessi pulsanti mantengono i propri eventi: cambia la disposizione, non le funzioni.
+ if(window.HUMANA_3D){
+  const socialBar=document.querySelector('.social'),actions=document.querySelector('.actions');
+  for(const id of ['voice','friends','settings']){const b=$(id);b.setAttribute('aria-label',b.getAttribute('aria-label')||b.textContent.trim());socialBar.append(b);}
+  actions.prepend($('chat-toggle'));
+  $('chat-toggle').setAttribute('aria-label','Apri o chiudi chat');
+  for(const [id,label] of [['profile','Profilo'],['friends','Amici'],['voice','Microfono'],['interact','Interagisci'],['inventory','Inventario'],['phone','Telefono']])$(id).setAttribute('aria-label',label);
+  $('minimap').width=240;$('minimap').height=240;
+ }
  const g=(a,b)=>`linear-gradient(160deg,${a},${b})`;
  const phone=installPhone({calls,api,notify,setControls,apps:[
   window.HUMANA_3D?{id:'npl',name:'NPL Bank',icon:'wallet',bg:g('#19c3a6','#0b5d7a')}:{name:'Banca',icon:'wallet',bg:g('#ffd86b','#f5a623'),run:()=>ctx.city.atm(true)},{id:'youtube',name:'YouTube',icon:'play',bg:g('#ff5a50','#e62117')},{name:'Lavoro',icon:'work',bg:g('#fbbf24','#d97706'),run:()=>ctx.jobs.open()},{name:'Mobilità',icon:'car',bg:g('#5eead4','#0d9488'),run:()=>ctx.city.garage()},{name:'Eventi',icon:'calendar',bg:g('#ff8a80','#ff3b30'),run:()=>livingUI.events()},
@@ -43,7 +53,7 @@ export function installHUD(ctx){
  function paintFace(img){const c=$('hud-avatar').getContext('2d');if(!img.complete||!img.naturalWidth)return;c.clearRect(0,0,96,96);c.save();c.beginPath();c.arc(48,48,45,0,7);c.clip();c.fillStyle='#287995';c.fillRect(0,0,96,96);c.drawImage(img,img.naturalWidth*.12,img.naturalHeight*.03,img.naturalWidth*.76,img.naturalHeight*.6,0,2,96,96);c.restore();}
  document.addEventListener('humana:wallet',e=>{if(e.detail?.balance!==undefined&&e.detail.gems!==undefined)paint(e.detail);else api('/state').then(paint).catch(()=>{});});
  let busy=false;async function refresh(){if(busy||!getUser()||net.ws?.readyState!==1)return;busy=true;try{const [wallet,people]=await Promise.all([api('/state'),api('/social')]);paint(wallet);renderer.friendIds=new Set(people.friends.filter(f=>f.status==='accepted').map(f=>f.user.id));const n=people.friends.filter(f=>f.status==='pending'&&f.receiver===net.id).length;$('friends').dataset.badge=n||'';}catch(e){notify(e.message);}finally{busy=false;}}
- const timer=setInterval(refresh,10000);addEventListener('pagehide',()=>clearInterval(timer),{once:true});
+ const timer=setInterval(refresh,10000);setInterval(()=>api('/needs').then(n=>{needsBadge.textContent=`🍽️ ${n.hunger} · 💧 ${n.thirst}`;needsBadge.classList.toggle('low',Math.min(n.hunger,n.thirst)<25);}).catch(()=>{}),10000);addEventListener('pagehide',()=>clearInterval(timer),{once:true});
  net.addEventListener('state',e=>{const hour=Math.floor((e.detail.now%2400000)/2400000*24),minute=Math.floor((e.detail.now%100000)/100000*60);$('world-clock').textContent=(hour>=6&&hour<18?'☀ ':'☾ ')+String(hour).padStart(2,'0')+':'+String(minute).padStart(2,'0');const me=getMe();if(me)$('interact').classList.toggle('available',!!document.getElementById('nearby-hint').textContent);});
  net.addEventListener('notification',()=>{$('phone').classList.add('unread');});$('phone').addEventListener('click',()=>$('phone').classList.remove('unread'));
  $('chat-input').addEventListener('focus',()=>document.body.classList.add('typing'));$('chat-input').addEventListener('blur',()=>document.body.classList.remove('typing'));

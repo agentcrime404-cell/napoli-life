@@ -22,3 +22,6 @@ SEGRETI-PRIVATI.md
 *.pem
 
 tools/jdk-*/
+
+# pagine temporanee di diagnosi della grafica (solo in locale, mai pubblicate)
+client/assets/_*.html

@@ -27,22 +27,22 @@ const APARTMENT_COLORS=['#f2f0ec','#e6e9ec','#efe6da','#dfe5e1'];
 function modernize(b){const m=MODERN[b.id]||{style:'apartment',color:APARTMENT_COLORS[b.sprite%4],height:150+(b.artHeight-380)*.6+(b.w>5.5?30:0)};
  const fw=5,fh=MODERN[b.id]?4:4.5;return {id:b.id,name:b.name,enterable:b.enterable,proc:true,...m,fx:Math.round((b.cx-fw/2)*2)/2,fy:Math.round((b.cy-fh/2)*2)/2,fw,fh};}
 export const BUILDINGS=[
- {id:'bar',name:'Bar Lungomare',cx:19.5,cy:11,sprite:0,artWidth:490,artHeight:590},
- {id:'pizzeria',name:'Pizzeria del Golfo',cx:11.5,cy:28,sprite:1,artWidth:440,artHeight:430},
+ {id:'bar',name:'Bar Vele',cx:19.5,cy:11,sprite:0,artWidth:490,artHeight:590},
+ {id:'pizzeria',name:'Pizzeria Vesuviana',cx:11.5,cy:28,sprite:1,artWidth:440,artHeight:430},
  {id:'shop',name:'Bottega Marina',cx:34.5,cy:23,sprite:2,artWidth:500,artHeight:480},
- {id:'club',name:'Luna · Discoteca',cx:29.5,cy:10,sprite:3,artWidth:490,artHeight:650}
+ {id:'club',name:'Orbita · Discoteca',cx:29.5,cy:10,sprite:3,artWidth:490,artHeight:650}
 ].map(b=>({...b,cx:stretch(b.cx),cy:stretch(b.cy)})).concat(RESIDENCES).map(withBase).map(modernize).map(withBase).concat([
  // Edifici disegnati dal codice: footprint allineato alla griglia, base = rettangolo esatto.
- {id:'bank',name:'Banca del Golfo',proc:true,style:'bank',fx:104,fy:56,fw:8,fh:5.5,height:150,interior:'bank'},
- {id:'burger',name:'Burger Drive',proc:true,style:'burger',fx:138,fy:56.2,fw:6,fh:4.6,height:95,interior:'burger'},
+ {id:'bank',name:'Banca Partenopea',proc:true,style:'bank',fx:104,fy:56,fw:8,fh:5.5,height:150,interior:'bank'},
+ {id:'burger',name:'Molo Burger',proc:true,style:'burger',fx:138,fy:56.2,fw:6,fh:4.6,height:95,interior:'burger'},
  {id:'osteria',name:'Osteria del Borgo',proc:true,style:'restaurant',color:'#e8b25c',fx:116,fy:67,fw:8,fh:7.5,height:140},
  {id:'vesuvio',name:'Ristorante Vesuvio',proc:true,style:'restaurant',color:'#d9775a',fx:137,fy:67,fw:8,fh:7.5,height:130},
- {id:'mall',name:'Centro Commerciale Golfo',proc:true,style:'mall',fx:103,fy:88,fw:24,fh:21,height:230,interior:'mall'},
+ {id:'mall',name:'Galleria Levante',proc:true,style:'mall',fx:103,fy:88,fw:24,fh:21,height:230,interior:'mall'},
  {id:'trattoria',name:'Trattoria del Borgo',proc:true,style:'restaurant',color:'#f0d48a',fx:38,fy:95,fw:8,fh:7,height:130},
  {id:'panorama',name:'Ristorante Panorama',proc:true,style:'restaurant',color:'#9fc7d8',fx:84,fy:95,fw:8,fh:7,height:150},
  ...VILLA_LOTS.map((l,i)=>({id:`villa${i}`,name:'Villa',proc:true,style:'villa',color:['#f7f6f2','#ecebe7','#f3efe6','#e9eef0'][i%4],fx:l.x+1,fy:l.y+5,fw:6,fh:5,height:105,interior:'villa',private:true})),
  {id:'fashion',name:'Moda Market',proc:true,style:'fashion',fx:136,fy:26,fw:12,fh:14,height:170,interior:'fashion'},
- {id:'barber',name:'Barbiere Totò',proc:true,style:'barber',fx:119,fy:56,fw:6,fh:5,height:120,interior:'barber'},
+ {id:'barber',name:'Barbiere Raffa',proc:true,style:'barber',fx:119,fy:56,fw:6,fh:5,height:120,interior:'barber'},
  {id:'casino',name:'Sala Slot Vesuvio',proc:true,style:'casino',fx:103.5,fy:67,fw:9,fh:8.5,height:150,interior:'casino'}
 ].map(withBase));
 // Il bordo marino segue x+y=SHORE: un fronte continuo visibile dalla piazza.
@@ -108,6 +108,10 @@ for(let t=-26,i=0;t<=28;t+=6.5,i++){if(STAIRS.some(s=>Math.abs(s-t)<2.6))continu
  // Alberi oltre il muro di confine (decorativi, fuori dall'area percorribile).
 
 }
+// Ogni mezzo parcheggiato, compresi quelli aggiunti dall'editor o disegnati
+// come arredo stradale, deve avere lo stesso identificativo usato dal catalogo.
+const PROP_VEHICLE={car:'auto',scooter:'scooter',moto:'scooter',bike:'bici',bici:'bici',bicycle:'bici',monopattino:'monopattino'};
+export const parkedVehicleOf=o=>o?.v||PROP_VEHICLE[o?.kind]||null;
 export const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
 function inside(poly,x,y){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[i],b=poly[j];if((a.y>y)!==(b.y>y)&&x<(b.x-a.x)*(y-a.y)/(b.y-a.y)+a.x)c=!c;}return c;}
 function edgeDistance(poly,x,y){let d=Infinity;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const a=poly[j],b=poly[i],dx=b.x-a.x,dy=b.y-a.y,t=Math.max(0,Math.min(1,((x-a.x)*dx+(y-a.y)*dy)/(dx*dx+dy*dy)));d=Math.min(d,Math.hypot(x-a.x-t*dx,y-a.y-t*dy));}return d;}
@@ -153,9 +157,12 @@ export function canStand(room,x,y,r=.25){if(room==='mergellina')return napoliSta
 export function step(p,input,dt){
  if(p.seat)return;
  let x=Number(input.x)||0,y=Number(input.y)||0;const length=Math.max(1,Math.hypot(x,y));x/=length;y/=length;
- let v=(p.room==='lungomare'||p.room==='mergellina')&&VEHICLE[p.vehicle],speed=v?2.5*v.speed:input.run?4.4:2.5;
+ let v=(p.room==='lungomare'||p.room==='mergellina')&&VEHICLE[p.vehicle],speed=v?7.5*v.speed:input.run?4.4:2.5;
+ // Hunger and thirst are gameplay effects, not just HUD values. Vehicles keep
+ // their handling; walking and running slow down gradually when needs are low.
+ if(!v&&p.needs){const lowest=Math.min(p.needs.hunger,p.needs.thirst);speed*=lowest<20?.58:lowest<40?.78:1;}
  if(v){const b=v.base||v.id;if(p.fuel!==undefined&&p.fuel<=0&&(b==='auto'||b==='cabrio'||b==='furgone'||b==='scooter'))speed=0; // benzina finita (solo 3D: nel 2D p.fuel non esiste)
-  return drive(p,x,y,speed,dt,v,input.rev===true);}
+  return drive(p,x,y,speed,dt,v,input.rev===true,input);}
 
  const dx=x*speed*dt,dy=y*speed*dt;const oldX=p.x,oldY=p.y;
  if(canStand(p.room,p.x+dx,p.y+dy)){p.x+=dx;p.y+=dy;}
@@ -168,9 +175,28 @@ export function step(p,input,dt){
 // Guida dei veicoli: il mezzo ha una sua direzione (heading) che ruota gradualmente verso quella richiesta,
 // accelera e frena con dolcezza e si muove sempre lungo la propria direzione (mai di traverso).
 // Sulle strade dritte la direzione si allinea all'asse della strada e il mezzo scivola al centro della corsia di destra.
-function drive(p,x,y,speed,dt,v,rev){
- const want=Math.hypot(x,y)>.05;if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=p.vel||0;
- const vb=v.base||v.id,two=vb==='bici'||vb==='monopattino'||vb==='scooter',rate=(two?3.6:2.6)*dt;
+function drive(p,x,y,speed,dt,v,rev,controls){
+ // Il client può inviare un intervallo più grande quando la scheda mobile
+ // viene sospesa o quando cambia orientamento. Limitarlo evita scatti enormi,
+ // attraversamento degli ostacoli e perdita della sincronizzazione multiplayer.
+ dt=Math.max(0,Math.min(Number(dt)||0,.12));
+ if(!Number.isFinite(speed)||speed<0)speed=0;
+ const vb=v.base||v.id,two=vb==='bici'||vb==='monopattino'||vb==='scooter';if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=Number.isFinite(p.vel)?p.vel:0;
+ if(controls?.drive===true){
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,Number(n)||0)),steer=clamp(controls.steer,-1,1),turn=Math.sign(steer)*Math.pow(Math.abs(steer),1.18),throttle=clamp(controls.throttle,0,1),brake=clamp(controls.brake,0,1),reverseAllowed=['auto','cabrio','furgone','scooter'].includes(vb);
+  p.steer=steer;
+  const target=brake>.01?(reverseAllowed&&Math.abs(p.vel)<.35?-Math.min(two?1.2:2.2,Math.max(two?.65:1.1,speed*.18))*brake:0):speed*throttle;
+  const response=brake>.01?11:throttle>.01?(two?6.4:4.4):3.6;
+  p.vel+=Math.max(-response*dt,Math.min(response*dt,target-p.vel));
+  const ratio=Math.max(0,Math.min(1,Math.abs(p.vel)/Math.max(1,speed))),yawRate=two?1.9-1.45*ratio:1.55-1.05*ratio;
+  if(Math.abs(p.vel)>.12)p.heading+=turn*yawRate*dt*(p.vel<0?-1:1);
+  p.heading=Math.atan2(Math.sin(p.heading),Math.cos(p.heading));p.direction=p.heading;
+  if(p.room==='lungomare'&&throttle>.01&&Math.abs(steer)<.08)laneAssist(p,dt);p.direction=p.heading;
+  const dx=Math.cos(p.heading)*p.vel*dt,dy=Math.sin(p.heading)*p.vel*dt,oldX=p.x,oldY=p.y;
+  if(canStand(p.room,p.x+dx,p.y+dy)){p.x+=dx;p.y+=dy;}else p.vel=0;
+  p.moving=Math.hypot(p.x-oldX,p.y-oldY)>.001;p.running=false;return;
+ }
+ p.steer=0;const want=Math.hypot(x,y)>.05;const rate=(two?3.6:2.6)*dt;
  if(rev&&want){if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=(p.vel||0)+Math.max(-9*dt,Math.min(5*dt,-speed*.35-(p.vel||0)));const bx=Math.cos(p.heading)*p.vel*dt,by=Math.sin(p.heading)*p.vel*dt,ox=p.x,oy=p.y;if(canStand(p.room,p.x+bx,p.y+by)){p.x+=bx;p.y+=by;}else p.vel=0;p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.running=false;p.direction=p.heading;return;}
  let diff=0;if(want){const d=Math.atan2(y,x);diff=Math.abs(Math.atan2(Math.sin(d-p.heading),Math.cos(d-p.heading)));p.heading=turnToward(p.heading,d,rate);}
  const target=want?speed*(1-.55*Math.min(1,diff/(Math.PI*.6))):0;p.vel+=Math.max(-9*dt,Math.min((two?7:5)*dt,target-p.vel));
@@ -205,7 +231,7 @@ export const EDIT_PROPS={
  fountain:{name:'Fontana',cat:'Arredo urbano',icon:'⛲',r:1.2},statue:{name:'Statua',cat:'Arredo urbano',icon:'🗿',r:.8},atm:{name:'Bancomat',cat:'Arredo urbano',icon:'🏧',r:.4},vending:{name:'Distributore di bevande',cat:'Arredo urbano',icon:'🥤',r:.5},
  palm:{name:'Palma',cat:'Natura',icon:'🌴',r:.4},tree:{name:'Albero',cat:'Natura',icon:'🌳',r:.5},plant:{name:'Pianta in vaso',cat:'Natura',icon:'🪴',r:.35},
  umbrella:{name:'Ombrellone',cat:'Spiaggia e dehors',icon:'⛱️',r:.4},lounger:{name:'Lettino',cat:'Spiaggia e dehors',icon:'🏖️',r:.5},table:{name:'Tavolino',cat:'Spiaggia e dehors',icon:'🍽️',r:.55},seat:{name:'Sedia',cat:'Spiaggia e dehors',icon:'💺',r:.2},
- scooter:{name:'Vespa parcheggiata',cat:'Veicoli',icon:'🛵',r:.5},
+ scooter:{name:'Scooter parcheggiato',cat:'Veicoli',icon:'🛵',r:.5},
  'parked-auto':{name:'Auto parcheggiata',cat:'Veicoli',icon:'🚗',r:1.1,kind:'parked',v:'auto'},'parked-furgone':{name:'Furgone parcheggiato',cat:'Veicoli',icon:'🚐',r:1.2,kind:'parked',v:'furgone'},
  'parked-cabrio':{name:'Cabrio parcheggiata',cat:'Veicoli',icon:'🏎️',r:1.1,kind:'parked',v:'cabrio'},'parked-scooter':{name:'Scooter 125',cat:'Veicoli',icon:'🛵',r:.5,kind:'parked',v:'scooter'},
  'parked-bici':{name:'Bici',cat:'Veicoli',icon:'🚲',r:.4,kind:'parked',v:'bici'},'parked-monopattino':{name:'Monopattino',cat:'Veicoli',icon:'🛴',r:.3,kind:'parked',v:'monopattino'}};

@@ -1,0 +1,25 @@
+{
+  "name": "Napoli Life · test mobile live",
+  "startedAt": "2026-10-12T20:49:37.260Z",
+  "baseURL": "http://127.0.0.1:3081",
+  "mode": "live-game",
+  "checks": [
+    {
+      "test": "dashboard e telemetria della partita reale",
+      "pass": true
+    },
+    {
+      "test": "apertura della partita reale",
+      "pass": false,
+      "details": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#guest')\u001b[22m\n"
+    }
+  ],
+  "profiles": [],
+  "knownLimits": [],
+  "qaAccount": "Ciro_2144",
+  "fatalError": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#guest')\u001b[22m\n\n    at run (C:\\Users\\joker\\Desktop\\Napoli life\\scripts\\qa-mobile-live.mjs:102:38)\n    at async file:///C:/Users/joker/Desktop/Napoli%20life/scripts/qa-mobile-live.mjs:182:16",
+  "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-live-auth-check\\videos\\page@a872333889499aa238748ecf2c84041e.webm",
+  "finishedAt": "2026-10-12T20:52:32.450Z",
+  "passed": 1,
+  "failed": 1
+}

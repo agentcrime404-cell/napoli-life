@@ -1,0 +1,3269 @@
+{
+  "generatedAt": "2026-10-12T16:16:30.305Z",
+  "note": "Audit inventory; not a legal opinion.",
+  "files": [
+    {
+      "path": "client/assets/avatar.png",
+      "bytes": 1037686,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/buildings.png",
+      "bytes": 2747814,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/cruscotto.webp",
+      "bytes": 112090,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/banca.png",
+      "bytes": 984995,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/bar.png",
+      "bytes": 832897,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/barbiere.png",
+      "bytes": 1061964,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/basi.json",
+      "bytes": 7177,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/edifici/burger.png",
+      "bytes": 912095,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/centro-commerciale.png",
+      "bytes": 1098912,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/discoteca.png",
+      "bytes": 989095,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-banca.png",
+      "bytes": 2246604,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-bar.png",
+      "bytes": 2441423,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-barbiere.png",
+      "bytes": 2431419,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-burger.png",
+      "bytes": 2277777,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-centro-commerciale.png",
+      "bytes": 2454337,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-discoteca.png",
+      "bytes": 2376641,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-moda.png",
+      "bytes": 2334446,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-negozio.png",
+      "bytes": 2182191,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-pizzeria.png",
+      "bytes": 2561012,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-ristorante.png",
+      "bytes": 2396774,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-slot.png",
+      "bytes": 2533477,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/int-villa.png",
+      "bytes": 2331312,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/moda.png",
+      "bytes": 1160563,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/negozio.png",
+      "bytes": 1004183,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/osteria.png",
+      "bytes": 1266345,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/palazzo-1.png",
+      "bytes": 1084994,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/palazzo-2.png",
+      "bytes": 1159232,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/palazzo-3.png",
+      "bytes": 1101831,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/palazzo-4.png",
+      "bytes": 1099507,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/panorama.png",
+      "bytes": 1137986,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/pizzeria.png",
+      "bytes": 939552,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/slot.png",
+      "bytes": 1095827,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/trattoria.png",
+      "bytes": 1321184,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/vesuvio.png",
+      "bytes": 1188597,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/villa-1.png",
+      "bytes": 765016,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/villa-2.png",
+      "bytes": 846016,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/villa-3.png",
+      "bytes": 1102871,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/edifici/villa-4.png",
+      "bytes": 986843,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/gulf.png",
+      "bytes": 2612570,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/icon-192.png",
+      "bytes": 6147,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/icon-512.png",
+      "bytes": 17163,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/living.png",
+      "bytes": 1534677,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/albero-natale.png",
+      "bytes": 963731,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/albero-viale.png",
+      "bytes": 1028156,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/altalena.png",
+      "bytes": 603280,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/anatre.png",
+      "bytes": 819052,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/asino.png",
+      "bytes": 688662,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/autoscontri.png",
+      "bytes": 1353596,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/bandiera.png",
+      "bytes": 276205,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/barca.png",
+      "bytes": 978286,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/bosco.png",
+      "bytes": 1192067,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cabina-telefonica.png",
+      "bytes": 683285,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/calcinculo.png",
+      "bytes": 1439171,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cancello.png",
+      "bytes": 813534,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cane.png",
+      "bytes": 773590,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cartello-stop.png",
+      "bytes": 229846,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cassetta-posta.png",
+      "bytes": 448645,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cavallo.png",
+      "bytes": 716579,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cervo.png",
+      "bytes": 617606,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cespuglio.png",
+      "bytes": 1327771,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cestino.png",
+      "bytes": 439286,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/chiosco.png",
+      "bytes": 1175834,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/cipresso.png",
+      "bytes": 379434,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/collina-vigneto.png",
+      "bytes": 1163397,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/collina.png",
+      "bytes": 1079311,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/dissuasori.png",
+      "bytes": 339148,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/edicola.png",
+      "bytes": 1212330,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/fioriera.png",
+      "bytes": 1159052,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/fontanella.png",
+      "bytes": 540827,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/food-truck.png",
+      "bytes": 1292484,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/gabbiani.png",
+      "bytes": 451850,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/galline.png",
+      "bytes": 905073,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/gatto.png",
+      "bytes": 821735,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/gazebo.png",
+      "bytes": 889896,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/giostra-cavalli.png",
+      "bytes": 1501107,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/idrante.png",
+      "bytes": 608027,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/idromassaggio.png",
+      "bytes": 1173457,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/lampione-moderno.png",
+      "bytes": 92753,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/limone.png",
+      "bytes": 970172,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/maiale.png",
+      "bytes": 893570,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/mercatino.png",
+      "bytes": 1376663,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/montagna-verde.png",
+      "bytes": 1204768,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/montagna.png",
+      "bytes": 1172200,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/montagne-russe.png",
+      "bytes": 1136186,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/mucca.png",
+      "bytes": 615549,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/muretto.png",
+      "bytes": 656834,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/muro-mattoni.png",
+      "bytes": 1109830,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/obelisco.png",
+      "bytes": 382331,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/palco.png",
+      "bytes": 1438156,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/panchina-legno.png",
+      "bytes": 859207,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/panchina-marmo.png",
+      "bytes": 772901,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/panchina-moderna.png",
+      "bytes": 803806,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/parcometro.png",
+      "bytes": 281746,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/pecora.png",
+      "bytes": 831072,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/pedalo.png",
+      "bytes": 844370,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/pensilina-bus.png",
+      "bytes": 801846,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/pino.png",
+      "bytes": 922200,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/piscina-grande.png",
+      "bytes": 948546,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/piscina-rotonda.png",
+      "bytes": 1218891,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/ponte.png",
+      "bytes": 886196,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/rastrelliera.png",
+      "bytes": 1011565,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/recinzione-ferro.png",
+      "bytes": 570431,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/recinzione-moderna.png",
+      "bytes": 472953,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/ringhiera-vetro.png",
+      "bytes": 415204,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/rocce.png",
+      "bytes": 1002548,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/roccia.png",
+      "bytes": 1182011,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/ruota-panoramica.png",
+      "bytes": 1098291,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/scivolo-acqua.png",
+      "bytes": 1105941,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/scivolo-parco.png",
+      "bytes": 832646,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/semaforo.png",
+      "bytes": 218450,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/siepe.png",
+      "bytes": 883693,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/staccionata-bianca.png",
+      "bytes": 509094,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/staccionata-legno.png",
+      "bytes": 594741,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/statua-angelo.png",
+      "bytes": 529084,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/statua-cavallo.png",
+      "bytes": 906935,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/statua-moderna.png",
+      "bytes": 517891,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/statua-pulcinella.png",
+      "bytes": 607960,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/statua-sirena.png",
+      "bytes": 991305,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/tazze.png",
+      "bytes": 1447517,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/tubo-acqua.png",
+      "bytes": 1053356,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/ulivo.png",
+      "bytes": 1430120,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/oggetti/vulcano.png",
+      "bytes": 1053022,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/paving.png",
+      "bytes": 3156800,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/1.webp",
+      "bytes": 19506,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/2.webp",
+      "bytes": 21548,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/3.webp",
+      "bytes": 15508,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/4.webp",
+      "bytes": 16382,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/5.webp",
+      "bytes": 19196,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/6.webp",
+      "bytes": 23500,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/7.webp",
+      "bytes": 18246,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/personaggi/8.webp",
+      "bytes": 18918,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/props.png",
+      "bytes": 1830968,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/residences.png",
+      "bytes": 2467710,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/sfondo-login-v2.webp",
+      "bytes": 323534,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/sfondo-napoli-life.webp",
+      "bytes": 161418,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/sfondo-pregame-v4.webp",
+      "bytes": 391460,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/social-poses.png",
+      "bytes": 1275751,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/auto-back.png",
+      "bytes": 339999,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/auto-front.png",
+      "bytes": 390166,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/bici-back.png",
+      "bytes": 424806,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/bici-front.png",
+      "bytes": 516007,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/cabrio-back.png",
+      "bytes": 333779,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/cabrio-front.png",
+      "bytes": 375071,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/furgone-back.png",
+      "bytes": 273591,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/furgone-front.png",
+      "bytes": 332514,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/monopattino-back.png",
+      "bytes": 207435,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/monopattino-front.png",
+      "bytes": 237047,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/scooter-back.png",
+      "bytes": 397836,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/veicoli/scooter-front.png",
+      "bytes": 442612,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/bar_chair_round_01/bar_chair_round_01.bin",
+      "bytes": 1017152,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/bar_chair_round_01/bar_chair_round_01.gltf",
+      "bytes": 2833,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/bar_chair_round_01/textures/bar_chair_round_01_arm_1k.jpg",
+      "bytes": 751149,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/bar_chair_round_01/textures/bar_chair_round_01_diff_1k.jpg",
+      "bytes": 599006,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/bar_chair_round_01/textures/bar_chair_round_01_nor_gl_1k.jpg",
+      "bytes": 442193,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/CoffeeCart_01.bin",
+      "bytes": 865700,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/CoffeeCart_01.gltf",
+      "bytes": 6637,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_cart_arm_1k.jpg",
+      "bytes": 159358,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_cart_diff_1k.jpg",
+      "bytes": 118396,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_cart_nor_gl_1k.jpg",
+      "bytes": 171213,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_props_arm_1k.jpg",
+      "bytes": 198809,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_props_diff_1k.jpg",
+      "bytes": 158758,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/CoffeeCart_01/textures/CoffeeCart_01_props_nor_gl_1k.jpg",
+      "bytes": 156633,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/outdoor_table_chair_set_01.bin",
+      "bytes": 456856,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/outdoor_table_chair_set_01.gltf",
+      "bytes": 6826,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_chair_arm_1k.jpg",
+      "bytes": 179920,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_chair_diff_1k.jpg",
+      "bytes": 155372,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_chair_nor_gl_1k.jpg",
+      "bytes": 46772,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_table_arm_1k.jpg",
+      "bytes": 201642,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_table_diff_1k.jpg",
+      "bytes": 151897,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/outdoor_table_chair_set_01/textures/outdoor_table_chair_set_01_table_nor_gl_1k.jpg",
+      "bytes": 43095,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/round_wooden_table_01/round_wooden_table_01.bin",
+      "bytes": 242688,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/round_wooden_table_01/round_wooden_table_01.gltf",
+      "bytes": 4089,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/round_wooden_table_01/textures/round_wooden_table_01_arm_1k.jpg",
+      "bytes": 134854,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/round_wooden_table_01/textures/round_wooden_table_01_diff_1k.jpg",
+      "bytes": 117911,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/bars/round_wooden_table_01/textures/round_wooden_table_01_nor_gl_1k.jpg",
+      "bytes": 50832,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/castello/alto.jpg",
+      "bytes": 57149,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/castello/basso.jpg",
+      "bytes": 49257,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/castello/molo.jpg",
+      "bytes": 19124,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/castello/tufo.jpg",
+      "bytes": 23665,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/caracciolo-0.jpg",
+      "bytes": 165444,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/caracciolo-1.jpg",
+      "bytes": 166369,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/caracciolo-2.jpg",
+      "bytes": 167350,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/caracciolo-3.jpg",
+      "bytes": 167171,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/partenope-0.jpg",
+      "bytes": 77755,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/partenope-1.jpg",
+      "bytes": 78329,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/partenope-2.jpg",
+      "bytes": 78040,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/facciate/partenope-3.jpg",
+      "bytes": 78359,
+      "status": "runtime",
+      "license": "public-domain source documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-a.glb",
+      "bytes": 108936,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-b.glb",
+      "bytes": 106408,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-c.glb",
+      "bytes": 102788,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-d.glb",
+      "bytes": 95160,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-e.glb",
+      "bytes": 128208,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-f.glb",
+      "bytes": 148952,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-g.glb",
+      "bytes": 166356,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-h.glb",
+      "bytes": 127384,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-i.glb",
+      "bytes": 209728,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-j.glb",
+      "bytes": 440652,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-k.glb",
+      "bytes": 246976,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-l.glb",
+      "bytes": 290516,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-m.glb",
+      "bytes": 301004,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-n.glb",
+      "bytes": 341232,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-skyscraper-a.glb",
+      "bytes": 111336,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-skyscraper-b.glb",
+      "bytes": 138480,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-skyscraper-c.glb",
+      "bytes": 149524,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-skyscraper-d.glb",
+      "bytes": 167148,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/building-skyscraper-e.glb",
+      "bytes": 101880,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-awning-wide.glb",
+      "bytes": 5544,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-awning.glb",
+      "bytes": 5528,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-overhang-wide.glb",
+      "bytes": 6716,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-overhang.glb",
+      "bytes": 6704,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-parasol-a.glb",
+      "bytes": 10320,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/detail-parasol-b.glb",
+      "bytes": 12120,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-a.glb",
+      "bytes": 14340,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-b.glb",
+      "bytes": 16336,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-c.glb",
+      "bytes": 12284,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-d.glb",
+      "bytes": 8716,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-e.glb",
+      "bytes": 8240,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-f.glb",
+      "bytes": 6932,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-g.glb",
+      "bytes": 16320,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-h.glb",
+      "bytes": 26812,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-i.glb",
+      "bytes": 11768,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-j.glb",
+      "bytes": 16404,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-k.glb",
+      "bytes": 7556,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-l.glb",
+      "bytes": 12128,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-m.glb",
+      "bytes": 15112,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-n.glb",
+      "bytes": 5904,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-wide-a.glb",
+      "bytes": 12736,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/low-detail-building-wide-b.glb",
+      "bytes": 18736,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-commercial/Textures/colormap.png",
+      "bytes": 11002,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-a.glb",
+      "bytes": 98604,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-b.glb",
+      "bytes": 146720,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-c.glb",
+      "bytes": 99592,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-d.glb",
+      "bytes": 147368,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-e.glb",
+      "bytes": 145512,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-f.glb",
+      "bytes": 138536,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-g.glb",
+      "bytes": 93596,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-h.glb",
+      "bytes": 65364,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-i.glb",
+      "bytes": 69772,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-j.glb",
+      "bytes": 99512,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-k.glb",
+      "bytes": 89152,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-l.glb",
+      "bytes": 109232,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-m.glb",
+      "bytes": 96996,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-n.glb",
+      "bytes": 139464,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-o.glb",
+      "bytes": 114424,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-p.glb",
+      "bytes": 109260,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-q.glb",
+      "bytes": 98632,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-r.glb",
+      "bytes": 88544,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-s.glb",
+      "bytes": 103172,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-t.glb",
+      "bytes": 167512,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/building-type-u.glb",
+      "bytes": 117912,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/driveway-long.glb",
+      "bytes": 2952,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/driveway-short.glb",
+      "bytes": 2956,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-1x2.glb",
+      "bytes": 16492,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-1x3.glb",
+      "bytes": 21032,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-1x4.glb",
+      "bytes": 25544,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-2x2.glb",
+      "bytes": 23872,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-2x3.glb",
+      "bytes": 28412,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-3x2.glb",
+      "bytes": 31280,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-3x3.glb",
+      "bytes": 35820,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence-low.glb",
+      "bytes": 18552,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/fence.glb",
+      "bytes": 9672,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/path-long.glb",
+      "bytes": 2940,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/path-short.glb",
+      "bytes": 2944,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/path-stones-long.glb",
+      "bytes": 6664,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/path-stones-messy.glb",
+      "bytes": 5476,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/path-stones-short.glb",
+      "bytes": 4284,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/planter.glb",
+      "bytes": 20368,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/Textures/colormap.png",
+      "bytes": 11784,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/tree-large.glb",
+      "bytes": 5812,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/buildings/kenney-city-suburban/tree-small.glb",
+      "bytes": 5812,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-cane-blind.glb",
+      "bytes": 6168,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-cane-low-vision.glb",
+      "bytes": 6568,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-cane.glb",
+      "bytes": 8524,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-crutch.glb",
+      "bytes": 16008,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-defibrillator-green.glb",
+      "bytes": 10296,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-defibrillator-red.glb",
+      "bytes": 10288,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-glasses.glb",
+      "bytes": 6764,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-mask.glb",
+      "bytes": 15820,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid-sunglasses.glb",
+      "bytes": 6324,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/aid_hearing.glb",
+      "bytes": 7212,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-a.glb",
+      "bytes": 273448,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-b.glb",
+      "bytes": 252140,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-c.glb",
+      "bytes": 252040,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-d.glb",
+      "bytes": 258760,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-e.glb",
+      "bytes": 248012,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-female-f.glb",
+      "bytes": 259488,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-a.glb",
+      "bytes": 246916,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-b.glb",
+      "bytes": 247332,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-c.glb",
+      "bytes": 263104,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-d.glb",
+      "bytes": 245184,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-e.glb",
+      "bytes": 242704,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/character-male-f.glb",
+      "bytes": 249388,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/Textures/colormap.png",
+      "bytes": 8706,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/wheelchair-deluxe.glb",
+      "bytes": 60588,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/wheelchair-power-deluxe.glb",
+      "bytes": 90512,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/wheelchair-power.glb",
+      "bytes": 76664,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/kenney-mini-characters/wheelchair.glb",
+      "bytes": 56680,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/anim-f.glb",
+      "bytes": 1897988,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/anim-m.glb",
+      "bytes": 1564892,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_01.glb",
+      "bytes": 2635812,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_03.glb",
+      "bytes": 3243368,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_05.glb",
+      "bytes": 2736332,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_08.glb",
+      "bytes": 2554828,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_14.glb",
+      "bytes": 2849276,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Female_Adult_17.glb",
+      "bytes": 2635684,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/LICENSE-Rocketbox.txt",
+      "bytes": 1066,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_02.glb",
+      "bytes": 2289280,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_06.glb",
+      "bytes": 2483904,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_11.glb",
+      "bytes": 1678728,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_13.glb",
+      "bytes": 1731468,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_16.glb",
+      "bytes": 2022188,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/Male_Adult_17.glb",
+      "bytes": 1766888,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_01.webp",
+      "bytes": 5258,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_03.webp",
+      "bytes": 5060,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_05.webp",
+      "bytes": 7524,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_08.webp",
+      "bytes": 5150,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_14.webp",
+      "bytes": 6456,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Female_Adult_17.webp",
+      "bytes": 4984,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_02.webp",
+      "bytes": 5742,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_06.webp",
+      "bytes": 5508,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_11.webp",
+      "bytes": 4408,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_13.webp",
+      "bytes": 5700,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_16.webp",
+      "bytes": 5156,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/ritratti/Male_Adult_17.webp",
+      "bytes": 5706,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/persone-vere/_colori.json",
+      "bytes": 1128,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Beach.gltf",
+      "bytes": 3166143,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Casual.gltf",
+      "bytes": 3058092,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Hoodie.gltf",
+      "bytes": 3104001,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Punk.gltf",
+      "bytes": 3003321,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Suit.gltf",
+      "bytes": 3315342,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-men/Worker.gltf",
+      "bytes": 2967023,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Adventurer.gltf",
+      "bytes": 3205962,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Casual.gltf",
+      "bytes": 3131788,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Formal.gltf",
+      "bytes": 3082953,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Punk.gltf",
+      "bytes": 3063914,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Suit.gltf",
+      "bytes": 3142156,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/characters/quaternius-women/Worker.gltf",
+      "bytes": 3095030,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/LICENZE.md",
+      "bytes": 10559,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/lighting/sky/kloofendal-mobile.jpg",
+      "bytes": 48452,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/lighting/sky/kloofendal_48d_partly_cloudy_puresky.hdr",
+      "bytes": 5451493,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/map/mergellina.json",
+      "bytes": 1672097,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/restaurants/wine_barrel_01/textures/wine_barrel_01_arm_1k.jpg",
+      "bytes": 172531,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/restaurants/wine_barrel_01/textures/wine_barrel_01_diff_1k.jpg",
+      "bytes": 195980,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/restaurants/wine_barrel_01/textures/wine_barrel_01_nor_gl_1k.jpg",
+      "bytes": 163587,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/restaurants/wine_barrel_01/wine_barrel_01.bin",
+      "bytes": 385912,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/restaurants/wine_barrel_01/wine_barrel_01.gltf",
+      "bytes": 6673,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-furniture/bench.glb",
+      "bytes": 10756,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/construction-fence.glb",
+      "bytes": 14856,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/dumpster.glb",
+      "bytes": 24456,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/light-curved.glb",
+      "bytes": 9492,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/light-square.glb",
+      "bytes": 6996,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/Textures/colormap.png",
+      "bytes": 11428,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/kenney-roads/traffic-light.glb",
+      "bytes": 20344,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/modular_street_seating.bin",
+      "bytes": 977224,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/modular_street_seating.gltf",
+      "bytes": 29629,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_armrests_arm_1k.jpg",
+      "bytes": 622643,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_armrests_diff_1k.jpg",
+      "bytes": 612860,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_armrests_nor_gl_1k.jpg",
+      "bytes": 324073,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_connectors_arm_1k.jpg",
+      "bytes": 591917,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_connectors_diff_1k.jpg",
+      "bytes": 212785,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_connectors_nor_gl_1k.jpg",
+      "bytes": 398150,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_supports_arm_1k.jpg",
+      "bytes": 734095,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_supports_diff_1k.jpg",
+      "bytes": 721380,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_supports_nor_gl_1k.jpg",
+      "bytes": 477177,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_timber_arm_1k.jpg",
+      "bytes": 762344,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_timber_diff_1k.jpg",
+      "bytes": 596026,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/modular_street_seating/textures/modular_street_seating_timber_nor_gl_1k.jpg",
+      "bytes": 557669,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_01/street_lamp_01.bin",
+      "bytes": 748908,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_01/street_lamp_01.gltf",
+      "bytes": 6419,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_01/textures/street_lamp_01_arm_1k.jpg",
+      "bytes": 664324,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_01/textures/street_lamp_01_diff_1k.jpg",
+      "bytes": 307889,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_01/textures/street_lamp_01_nor_gl_1k.jpg",
+      "bytes": 438623,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_02/street_lamp_02.bin",
+      "bytes": 530092,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_02/street_lamp_02.gltf",
+      "bytes": 6429,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_02/textures/street_lamp_02_arm_1k.jpg",
+      "bytes": 657710,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_02/textures/street_lamp_02_diff_1k.jpg",
+      "bytes": 303714,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/street_furniture/street_lamp_02/textures/street_lamp_02_nor_gl_1k.jpg",
+      "bytes": 372301,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/bark_brown_02/diff.jpg",
+      "bytes": 87006,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/clay_roof_tiles_02/diff.jpg",
+      "bytes": 68659,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/clean_asphalt/diff.jpg",
+      "bytes": 697630,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/clean_asphalt/nor.jpg",
+      "bytes": 776360,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/clean_asphalt/rough.jpg",
+      "bytes": 641634,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/coast_sand_01/diff.jpg",
+      "bytes": 960614,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/coast_sand_01/nor.jpg",
+      "bytes": 1146826,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/coast_sand_01/rough.jpg",
+      "bytes": 383892,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/granite_tile/diff.jpg",
+      "bytes": 676597,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/granite_tile/nor.jpg",
+      "bytes": 592362,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/granite_tile/rough.jpg",
+      "bytes": 674755,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/large_sandstone_blocks/diff.jpg",
+      "bytes": 750937,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/large_sandstone_blocks/nor.jpg",
+      "bytes": 714290,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/large_sandstone_blocks/rough.jpg",
+      "bytes": 574293,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/leafy_grass/diff.jpg",
+      "bytes": 87215,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/marble_tiles/diff.jpg",
+      "bytes": 957660,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/marble_tiles/nor.jpg",
+      "bytes": 601407,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/marble_tiles/rough.jpg",
+      "bytes": 759292,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/painted_plaster_wall/diff.jpg",
+      "bytes": 686726,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/painted_plaster_wall/nor.jpg",
+      "bytes": 900461,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/painted_plaster_wall/rough.jpg",
+      "bytes": 354762,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/palm_tree_bark/diff.jpg",
+      "bytes": 95825,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/pavement_02/diff.jpg",
+      "bytes": 1178347,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/pavement_02/nor.jpg",
+      "bytes": 738746,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/pavement_02/rough.jpg",
+      "bytes": 574371,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/red_plaster_weathered/diff.jpg",
+      "bytes": 710340,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/red_plaster_weathered/nor.jpg",
+      "bytes": 581562,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/red_plaster_weathered/rough.jpg",
+      "bytes": 597697,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/square_cobblestone/diff.jpg",
+      "bytes": 998595,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/square_cobblestone/nor.jpg",
+      "bytes": 929523,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/square_cobblestone/rough.jpg",
+      "bytes": 515559,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/volcanic_rock_tiles/diff.jpg",
+      "bytes": 777492,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/volcanic_rock_tiles/nor.jpg",
+      "bytes": 1069838,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/volcanic_rock_tiles/rough.jpg",
+      "bytes": 158928,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/white_plaster_rough_01/diff.jpg",
+      "bytes": 628421,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/white_plaster_rough_01/nor.jpg",
+      "bytes": 384190,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/white_plaster_rough_01/rough.jpg",
+      "bytes": 594450,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/worn_plaster_wall/diff.jpg",
+      "bytes": 750361,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/worn_plaster_wall/nor.jpg",
+      "bytes": 680164,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/worn_plaster_wall/rough.jpg",
+      "bytes": 242497,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/yellow_plaster/diff.jpg",
+      "bytes": 376961,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/yellow_plaster/nor.jpg",
+      "bytes": 522586,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/polyhaven/yellow_plaster/rough.jpg",
+      "bytes": 243457,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/textures/threejs/waternormals.jpg",
+      "bytes": 78,
+      "status": "runtime",
+      "license": "MIT documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-basso-front.png",
+      "bytes": 1437742,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-basso-side.png",
+      "bytes": 1444202,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-basso-top.png",
+      "bytes": 199331,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-basso.json",
+      "bytes": 245,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-strada-front.png",
+      "bytes": 729101,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-strada-side.png",
+      "bytes": 1000329,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-strada-top.png",
+      "bytes": 165174,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-strada.json",
+      "bytes": 246,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-tondo-front.png",
+      "bytes": 1184057,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-tondo-side.png",
+      "bytes": 1151363,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-tondo-top.png",
+      "bytes": 338264,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/albero-tondo.json",
+      "bytes": 245,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/cipresso-front.png",
+      "bytes": 274501,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/cipresso-side.png",
+      "bytes": 267688,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/cipresso-top.png",
+      "bytes": 319833,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/cipresso.json",
+      "bytes": 237,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-front.png",
+      "bytes": 520362,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-nana-front.png",
+      "bytes": 633409,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-nana-side.png",
+      "bytes": 646587,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-nana-top.png",
+      "bytes": 353805,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-nana.json",
+      "bytes": 240,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-side.png",
+      "bytes": 475040,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma-top.png",
+      "bytes": 259913,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/palma.json",
+      "bytes": 235,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/pino-front.png",
+      "bytes": 517983,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/pino-side.png",
+      "bytes": 514910,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/pino-top.png",
+      "bytes": 337803,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/sagome/pino.json",
+      "bytes": 237,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/alberi-veri/_fonti_e_licenze.json",
+      "bytes": 15640,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/flower_redA.glb",
+      "bytes": 7104,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/flower_yellowA.glb",
+      "bytes": 7120,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/plant_bush.glb",
+      "bytes": 4396,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/rock_largeA.glb",
+      "bytes": 7552,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/rock_largeC.glb",
+      "bytes": 7004,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_cone.glb",
+      "bytes": 10924,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_default.glb",
+      "bytes": 9428,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_oak.glb",
+      "bytes": 14644,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_palm.glb",
+      "bytes": 13616,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_palmBend.glb",
+      "bytes": 14820,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/kenney-nature/tree_palmTall.glb",
+      "bytes": 15592,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_box_01/planter_box_01.bin",
+      "bytes": 250580,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_box_01/planter_box_01.gltf",
+      "bytes": 2787,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_box_01/textures/planter_box_01_arm_1k.jpg",
+      "bytes": 745610,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_box_01/textures/planter_box_01_diff_1k.jpg",
+      "bytes": 633117,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_box_01/textures/planter_box_01_nor_gl_1k.jpg",
+      "bytes": 707323,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_pot_clay/planter_pot_clay.bin",
+      "bytes": 78096,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_pot_clay/planter_pot_clay.gltf",
+      "bytes": 2813,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_pot_clay/textures/planter_pot_clay_arm_1k.jpg",
+      "bytes": 613484,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_pot_clay/textures/planter_pot_clay_diff_1k.jpg",
+      "bytes": 596319,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/planter_pot_clay/textures/planter_pot_clay_nor_gl_1k.jpg",
+      "bytes": 506446,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/potted_plant_01.bin",
+      "bytes": 5345188,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/potted_plant_01.gltf",
+      "bytes": 7969,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_leaves_diff_1k.jpg",
+      "bytes": 124730,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_leaves_nor_gl_1k.jpg",
+      "bytes": 177105,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_leaves_rough_1k.jpg",
+      "bytes": 91706,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_pot_diff_1k.jpg",
+      "bytes": 204900,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_pot_nor_gl_1k.jpg",
+      "bytes": 200349,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_01/textures/potted_plant_01_pot_rough_1k.jpg",
+      "bytes": 173192,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/potted_plant_02.bin",
+      "bytes": 1852244,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/potted_plant_02.gltf",
+      "bytes": 6653,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_leaves_diff_1k.jpg",
+      "bytes": 167700,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_leaves_nor_gl_1k.jpg",
+      "bytes": 127232,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_leaves_rough_1k.jpg",
+      "bytes": 102396,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_pot_diff_1k.jpg",
+      "bytes": 155244,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_pot_nor_gl_1k.jpg",
+      "bytes": 108343,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vegetation/potted_plant_02/textures/potted_plant_02_pot_rough_1k.jpg",
+      "bytes": 114886,
+      "status": "review-required",
+      "license": "see LICENZE.md"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/auto-vere/sportscar.glb",
+      "bytes": 356896,
+      "status": "excluded-runtime",
+      "license": "unverified-external"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/ambulance.glb",
+      "bytes": 233612,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/box.glb",
+      "bytes": 14108,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/cone-flat.glb",
+      "bytes": 16712,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/cone.glb",
+      "bytes": 16696,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-bolt.glb",
+      "bytes": 4768,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-bumper.glb",
+      "bytes": 11312,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-door-window.glb",
+      "bytes": 7576,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-door.glb",
+      "bytes": 7052,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-drivetrain-axle.glb",
+      "bytes": 18740,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-drivetrain.glb",
+      "bytes": 36896,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-nut.glb",
+      "bytes": 4744,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-plate-a.glb",
+      "bytes": 5048,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-plate-b.glb",
+      "bytes": 5380,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-plate-small-a.glb",
+      "bytes": 4224,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-plate-small-b.glb",
+      "bytes": 5392,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-spoiler-a.glb",
+      "bytes": 5616,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-spoiler-b.glb",
+      "bytes": 8596,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/debris-tire.glb",
+      "bytes": 26548,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/delivery-flat.glb",
+      "bytes": 214456,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/delivery.glb",
+      "bytes": 240264,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/firetruck.glb",
+      "bytes": 232448,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/garbage-truck.glb",
+      "bytes": 268224,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+      "bytes": 197804,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/kart-oobi.glb",
+      "bytes": 251516,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/kart-oodi.glb",
+      "bytes": 230984,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/kart-ooli.glb",
+      "bytes": 233380,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/kart-oopi.glb",
+      "bytes": 236196,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/kart-oozi.glb",
+      "bytes": 240776,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/police.glb",
+      "bytes": 195336,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/race-future.glb",
+      "bytes": 173164,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/race.glb",
+      "bytes": 167272,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/sedan-sports.glb",
+      "bytes": 177676,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/sedan.glb",
+      "bytes": 172216,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/suv-luxury.glb",
+      "bytes": 175908,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/suv.glb",
+      "bytes": 207572,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/taxi.glb",
+      "bytes": 175608,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/Textures/colormap.png",
+      "bytes": 12371,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/tractor-police.glb",
+      "bytes": 196308,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/tractor-shovel.glb",
+      "bytes": 222584,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/tractor.glb",
+      "bytes": 175960,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/truck-flat.glb",
+      "bytes": 207424,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/truck.glb",
+      "bytes": 176360,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/van.glb",
+      "bytes": 175664,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-dark.glb",
+      "bytes": 29116,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-default.glb",
+      "bytes": 26820,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-racing.glb",
+      "bytes": 29120,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-tractor-back.glb",
+      "bytes": 36628,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-tractor-dark-back.glb",
+      "bytes": 36644,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-tractor-dark-front.glb",
+      "bytes": 29156,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-tractor-front.glb",
+      "bytes": 29140,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/kenney-car-kit/wheel-truck.glb",
+      "bytes": 34304,
+      "status": "runtime",
+      "license": "CC0 documented"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/moto-vere/africa.glb",
+      "bytes": 5227400,
+      "status": "excluded-runtime",
+      "license": "unverified-external"
+    },
+    {
+      "path": "client/assets/world/napoli/vehicles/moto-vere/LEGGIMI.txt",
+      "bytes": 764,
+      "status": "excluded-runtime",
+      "license": "unverified-external"
+    },
+    {
+      "path": "client/assets/_reference-review.html",
+      "bytes": 786,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    },
+    {
+      "path": "client/assets/_renderer-audit.html",
+      "bytes": 5537,
+      "status": "runtime",
+      "license": "project/generated or documented"
+    }
+  ],
+  "summary": {
+    "review-required": 252,
+    "runtime": 288,
+    "excluded-runtime": 3
+  }
+}

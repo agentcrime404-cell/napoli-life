@@ -1,0 +1,2301 @@
+{
+  "startedAt": "2026-10-12T20:16:06.216Z",
+  "mode": "local-game",
+  "profiles": [
+    {
+      "name": "android-portrait",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "hud-android-portrait.png",
+      "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa\\videos\\page@ef285c6f3378b453c2dd447f029c4279.webm",
+      "appLoaded": false,
+      "boxes": [
+        {
+          "name": "▣ Inventario",
+          "x": 12,
+          "y": 662,
+          "right": 52,
+          "bottom": 702,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "▯ Telefono",
+          "x": 59,
+          "y": 662,
+          "right": 99,
+          "bottom": 702,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "Profilo",
+          "x": 10,
+          "y": 10,
+          "right": 46.959999084472656,
+          "bottom": 46.959999084472656,
+          "w": 36.959999084472656,
+          "h": 36.959999084472656
+        },
+        {
+          "name": "Amici",
+          "x": 288.21875,
+          "y": 10,
+          "right": 325.9624938964844,
+          "bottom": 47.743751525878906,
+          "w": 37.743743896484375,
+          "h": 37.743751525878906
+        },
+        {
+          "name": "Impostazioni",
+          "x": 337.109375,
+          "y": 10,
+          "right": 374.8531188964844,
+          "bottom": 47.743751525878906,
+          "w": 37.743743896484375,
+          "h": 37.743751525878906
+        },
+        {
+          "name": "Cambia telecamera",
+          "x": 302,
+          "y": 165.5,
+          "right": 338,
+          "bottom": 201.5,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Grafica",
+          "x": 344,
+          "y": 165.5,
+          "right": 380,
+          "bottom": 201.5,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Apri mappa del quartiere",
+          "x": 282.5,
+          "y": 62,
+          "right": 380,
+          "bottom": 159.5,
+          "w": 97.5,
+          "h": 97.5
+        },
+        {
+          "name": "Riduci minimappa",
+          "x": 282.5,
+          "y": 132.5,
+          "right": 305.5,
+          "bottom": 155.5,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Ingrandisci minimappa",
+          "x": 282.5,
+          "y": 132.5,
+          "right": 305.5,
+          "bottom": 155.5,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Clacson",
+          "x": 148.25,
+          "y": 107,
+          "right": 182.25,
+          "bottom": 141,
+          "w": 34,
+          "h": 34
+        },
+        {
+          "name": "Scendi dal veicolo",
+          "x": 187.25,
+          "y": 107,
+          "right": 229.25,
+          "bottom": 141,
+          "w": 42,
+          "h": 34
+        },
+        {
+          "name": "Chiudi veicolo",
+          "x": 334,
+          "y": 205,
+          "right": 372,
+          "bottom": 243,
+          "w": 38,
+          "h": 38
+        },
+        {
+          "name": "Sterzo orizzontale",
+          "x": 14,
+          "y": 756,
+          "right": 162.1875,
+          "bottom": 828,
+          "w": 148.1875,
+          "h": 72
+        },
+        {
+          "name": "Acceleratore",
+          "x": 243,
+          "y": 759,
+          "right": 303,
+          "bottom": 823,
+          "w": 60,
+          "h": 64
+        },
+        {
+          "name": "Freno; retromarcia solo da fermo",
+          "x": 311,
+          "y": 759,
+          "right": 371,
+          "bottom": 823,
+          "w": 60,
+          "h": 64
+        }
+      ],
+      "overlaps": [
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Riduci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Riduci minimappa",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        }
+      ],
+      "intentionalOverlaps": [],
+      "joystickVisible": false,
+      "driveVisible": true,
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 662,
+            "right": 52,
+            "bottom": 702,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 662,
+            "right": 99,
+            "bottom": 702,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 46.959999084472656,
+            "bottom": 46.959999084472656,
+            "w": 36.959999084472656,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Amici",
+            "x": 288.21875,
+            "y": 10,
+            "right": 325.9624938964844,
+            "bottom": 47.743751525878906,
+            "w": 37.743743896484375,
+            "h": 37.743751525878906
+          },
+          {
+            "name": "Impostazioni",
+            "x": 337.109375,
+            "y": 10,
+            "right": 374.8531188964844,
+            "bottom": 47.743751525878906,
+            "w": 37.743743896484375,
+            "h": 37.743751525878906
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 302,
+            "y": 165.5,
+            "right": 338,
+            "bottom": 201.5,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 344,
+            "y": 165.5,
+            "right": 380,
+            "bottom": 201.5,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 282.5,
+            "y": 62,
+            "right": 380,
+            "bottom": 159.5,
+            "w": 97.5,
+            "h": 97.5
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 282.5,
+            "y": 132.5,
+            "right": 305.5,
+            "bottom": 155.5,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 282.5,
+            "y": 132.5,
+            "right": 305.5,
+            "bottom": 155.5,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 148.25,
+            "y": 107,
+            "right": 182.25,
+            "bottom": 141,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 187.25,
+            "y": 107,
+            "right": 229.25,
+            "bottom": 141,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 334,
+            "y": 205,
+            "right": 372,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 756,
+            "right": 162.1875,
+            "bottom": 828,
+            "w": 148.1875,
+            "h": 72
+          },
+          {
+            "name": "Acceleratore",
+            "x": 243,
+            "y": 759,
+            "right": 303,
+            "bottom": 823,
+            "w": 60,
+            "h": 64
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 311,
+            "y": 759,
+            "right": 371,
+            "bottom": 823,
+            "w": 60,
+            "h": 64
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "android-compact",
+      "viewport": {
+        "width": 320,
+        "height": 640
+      },
+      "screenshot": "hud-android-compact.png",
+      "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa\\videos\\page@a359c8b6dc87dd6c21b880f9eeecd8e9.webm",
+      "appLoaded": false,
+      "boxes": [
+        {
+          "name": "▣ Inventario",
+          "x": 12,
+          "y": 458,
+          "right": 52,
+          "bottom": 498,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "▯ Telefono",
+          "x": 59,
+          "y": 458,
+          "right": 99,
+          "bottom": 498,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "Profilo",
+          "x": 10,
+          "y": 10,
+          "right": 46.959999084472656,
+          "bottom": 46.959999084472656,
+          "w": 36.959999084472656,
+          "h": 36.959999084472656
+        },
+        {
+          "name": "Amici",
+          "x": 220,
+          "y": 10,
+          "right": 256.9599914550781,
+          "bottom": 46.959999084472656,
+          "w": 36.959991455078125,
+          "h": 36.959999084472656
+        },
+        {
+          "name": "Impostazioni",
+          "x": 268,
+          "y": 10,
+          "right": 304.9599914550781,
+          "bottom": 46.959999084472656,
+          "w": 36.959991455078125,
+          "h": 36.959999084472656
+        },
+        {
+          "name": "Cambia telecamera",
+          "x": 232,
+          "y": 160,
+          "right": 268,
+          "bottom": 196,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Grafica",
+          "x": 274,
+          "y": 160,
+          "right": 310,
+          "bottom": 196,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Apri mappa del quartiere",
+          "x": 218,
+          "y": 62,
+          "right": 310,
+          "bottom": 154,
+          "w": 92,
+          "h": 92
+        },
+        {
+          "name": "Riduci minimappa",
+          "x": 218,
+          "y": 127,
+          "right": 241,
+          "bottom": 150,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Ingrandisci minimappa",
+          "x": 218,
+          "y": 127,
+          "right": 241,
+          "bottom": 150,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Clacson",
+          "x": 130.453125,
+          "y": 106,
+          "right": 164.453125,
+          "bottom": 140,
+          "w": 34,
+          "h": 34
+        },
+        {
+          "name": "Scendi dal veicolo",
+          "x": 167.453125,
+          "y": 106,
+          "right": 209.453125,
+          "bottom": 140,
+          "w": 42,
+          "h": 34
+        },
+        {
+          "name": "Chiudi veicolo",
+          "x": 264,
+          "y": 205,
+          "right": 302,
+          "bottom": 243,
+          "w": 38,
+          "h": 38
+        },
+        {
+          "name": "Sterzo orizzontale",
+          "x": 8,
+          "y": 552,
+          "right": 132.796875,
+          "bottom": 624,
+          "w": 124.796875,
+          "h": 72
+        },
+        {
+          "name": "Acceleratore",
+          "x": 182,
+          "y": 556,
+          "right": 242,
+          "bottom": 620,
+          "w": 60,
+          "h": 64
+        },
+        {
+          "name": "Freno; retromarcia solo da fermo",
+          "x": 248,
+          "y": 556,
+          "right": 308,
+          "bottom": 620,
+          "w": 60,
+          "h": 64
+        }
+      ],
+      "overlaps": [
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Riduci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Riduci minimappa",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        }
+      ],
+      "intentionalOverlaps": [],
+      "joystickVisible": false,
+      "driveVisible": true,
+      "layout": {
+        "viewport": {
+          "width": 320,
+          "height": 640
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 458,
+            "right": 52,
+            "bottom": 498,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 458,
+            "right": 99,
+            "bottom": 498,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 46.959999084472656,
+            "bottom": 46.959999084472656,
+            "w": 36.959999084472656,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Amici",
+            "x": 220,
+            "y": 10,
+            "right": 256.9599914550781,
+            "bottom": 46.959999084472656,
+            "w": 36.959991455078125,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Impostazioni",
+            "x": 268,
+            "y": 10,
+            "right": 304.9599914550781,
+            "bottom": 46.959999084472656,
+            "w": 36.959991455078125,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 232,
+            "y": 160,
+            "right": 268,
+            "bottom": 196,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 274,
+            "y": 160,
+            "right": 310,
+            "bottom": 196,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 218,
+            "y": 62,
+            "right": 310,
+            "bottom": 154,
+            "w": 92,
+            "h": 92
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 218,
+            "y": 127,
+            "right": 241,
+            "bottom": 150,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 218,
+            "y": 127,
+            "right": 241,
+            "bottom": 150,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 130.453125,
+            "y": 106,
+            "right": 164.453125,
+            "bottom": 140,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 167.453125,
+            "y": 106,
+            "right": 209.453125,
+            "bottom": 140,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 264,
+            "y": 205,
+            "right": 302,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 8,
+            "y": 552,
+            "right": 132.796875,
+            "bottom": 624,
+            "w": 124.796875,
+            "h": 72
+          },
+          {
+            "name": "Acceleratore",
+            "x": 182,
+            "y": 556,
+            "right": 242,
+            "bottom": 620,
+            "w": 60,
+            "h": 64
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 248,
+            "y": 556,
+            "right": 308,
+            "bottom": 620,
+            "w": 60,
+            "h": 64
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "android-landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "screenshot": "hud-android-landscape.png",
+      "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa\\videos\\page@cc5711d66c376d5c9c454429db1bd2e9.webm",
+      "appLoaded": false,
+      "boxes": [
+        {
+          "name": "▣ Inventario",
+          "x": 12,
+          "y": 218,
+          "right": 52,
+          "bottom": 258,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "▯ Telefono",
+          "x": 59,
+          "y": 218,
+          "right": 99,
+          "bottom": 258,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "Profilo",
+          "x": 10,
+          "y": 10,
+          "right": 52,
+          "bottom": 52,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Amici",
+          "x": 747,
+          "y": 8,
+          "right": 789,
+          "bottom": 50,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Impostazioni",
+          "x": 794,
+          "y": 8,
+          "right": 836,
+          "bottom": 50,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Cambia telecamera",
+          "x": 756,
+          "y": 159.59375,
+          "right": 792,
+          "bottom": 195.59375,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Grafica",
+          "x": 798,
+          "y": 159.59375,
+          "right": 834,
+          "bottom": 195.59375,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Apri mappa del quartiere",
+          "x": 740.40625,
+          "y": 60,
+          "right": 834,
+          "bottom": 153.59375,
+          "w": 93.59375,
+          "h": 93.59375
+        },
+        {
+          "name": "Riduci minimappa",
+          "x": 740.40625,
+          "y": 126.59375,
+          "right": 763.40625,
+          "bottom": 149.59375,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Ingrandisci minimappa",
+          "x": 740.40625,
+          "y": 126.59375,
+          "right": 763.40625,
+          "bottom": 149.59375,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Clacson",
+          "x": 159.0625,
+          "y": 79,
+          "right": 193.0625,
+          "bottom": 113,
+          "w": 34,
+          "h": 34
+        },
+        {
+          "name": "Scendi dal veicolo",
+          "x": 198.0625,
+          "y": 79,
+          "right": 240.0625,
+          "bottom": 113,
+          "w": 42,
+          "h": 34
+        },
+        {
+          "name": "Chiudi veicolo",
+          "x": 788,
+          "y": 205,
+          "right": 826,
+          "bottom": 243,
+          "w": 38,
+          "h": 38
+        },
+        {
+          "name": "Sterzo orizzontale",
+          "x": 14,
+          "y": 310,
+          "right": 198,
+          "bottom": 378,
+          "w": 184,
+          "h": 68
+        },
+        {
+          "name": "Acceleratore",
+          "x": 692.09375,
+          "y": 315,
+          "right": 754.546875,
+          "bottom": 373,
+          "w": 62.453125,
+          "h": 58
+        },
+        {
+          "name": "Freno; retromarcia solo da fermo",
+          "x": 762.546875,
+          "y": 315,
+          "right": 825,
+          "bottom": 373,
+          "w": 62.453125,
+          "h": 58
+        }
+      ],
+      "overlaps": [
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Riduci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Riduci minimappa",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        }
+      ],
+      "intentionalOverlaps": [],
+      "joystickVisible": false,
+      "driveVisible": true,
+      "layout": {
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 218,
+            "right": 52,
+            "bottom": 258,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 218,
+            "right": 99,
+            "bottom": 258,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 52,
+            "bottom": 52,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Amici",
+            "x": 747,
+            "y": 8,
+            "right": 789,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Impostazioni",
+            "x": 794,
+            "y": 8,
+            "right": 836,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 756,
+            "y": 159.59375,
+            "right": 792,
+            "bottom": 195.59375,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 798,
+            "y": 159.59375,
+            "right": 834,
+            "bottom": 195.59375,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 740.40625,
+            "y": 60,
+            "right": 834,
+            "bottom": 153.59375,
+            "w": 93.59375,
+            "h": 93.59375
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 740.40625,
+            "y": 126.59375,
+            "right": 763.40625,
+            "bottom": 149.59375,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 740.40625,
+            "y": 126.59375,
+            "right": 763.40625,
+            "bottom": 149.59375,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 159.0625,
+            "y": 79,
+            "right": 193.0625,
+            "bottom": 113,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 198.0625,
+            "y": 79,
+            "right": 240.0625,
+            "bottom": 113,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 788,
+            "y": 205,
+            "right": 826,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 310,
+            "right": 198,
+            "bottom": 378,
+            "w": 184,
+            "h": 68
+          },
+          {
+            "name": "Acceleratore",
+            "x": 692.09375,
+            "y": 315,
+            "right": 754.546875,
+            "bottom": 373,
+            "w": 62.453125,
+            "h": 58
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 762.546875,
+            "y": 315,
+            "right": 825,
+            "bottom": 373,
+            "w": 62.453125,
+            "h": 58
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "android-landscape-small",
+      "viewport": {
+        "width": 740,
+        "height": 360
+      },
+      "screenshot": "hud-android-landscape-small.png",
+      "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa\\videos\\page@3b58148378061daf45aa11e530fba58e.webm",
+      "appLoaded": false,
+      "boxes": [
+        {
+          "name": "▣ Inventario",
+          "x": 12,
+          "y": 188,
+          "right": 52,
+          "bottom": 228,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "▯ Telefono",
+          "x": 59,
+          "y": 188,
+          "right": 99,
+          "bottom": 228,
+          "w": 40,
+          "h": 40
+        },
+        {
+          "name": "Profilo",
+          "x": 10,
+          "y": 10,
+          "right": 52,
+          "bottom": 52,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Amici",
+          "x": 643,
+          "y": 8,
+          "right": 685,
+          "bottom": 50,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Impostazioni",
+          "x": 690,
+          "y": 8,
+          "right": 732,
+          "bottom": 50,
+          "w": 42,
+          "h": 42
+        },
+        {
+          "name": "Cambia telecamera",
+          "x": 652,
+          "y": 158,
+          "right": 688,
+          "bottom": 194,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Grafica",
+          "x": 694,
+          "y": 158,
+          "right": 730,
+          "bottom": 194,
+          "w": 36,
+          "h": 36
+        },
+        {
+          "name": "Apri mappa del quartiere",
+          "x": 638,
+          "y": 60,
+          "right": 730,
+          "bottom": 152,
+          "w": 92,
+          "h": 92
+        },
+        {
+          "name": "Riduci minimappa",
+          "x": 638,
+          "y": 125,
+          "right": 661,
+          "bottom": 148,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Ingrandisci minimappa",
+          "x": 638,
+          "y": 125,
+          "right": 661,
+          "bottom": 148,
+          "w": 23,
+          "h": 23
+        },
+        {
+          "name": "Clacson",
+          "x": 159.0625,
+          "y": 79,
+          "right": 193.0625,
+          "bottom": 113,
+          "w": 34,
+          "h": 34
+        },
+        {
+          "name": "Scendi dal veicolo",
+          "x": 198.0625,
+          "y": 79,
+          "right": 240.0625,
+          "bottom": 113,
+          "w": 42,
+          "h": 34
+        },
+        {
+          "name": "Chiudi veicolo",
+          "x": 684,
+          "y": 205,
+          "right": 722,
+          "bottom": 243,
+          "w": 38,
+          "h": 38
+        },
+        {
+          "name": "Sterzo orizzontale",
+          "x": 14,
+          "y": 280,
+          "right": 198,
+          "bottom": 348,
+          "w": 184,
+          "h": 68
+        },
+        {
+          "name": "Acceleratore",
+          "x": 593,
+          "y": 285,
+          "right": 653,
+          "bottom": 343,
+          "w": 60,
+          "h": 58
+        },
+        {
+          "name": "Freno; retromarcia solo da fermo",
+          "x": 661,
+          "y": 285,
+          "right": 721,
+          "bottom": 343,
+          "w": 60,
+          "h": 58
+        }
+      ],
+      "overlaps": [
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Riduci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Apri mappa del quartiere",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        },
+        {
+          "a": "Riduci minimappa",
+          "b": "Ingrandisci minimappa",
+          "area": 529,
+          "intentional": false
+        }
+      ],
+      "intentionalOverlaps": [],
+      "joystickVisible": false,
+      "driveVisible": true,
+      "layout": {
+        "viewport": {
+          "width": 740,
+          "height": 360
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 188,
+            "right": 52,
+            "bottom": 228,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 188,
+            "right": 99,
+            "bottom": 228,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 52,
+            "bottom": 52,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Amici",
+            "x": 643,
+            "y": 8,
+            "right": 685,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Impostazioni",
+            "x": 690,
+            "y": 8,
+            "right": 732,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 652,
+            "y": 158,
+            "right": 688,
+            "bottom": 194,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 694,
+            "y": 158,
+            "right": 730,
+            "bottom": 194,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 638,
+            "y": 60,
+            "right": 730,
+            "bottom": 152,
+            "w": 92,
+            "h": 92
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 638,
+            "y": 125,
+            "right": 661,
+            "bottom": 148,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 638,
+            "y": 125,
+            "right": 661,
+            "bottom": 148,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 159.0625,
+            "y": 79,
+            "right": 193.0625,
+            "bottom": 113,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 198.0625,
+            "y": 79,
+            "right": 240.0625,
+            "bottom": 113,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 684,
+            "y": 205,
+            "right": 722,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 280,
+            "right": 198,
+            "bottom": 348,
+            "w": 184,
+            "h": 68
+          },
+          {
+            "name": "Acceleratore",
+            "x": 593,
+            "y": 285,
+            "right": 653,
+            "bottom": 343,
+            "w": 60,
+            "h": 58
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 661,
+            "y": 285,
+            "right": 721,
+            "bottom": 343,
+            "w": 60,
+            "h": 58
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "checks": [
+    {
+      "profile": "android-portrait",
+      "test": "sterzo + acceleratore simultanei",
+      "pass": true,
+      "details": {
+        "pointers": [
+          {
+            "id": 2,
+            "action": "steer",
+            "value": 0.42453772558769337
+          },
+          {
+            "id": 3,
+            "action": "gas",
+            "value": 0
+          }
+        ],
+        "input": {
+          "drive": true,
+          "steer": 0.2240003036433238,
+          "throttle": 1,
+          "brake": 0
+        }
+      }
+    },
+    {
+      "profile": "android-portrait",
+      "test": "rilascio multitouch",
+      "pass": true,
+      "details": {
+        "pointers": 0,
+        "steerClass": false
+      }
+    },
+    {
+      "profile": "android-portrait",
+      "test": "aree HUD senza collisioni impreviste",
+      "pass": false,
+      "details": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 662,
+            "right": 52,
+            "bottom": 702,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 662,
+            "right": 99,
+            "bottom": 702,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 46.959999084472656,
+            "bottom": 46.959999084472656,
+            "w": 36.959999084472656,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Amici",
+            "x": 288.21875,
+            "y": 10,
+            "right": 325.9624938964844,
+            "bottom": 47.743751525878906,
+            "w": 37.743743896484375,
+            "h": 37.743751525878906
+          },
+          {
+            "name": "Impostazioni",
+            "x": 337.109375,
+            "y": 10,
+            "right": 374.8531188964844,
+            "bottom": 47.743751525878906,
+            "w": 37.743743896484375,
+            "h": 37.743751525878906
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 302,
+            "y": 165.5,
+            "right": 338,
+            "bottom": 201.5,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 344,
+            "y": 165.5,
+            "right": 380,
+            "bottom": 201.5,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 282.5,
+            "y": 62,
+            "right": 380,
+            "bottom": 159.5,
+            "w": 97.5,
+            "h": 97.5
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 282.5,
+            "y": 132.5,
+            "right": 305.5,
+            "bottom": 155.5,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 282.5,
+            "y": 132.5,
+            "right": 305.5,
+            "bottom": 155.5,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 148.25,
+            "y": 107,
+            "right": 182.25,
+            "bottom": 141,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 187.25,
+            "y": 107,
+            "right": 229.25,
+            "bottom": 141,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 334,
+            "y": 205,
+            "right": 372,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 756,
+            "right": 162.1875,
+            "bottom": 828,
+            "w": 148.1875,
+            "h": 72
+          },
+          {
+            "name": "Acceleratore",
+            "x": 243,
+            "y": 759,
+            "right": 303,
+            "bottom": 823,
+            "w": 60,
+            "h": 64
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 311,
+            "y": 759,
+            "right": 371,
+            "bottom": 823,
+            "w": 60,
+            "h": 64
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      }
+    },
+    {
+      "profile": "android-compact",
+      "test": "sterzo + acceleratore simultanei",
+      "pass": true,
+      "details": {
+        "pointers": [
+          {
+            "id": 2,
+            "action": "steer",
+            "value": 0.49768373607111555
+          },
+          {
+            "id": 3,
+            "action": "gas",
+            "value": 0
+          }
+        ],
+        "input": {
+          "drive": true,
+          "steer": 0.2625945853079337,
+          "throttle": 1,
+          "brake": 0
+        }
+      }
+    },
+    {
+      "profile": "android-compact",
+      "test": "rilascio multitouch",
+      "pass": true,
+      "details": {
+        "pointers": 0,
+        "steerClass": false
+      }
+    },
+    {
+      "profile": "android-compact",
+      "test": "aree HUD senza collisioni impreviste",
+      "pass": false,
+      "details": {
+        "viewport": {
+          "width": 320,
+          "height": 640
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 458,
+            "right": 52,
+            "bottom": 498,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 458,
+            "right": 99,
+            "bottom": 498,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 46.959999084472656,
+            "bottom": 46.959999084472656,
+            "w": 36.959999084472656,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Amici",
+            "x": 220,
+            "y": 10,
+            "right": 256.9599914550781,
+            "bottom": 46.959999084472656,
+            "w": 36.959991455078125,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Impostazioni",
+            "x": 268,
+            "y": 10,
+            "right": 304.9599914550781,
+            "bottom": 46.959999084472656,
+            "w": 36.959991455078125,
+            "h": 36.959999084472656
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 232,
+            "y": 160,
+            "right": 268,
+            "bottom": 196,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 274,
+            "y": 160,
+            "right": 310,
+            "bottom": 196,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 218,
+            "y": 62,
+            "right": 310,
+            "bottom": 154,
+            "w": 92,
+            "h": 92
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 218,
+            "y": 127,
+            "right": 241,
+            "bottom": 150,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 218,
+            "y": 127,
+            "right": 241,
+            "bottom": 150,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 130.453125,
+            "y": 106,
+            "right": 164.453125,
+            "bottom": 140,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 167.453125,
+            "y": 106,
+            "right": 209.453125,
+            "bottom": 140,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 264,
+            "y": 205,
+            "right": 302,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 8,
+            "y": 552,
+            "right": 132.796875,
+            "bottom": 624,
+            "w": 124.796875,
+            "h": 72
+          },
+          {
+            "name": "Acceleratore",
+            "x": 182,
+            "y": 556,
+            "right": 242,
+            "bottom": 620,
+            "w": 60,
+            "h": 64
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 248,
+            "y": 556,
+            "right": 308,
+            "bottom": 620,
+            "w": 60,
+            "h": 64
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      }
+    },
+    {
+      "profile": "android-landscape",
+      "test": "sterzo + acceleratore simultanei",
+      "pass": true,
+      "details": {
+        "pointers": [
+          {
+            "id": 2,
+            "action": "steer",
+            "value": 0.34324942791762014
+          },
+          {
+            "id": 3,
+            "action": "gas",
+            "value": 0
+          }
+        ],
+        "input": {
+          "drive": true,
+          "steer": 0.18110987892184852,
+          "throttle": 1,
+          "brake": 0
+        }
+      }
+    },
+    {
+      "profile": "android-landscape",
+      "test": "rilascio multitouch",
+      "pass": true,
+      "details": {
+        "pointers": 0,
+        "steerClass": false
+      }
+    },
+    {
+      "profile": "android-landscape",
+      "test": "aree HUD senza collisioni impreviste",
+      "pass": false,
+      "details": {
+        "viewport": {
+          "width": 844,
+          "height": 390
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 218,
+            "right": 52,
+            "bottom": 258,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 218,
+            "right": 99,
+            "bottom": 258,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 52,
+            "bottom": 52,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Amici",
+            "x": 747,
+            "y": 8,
+            "right": 789,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Impostazioni",
+            "x": 794,
+            "y": 8,
+            "right": 836,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 756,
+            "y": 159.59375,
+            "right": 792,
+            "bottom": 195.59375,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 798,
+            "y": 159.59375,
+            "right": 834,
+            "bottom": 195.59375,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 740.40625,
+            "y": 60,
+            "right": 834,
+            "bottom": 153.59375,
+            "w": 93.59375,
+            "h": 93.59375
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 740.40625,
+            "y": 126.59375,
+            "right": 763.40625,
+            "bottom": 149.59375,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 740.40625,
+            "y": 126.59375,
+            "right": 763.40625,
+            "bottom": 149.59375,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 159.0625,
+            "y": 79,
+            "right": 193.0625,
+            "bottom": 113,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 198.0625,
+            "y": 79,
+            "right": 240.0625,
+            "bottom": 113,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 788,
+            "y": 205,
+            "right": 826,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 310,
+            "right": 198,
+            "bottom": 378,
+            "w": 184,
+            "h": 68
+          },
+          {
+            "name": "Acceleratore",
+            "x": 692.09375,
+            "y": 315,
+            "right": 754.546875,
+            "bottom": 373,
+            "w": 62.453125,
+            "h": 58
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 762.546875,
+            "y": 315,
+            "right": 825,
+            "bottom": 373,
+            "w": 62.453125,
+            "h": 58
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      }
+    },
+    {
+      "profile": "android-landscape-small",
+      "test": "sterzo + acceleratore simultanei",
+      "pass": true,
+      "details": {
+        "pointers": [
+          {
+            "id": 2,
+            "action": "steer",
+            "value": 0.34324942791762014
+          },
+          {
+            "id": 3,
+            "action": "gas",
+            "value": 0
+          }
+        ],
+        "input": {
+          "drive": true,
+          "steer": 0.18110987892184852,
+          "throttle": 1,
+          "brake": 0
+        }
+      }
+    },
+    {
+      "profile": "android-landscape-small",
+      "test": "rilascio multitouch",
+      "pass": true,
+      "details": {
+        "pointers": 0,
+        "steerClass": false
+      }
+    },
+    {
+      "profile": "android-landscape-small",
+      "test": "aree HUD senza collisioni impreviste",
+      "pass": false,
+      "details": {
+        "viewport": {
+          "width": 740,
+          "height": 360
+        },
+        "boxes": [
+          {
+            "name": "▣ Inventario",
+            "x": 12,
+            "y": 188,
+            "right": 52,
+            "bottom": 228,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "▯ Telefono",
+            "x": 59,
+            "y": 188,
+            "right": 99,
+            "bottom": 228,
+            "w": 40,
+            "h": 40
+          },
+          {
+            "name": "Profilo",
+            "x": 10,
+            "y": 10,
+            "right": 52,
+            "bottom": 52,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Amici",
+            "x": 643,
+            "y": 8,
+            "right": 685,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Impostazioni",
+            "x": 690,
+            "y": 8,
+            "right": 732,
+            "bottom": 50,
+            "w": 42,
+            "h": 42
+          },
+          {
+            "name": "Cambia telecamera",
+            "x": 652,
+            "y": 158,
+            "right": 688,
+            "bottom": 194,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Grafica",
+            "x": 694,
+            "y": 158,
+            "right": 730,
+            "bottom": 194,
+            "w": 36,
+            "h": 36
+          },
+          {
+            "name": "Apri mappa del quartiere",
+            "x": 638,
+            "y": 60,
+            "right": 730,
+            "bottom": 152,
+            "w": 92,
+            "h": 92
+          },
+          {
+            "name": "Riduci minimappa",
+            "x": 638,
+            "y": 125,
+            "right": 661,
+            "bottom": 148,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Ingrandisci minimappa",
+            "x": 638,
+            "y": 125,
+            "right": 661,
+            "bottom": 148,
+            "w": 23,
+            "h": 23
+          },
+          {
+            "name": "Clacson",
+            "x": 159.0625,
+            "y": 79,
+            "right": 193.0625,
+            "bottom": 113,
+            "w": 34,
+            "h": 34
+          },
+          {
+            "name": "Scendi dal veicolo",
+            "x": 198.0625,
+            "y": 79,
+            "right": 240.0625,
+            "bottom": 113,
+            "w": 42,
+            "h": 34
+          },
+          {
+            "name": "Chiudi veicolo",
+            "x": 684,
+            "y": 205,
+            "right": 722,
+            "bottom": 243,
+            "w": 38,
+            "h": 38
+          },
+          {
+            "name": "Sterzo orizzontale",
+            "x": 14,
+            "y": 280,
+            "right": 198,
+            "bottom": 348,
+            "w": 184,
+            "h": 68
+          },
+          {
+            "name": "Acceleratore",
+            "x": 593,
+            "y": 285,
+            "right": 653,
+            "bottom": 343,
+            "w": 60,
+            "h": 58
+          },
+          {
+            "name": "Freno; retromarcia solo da fermo",
+            "x": 661,
+            "y": 285,
+            "right": 721,
+            "bottom": 343,
+            "w": 60,
+            "h": 58
+          }
+        ],
+        "overlaps": [
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Riduci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Apri mappa del quartiere",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          },
+          {
+            "a": "Riduci minimappa",
+            "b": "Ingrandisci minimappa",
+            "area": 529,
+            "intentional": false
+          }
+        ],
+        "intentionalOverlaps": [],
+        "joystickVisible": false,
+        "driveVisible": true
+      }
+    }
+  ],
+  "knownLimits": [],
+  "finishedAt": "2026-10-12T20:16:40.593Z",
+  "passed": 8,
+  "failed": 4
+}

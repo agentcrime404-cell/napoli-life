@@ -19,8 +19,8 @@ export function surfaceFront(x,y){
  return 'cobble';}
 // Edifici (stessi id della città originale: si entra negli stessi interni). w×d = larghezza × profondità in metri.
 const B=(id,art,name,w,d,extra={})=>({id,art,name,w,d,...extra});
-const ROW_A=[B('bar','bar','Bar Lungomare',10,7),B('pizzeria','pizzeria','Pizzeria del Golfo',10,7),B('shop','negozio','Bottega Marina',9,6),B('club','discoteca','Luna · Discoteca',10,7),B('barber','barbiere','Barbiere Totò',9,6),B('bank','banca','Banca del Golfo',14,8),B('burger','burger','Burger Drive',12,7),B('casino','slot','Sala Slot Vesuvio',14,10)];
-const ROW_B=[B('osteria','osteria','Osteria del Borgo',14,9),B('vesuvio','vesuvio','Ristorante Vesuvio',14,9),B('fashion','moda','Moda Market',18,12),B('mall','centro-commerciale','Centro Commerciale Golfo',30,18),B('trattoria','trattoria','Trattoria del Borgo',14,9),B('panorama','panorama','Ristorante Panorama',14,9)];
+const ROW_A=[B('bar','bar','Bar Vele',10,7),B('pizzeria','pizzeria','Pizzeria Vesuviana',10,7),B('shop','negozio','Emporio Marina',9,6),B('club','discoteca','Orbita · Discoteca',10,7),B('barber','barbiere','Barbiere Raffa',9,6),B('bank','banca','Banca Partenopea',14,8),B('burger','burger','Molo Burger',12,7),B('casino','slot','Sala Fortuna',14,10)];
+const ROW_B=[B('osteria','osteria','Osteria Blu',14,9),B('vesuvio','vesuvio','Ristorante Cratere',14,9),B('fashion','moda','Moda Vela',18,12),B('mall','centro-commerciale','Galleria Levante',30,18),B('trattoria','trattoria','Trattoria del Borgo',14,9),B('panorama','panorama','Ristorante Belvedere',14,9)];
 const ROW_C=[0,1,2,3].map(i=>B('villa'+i,'villa-'+(i+1),'Villa',14,10,{interior:'villa',private:true})).concat([1,2,3,4].map(i=>B('residence'+(i+90),'palazzo-'+i,'Palazzo',12,10,{enterable:false})));
 // Posiziona una fila: da sinistra a destra, saltando le strade verticali.
 function place(list,front){const out=[];let x=6;for(const b of list){let bx=((x%BLOCK)+BLOCK)%BLOCK;if(bx+b.w>BLOCK-8){x+=BLOCK-bx+1;}out.push({...b,fx:x,fy:front-b.d,fw:b.w,fh:b.d});x+=b.w+3;}return out;}

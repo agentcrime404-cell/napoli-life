@@ -3,16 +3,16 @@ import {MAPS,canStand,distance,doors} from '../shared/world.js';
 import {state} from './storage.js';
 const fail=(message,status=400)=>{throw Object.assign(new Error(message),{status});};
 const today=()=>new Date().toISOString().slice(0,10);
-export const DAILY=[{id:'walk',name:'Cammina 500 metri',goal:500,reward:60},{id:'deliver',name:'Completa 3 consegne',goal:3,reward:150},{id:'visit',name:'Entra in 3 locali diversi',goal:3,reward:50}];
+export const DAILY=[{id:'walk',name:'Cammina 500 metri',goal:500,reward:60},{id:'deliver',name:'Completa 3 consegne',goal:3,reward:150},{id:'visit',name:'Entra in 3 locali diversi',goal:3,reward:50},{id:'service',name:'Resta in servizio 5 minuti',goal:300,reward:100}];
 export const LEVEL_REWARD=50;
 export class Jobs{
  constructor(db,game){this.db=db;this.game=game;}
  save(id,progress){this.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(progress),id);}
  pay(id,coins){this.db.prepare('UPDATE player_state SET balance=balance+? WHERE user_id=?').run(coins,id);}
  // Giornata corrente: si azzera a mezzanotte; i metri si contano dall'esperienza (che cresce solo camminando).
- daily(id){const s=state(this.db,id),pr=s.progress;if(pr.daily?.date!==today()){pr.daily={date:today(),xp0:pr.xp||0,deliver:0,visits:[],claimed:[]};this.save(id,pr);}return {pr,d:pr.daily};}
+ daily(id){const s=state(this.db,id),pr=s.progress;if(pr.daily?.date!==today()){pr.daily={date:today(),xp0:pr.xp||0,deliver:0,visits:[],service:0,claimed:[]};this.save(id,pr);}return {pr,d:pr.daily};}
  view(id){const {pr,d}=this.daily(id),p=this.game.players.get(id),walk=Math.floor((pr.xp||0)+(p?.travel||0)-d.xp0);
-  const value={walk,deliver:d.deliver,visit:d.visits.length};
+  const value={walk,deliver:d.deliver,visit:d.visits.length,service:Math.floor(d.service||0)};
   return {missions:DAILY.map(m=>({...m,progress:Math.min(m.goal,value[m.id]),done:value[m.id]>=m.goal,claimed:d.claimed.includes(m.id)})),job:p?.job?{name:p.job.name,x:p.job.x,y:p.job.y,reward:p.job.reward,deadline:p.job.deadline}:null,level:1+Math.floor((pr.xp||0)/100),balance:state(this.db,id).balance};}
  claim(id,mid){const m=DAILY.find(x=>x.id===mid);if(!m)fail('Missione sconosciuta');const v=this.view(id).missions.find(x=>x.id===mid);if(!v.done)fail('Missione non ancora completata');if(v.claimed)fail('Premio già riscosso');
   const {pr}=this.daily(id);pr.daily.claimed.push(mid);this.save(id,pr);this.pay(id,m.reward);return this.view(id);}
@@ -22,6 +22,7 @@ export class Jobs{
   if(!places.length)fail('Nessuna consegna disponibile qui vicino');const t=places[Math.floor(Math.random()*places.length)],dist=distance(t,p);
   p.job={name:t.name,x:t.x,y:t.y,started:Date.now(),deadline:Date.now()+Math.round(dist/2.5*1000+30000),reward:Math.round(20+dist*.8)};return this.view(id);}
  cancel(id){const p=this.game.players.get(id);if(p)p.job=null;return this.view(id);}
+ service(p,dt){if(!p?.duty||!p.work||!Number.isFinite(dt)||dt<=0)return;const {pr,d}=this.daily(p.id);d.service=(d.service||0)+dt;if(Math.floor(d.service)%15<dt)this.save(p.id,pr);}
  // Chiamato dal ciclo di gioco: consegna completata quando arrivi a destinazione.
  tick(p){if(!p.job||p.room!=='lungomare'||distance(p,p.job)>2.6)return;const j=p.job;p.job=null;const fast=Date.now()<=j.deadline,coins=j.reward+(fast?Math.round(j.reward*.5):0);
   this.pay(p.id,coins);const {pr}=this.daily(p.id);pr.daily.deliver++;this.save(p.id,pr);this.game.send(p.ws,{type:'jobDone',coins,fast,place:j.name});}

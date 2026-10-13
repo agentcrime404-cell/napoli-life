@@ -77,9 +77,10 @@ export class MergLife extends CityLife{
  step(a,dt){
   if(a.state==='crew'||a.state==='party'||a.state==='wait'||a.state==='chat')return super.step(a,dt);
   if(a.state==='sit'||a.state==='fish'){a.t-=dt;a.act='Idle';if(a.t<=0)a.on=false;return;}
+  if(a.state==='knock'){a.t-=dt;a.act=(Math.floor((a.t||0)*3)%2?'Wave':'Idle');if(a.t<=0){a.state='in';a.t=rnd(12,30);this.release(a);}return;}
   if(a.state==='in'){a.t-=dt;if(a.t<=0){a.state='leave';a.x=a.door.x;a.z=a.door.y;a.on=true;}return;}
   if(a.state==='toDoor'||a.state==='leave'){const tg=a.state==='toDoor'?a.door:a.start,dx=tg.x-a.x,dz=(tg.y)-a.z,d=Math.hypot(dx,dz),v=Math.min(d,a.speed*dt);a.act='Walk';if(d>1e-6){a.x+=dx/d*v;a.z+=dz/d*v;a.yaw=Math.atan2(dx,dz);}
-   if(d<.15){if(a.state==='toDoor'){a.state='in';a.t=rnd(12,30);this.release(a);}else a.on=false;}return;}
+   if(d<.15){if(a.state==='toDoor'){a.state='knock';a.t=2.8;a.act='Wave';}else a.on=false;}return;}
   // camminata lungo la strada
   const r=a.r;if(!r){a.on=false;return;}const prev=a.s;a.s+=a.dir*a.speed*dt;
   // incroci: ai nodi condivisi si può cambiare strada; alla fine della strada si gira o si prosegue su un'altra

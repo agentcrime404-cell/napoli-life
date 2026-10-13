@@ -1,0 +1,31 @@
+{
+  "name": "Napoli Life · test mobile live",
+  "startedAt": "2026-10-13T01:02:00.905Z",
+  "baseURL": "http://127.0.0.1:3181",
+  "mode": "live-game",
+  "checks": [
+    {
+      "test": "dashboard e telemetria della partita reale",
+      "pass": true
+    },
+    {
+      "test": "modalità veicolo QA attiva",
+      "pass": true
+    },
+    {
+      "test": "apertura della partita reale",
+      "pass": false,
+      "details": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#guest')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"guest\" type=\"button\" class=\"guest\">▶ Gioca subito come ospite</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n"
+    }
+  ],
+  "profiles": [],
+  "knownLimits": [
+    "Il flusso di ingresso non ha mostrato il menu di gioco: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#guest')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"guest\" type=\"button\" class=\"guest\">▶ Gioca subito come ospite</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n"
+  ],
+  "qaAccount": "Ciro_8010",
+  "fatalError": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#guest')\u001b[22m\n\u001b[2m    - locator resolved to <button id=\"guest\" type=\"button\" class=\"guest\">▶ Gioca subito come ospite</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\n    at run (C:\\Users\\joker\\Desktop\\Napoli life\\scripts\\qa-mobile-live.mjs:122:39)\n    at async file:///C:/Users/joker/Desktop/Napoli%20life/scripts/qa-mobile-live.mjs:203:16",
+  "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-mobile-phase1\\final-live\\videos\\page@80bce182a519740faa0532a58933e204.webm",
+  "finishedAt": "2026-10-13T01:07:54.632Z",
+  "passed": 2,
+  "failed": 1
+}

@@ -1,0 +1,170 @@
+{
+  "createdAt": "2026-10-13T01:30:25.650Z",
+  "baseURL": "http://127.0.0.1:3181",
+  "viewport": {
+    "width": 390,
+    "height": 844
+  },
+  "account": "Ciro_5774",
+  "enteredCity": true,
+  "worldLoaded": true,
+  "performance": {
+    "fps": 25,
+    "frameMs": 39.5,
+    "p95FrameMs": 149.9,
+    "slowFrames": 18,
+    "heapMb": 236.6,
+    "longTasks": [
+      {
+        "duration": 181,
+        "start": 5186
+      },
+      {
+        "duration": 60,
+        "start": 5463
+      },
+      {
+        "duration": 1265,
+        "start": 5643
+      },
+      {
+        "duration": 62,
+        "start": 6970
+      },
+      {
+        "duration": 832,
+        "start": 7040
+      },
+      {
+        "duration": 2437,
+        "start": 7915
+      },
+      {
+        "duration": 352,
+        "start": 10356
+      },
+      {
+        "duration": 57,
+        "start": 10744
+      },
+      {
+        "duration": 65,
+        "start": 10839
+      },
+      {
+        "duration": 1071,
+        "start": 10904
+      },
+      {
+        "duration": 1218,
+        "start": 13084
+      },
+      {
+        "duration": 246,
+        "start": 14335
+      },
+      {
+        "duration": 101,
+        "start": 14582
+      },
+      {
+        "duration": 67,
+        "start": 14733
+      },
+      {
+        "duration": 5568,
+        "start": 15343
+      },
+      {
+        "duration": 1151,
+        "start": 20930
+      },
+      {
+        "duration": 165,
+        "start": 23487
+      },
+      {
+        "duration": 3483,
+        "start": 23790
+      },
+      {
+        "duration": 141,
+        "start": 27510
+      },
+      {
+        "duration": 1940,
+        "start": 27708
+      },
+      {
+        "duration": 67,
+        "start": 30771
+      },
+      {
+        "duration": 1426,
+        "start": 31040
+      },
+      {
+        "duration": 92,
+        "start": 32515
+      },
+      {
+        "duration": 7283,
+        "start": 32615
+      },
+      {
+        "duration": 50,
+        "start": 39952
+      },
+      {
+        "duration": 69,
+        "start": 40307
+      },
+      {
+        "duration": 51,
+        "start": 40644
+      }
+    ]
+  },
+  "state": {
+    "player": {
+      "id": "41c31570-bc42-425b-93e9-c51a25316df2",
+      "room": "mergellina",
+      "x": 230.2,
+      "y": 399,
+      "velocity": 0,
+      "heading": -1.571,
+      "vehicle": null,
+      "seat": null,
+      "velocityEstimated": true
+    },
+    "camera": {
+      "mode": "third",
+      "vehicleMode": "car-chase",
+      "yaw": 0.785,
+      "pitch": 0,
+      "position": {
+        "x": 233.8,
+        "y": 1.9,
+        "z": 402.6
+      }
+    },
+    "world": {
+      "loaded": true,
+      "collisionBodies": 0,
+      "collisionCounts": {
+        "circles": 2459,
+        "rects": 0
+      }
+    },
+    "renderer": {
+      "drawCalls": 250,
+      "triangles": 639625,
+      "geometries": 219,
+      "textures": 74,
+      "pixelRatio": 1,
+      "gpuMemory": "non esposta dal browser"
+    }
+  },
+  "errors": [],
+  "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-mobile-phase1\\game-live-390x844.png"
+}

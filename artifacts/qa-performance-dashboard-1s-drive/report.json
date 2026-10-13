@@ -1,0 +1,6838 @@
+{
+  "name": "Napoli Life · audit prestazioni live",
+  "mode": "live-game",
+  "baseURL": "http://127.0.0.1:3081",
+  "startedAt": "2026-10-12T22:41:08.822Z",
+  "device": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "isMobile": true,
+    "hasTouch": true,
+    "benchmarkHost": "Chrome desktop with emulated mobile viewport; not a physical-phone measurement"
+  },
+  "capture": {
+    "screenshots": true,
+    "video": false,
+    "reason": "Video encoding is disabled during FPS sampling to avoid distorting frame-time results."
+  },
+  "scenarios": [
+    {
+      "name": "gioco-normale-mobile",
+      "dashboard": false,
+      "quality": "predefinita",
+      "entry": {
+        "ready": true,
+        "loadMs": 53984,
+        "telemetry": true,
+        "sceneLoading": {
+          "hidden": true,
+          "text": "Preparazione della grafica…Riprova"
+        }
+      },
+      "viewport": {
+        "game": {
+          "width": 390,
+          "height": 844,
+          "dpr": 1
+        },
+        "browser": {
+          "width": 390,
+          "height": 844
+        },
+        "dashboard": null
+      },
+      "start": {
+        "performance": {
+          "fps": 16,
+          "frameMs": 62,
+          "p95FrameMs": 216.1,
+          "slowFrames": 39,
+          "heapMb": 138.3,
+          "longTasks": [
+            {
+              "duration": 82,
+              "start": 32350
+            },
+            {
+              "duration": 12151,
+              "start": 32450
+            },
+            {
+              "duration": 173,
+              "start": 45073
+            },
+            {
+              "duration": 3086,
+              "start": 45320
+            },
+            {
+              "duration": 127,
+              "start": 48407
+            },
+            {
+              "duration": 537,
+              "start": 48791
+            },
+            {
+              "duration": 58,
+              "start": 49566
+            },
+            {
+              "duration": 66,
+              "start": 49962
+            },
+            {
+              "duration": 57,
+              "start": 50069
+            },
+            {
+              "duration": 94,
+              "start": 50168
+            },
+            {
+              "duration": 133,
+              "start": 50511
+            },
+            {
+              "duration": 109,
+              "start": 51072
+            },
+            {
+              "duration": 2202,
+              "start": 51262
+            },
+            {
+              "duration": 130,
+              "start": 53555
+            },
+            {
+              "duration": 7877,
+              "start": 53686
+            },
+            {
+              "duration": 65,
+              "start": 61563
+            },
+            {
+              "duration": 1026,
+              "start": 61882
+            },
+            {
+              "duration": 53,
+              "start": 63011
+            },
+            {
+              "duration": 97,
+              "start": 63728
+            },
+            {
+              "duration": 67,
+              "start": 63937
+            },
+            {
+              "duration": 204,
+              "start": 64045
+            },
+            {
+              "duration": 79,
+              "start": 64999
+            },
+            {
+              "duration": 58,
+              "start": 65079
+            },
+            {
+              "duration": 237,
+              "start": 65142
+            },
+            {
+              "duration": 275,
+              "start": 65384
+            },
+            {
+              "duration": 67,
+              "start": 65732
+            },
+            {
+              "duration": 122,
+              "start": 65845
+            },
+            {
+              "duration": 62,
+              "start": 66010
+            },
+            {
+              "duration": 56,
+              "start": 66075
+            },
+            {
+              "duration": 70,
+              "start": 66295
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 230.2,
+          "y": 399,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 234,
+          "triangles": 639499,
+          "geometries": 212,
+          "textures": 72,
+          "pixelRatio": 1,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 57.1,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 56278,
+          "scriptMs": 15252,
+          "layoutMs": 1000,
+          "styleMs": 788,
+          "domNodes": 1252,
+          "documents": 2,
+          "eventListeners": 265
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 15,
+          "frameMs": 65.4,
+          "p95FrameMs": 216.1,
+          "slowFrames": 43,
+          "heapMb": 139.1,
+          "longTasks": [
+            {
+              "duration": 109,
+              "start": 51072
+            },
+            {
+              "duration": 2202,
+              "start": 51262
+            },
+            {
+              "duration": 130,
+              "start": 53555
+            },
+            {
+              "duration": 7877,
+              "start": 53686
+            },
+            {
+              "duration": 65,
+              "start": 61563
+            },
+            {
+              "duration": 1026,
+              "start": 61882
+            },
+            {
+              "duration": 53,
+              "start": 63011
+            },
+            {
+              "duration": 97,
+              "start": 63728
+            },
+            {
+              "duration": 67,
+              "start": 63937
+            },
+            {
+              "duration": 204,
+              "start": 64045
+            },
+            {
+              "duration": 79,
+              "start": 64999
+            },
+            {
+              "duration": 58,
+              "start": 65079
+            },
+            {
+              "duration": 237,
+              "start": 65142
+            },
+            {
+              "duration": 275,
+              "start": 65384
+            },
+            {
+              "duration": 67,
+              "start": 65732
+            },
+            {
+              "duration": 122,
+              "start": 65845
+            },
+            {
+              "duration": 62,
+              "start": 66010
+            },
+            {
+              "duration": 56,
+              "start": 66075
+            },
+            {
+              "duration": 70,
+              "start": 66295
+            },
+            {
+              "duration": 59,
+              "start": 66544
+            },
+            {
+              "duration": 654,
+              "start": 66908
+            },
+            {
+              "duration": 69,
+              "start": 67808
+            },
+            {
+              "duration": 283,
+              "start": 67900
+            },
+            {
+              "duration": 67,
+              "start": 69472
+            },
+            {
+              "duration": 109,
+              "start": 69567
+            },
+            {
+              "duration": 68,
+              "start": 69677
+            },
+            {
+              "duration": 70,
+              "start": 69935
+            },
+            {
+              "duration": 88,
+              "start": 70005
+            },
+            {
+              "duration": 69,
+              "start": 70238
+            },
+            {
+              "duration": 81,
+              "start": 70325
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 230.2,
+          "y": 399,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 644029,
+          "geometries": 214,
+          "textures": 76,
+          "pixelRatio": 0.8,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 57.8,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 60024,
+          "scriptMs": 18372,
+          "layoutMs": 1025,
+          "styleMs": 899,
+          "domNodes": 1540,
+          "documents": 2,
+          "eventListeners": 267
+        }
+      },
+      "taskTimePerWallPct": 92,
+      "webgl": {
+        "start": {
+          "frame": 43,
+          "calls": 234,
+          "triangles": 639499,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 116,
+          "calls": 224,
+          "triangles": 644029,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 73,
+        "renderedFps": 17.9
+      },
+      "profile": {
+        "sampledCpuMs": 64526,
+        "topFunctions": [
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 11310,
+            "share": 18
+          },
+          {
+            "frame": "(garbage collector) · built-in · -1",
+            "cpuMs": 8614,
+            "share": 13
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 7544,
+            "share": 12
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 4373,
+            "share": 7
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 3551,
+            "share": 6
+          },
+          {
+            "frame": "edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 2114,
+            "share": 3
+          },
+          {
+            "frame": "land · http://127.0.0.1:3081/world/world3d.js · 967",
+            "cpuMs": 1652,
+            "share": 3
+          },
+          {
+            "frame": "start · http://127.0.0.1:3081/audio/ambient.js · 12",
+            "cpuMs": 1587,
+            "share": 2
+          },
+          {
+            "frame": "Es · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1519,
+            "share": 2
+          },
+          {
+            "frame": "b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1484,
+            "share": 2
+          },
+          {
+            "frame": "signMat · http://127.0.0.1:3081/world/world3d.js · 792",
+            "cpuMs": 1353,
+            "share": 2
+          },
+          {
+            "frame": "texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1204,
+            "share": 2
+          }
+        ],
+        "topInclusiveFunctions": [
+          {
+            "frame": "(root) · built-in · -1",
+            "cpuMs": 64520,
+            "share": 100
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 18022,
+            "share": 28
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 11310,
+            "share": 18
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 9756,
+            "share": 15
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97",
+            "cpuMs": 9756,
+            "share": 15
+          },
+          {
+            "frame": "(garbage collector) · built-in · -1",
+            "cpuMs": 8614,
+            "share": 13
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 7544,
+            "share": 12
+          },
+          {
+            "frame": "traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 6211,
+            "share": 10
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934",
+            "cpuMs": 4750,
+            "share": 7
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 4466,
+            "share": 7
+          },
+          {
+            "frame": "parkedProps · http://127.0.0.1:3081/app.js · 9",
+            "cpuMs": 3790,
+            "share": 6
+          },
+          {
+            "frame": "napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104",
+            "cpuMs": 3784,
+            "share": 6
+          }
+        ],
+        "topStacks": [
+          {
+            "frame": "(root) · built-in · -1 → (idle) · built-in · -1",
+            "cpuMs": 11310,
+            "share": 18
+          },
+          {
+            "frame": "(root) · built-in · -1 → (garbage collector) · built-in · -1",
+            "cpuMs": 8614,
+            "share": 13
+          },
+          {
+            "frame": "(root) · built-in · -1 → (program) · built-in · -1",
+            "cpuMs": 7544,
+            "share": 12
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 4373,
+            "share": 7
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → parkedProps · http://127.0.0.1:3081/app.js · 9 → napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 123 → roadAt · http://127.0.0.1:3081/shared/napoli.js · 109 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 3384,
+            "share": 5
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 2114,
+            "share": 3
+          },
+          {
+            "frame": "(root) · built-in · -1 → go · http://127.0.0.1:3081/ui/living.js · 22 → start · http://127.0.0.1:3081/audio/ambient.js · 12",
+            "cpuMs": 1524,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → signpost · http://127.0.0.1:3081/world/world3d.js · 797 → pu · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Es · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1501,
+            "share": 2
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → getUniforms · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1393,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → signpost · http://127.0.0.1:3081/world/world3d.js · 797 → (anonima) · http://127.0.0.1:3081/world/world3d.js · 798 → signMat · http://127.0.0.1:3081/world/world3d.js · 792",
+            "cpuMs": 1353,
+            "share": 2
+          },
+          {
+            "frame": "Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → upload · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → wo · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → E · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → L · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1204,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → set3d · http://127.0.0.1:3081/app.js · 85 → World3D · http://127.0.0.1:3081/world/world3d.js · 30 → ec · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Mt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 894,
+            "share": 1
+          }
+        ]
+      },
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": [],
+        "requests": [
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "http": []
+      }
+    },
+    {
+      "name": "gioco-fermo",
+      "pass": true,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 15,
+          "frameMs": 66,
+          "p95FrameMs": 216.1,
+          "slowFrames": 43,
+          "heapMb": 139.8,
+          "longTasks": [
+            {
+              "duration": 109,
+              "start": 51072
+            },
+            {
+              "duration": 2202,
+              "start": 51262
+            },
+            {
+              "duration": 130,
+              "start": 53555
+            },
+            {
+              "duration": 7877,
+              "start": 53686
+            },
+            {
+              "duration": 65,
+              "start": 61563
+            },
+            {
+              "duration": 1026,
+              "start": 61882
+            },
+            {
+              "duration": 53,
+              "start": 63011
+            },
+            {
+              "duration": 97,
+              "start": 63728
+            },
+            {
+              "duration": 67,
+              "start": 63937
+            },
+            {
+              "duration": 204,
+              "start": 64045
+            },
+            {
+              "duration": 79,
+              "start": 64999
+            },
+            {
+              "duration": 58,
+              "start": 65079
+            },
+            {
+              "duration": 237,
+              "start": 65142
+            },
+            {
+              "duration": 275,
+              "start": 65384
+            },
+            {
+              "duration": 67,
+              "start": 65732
+            },
+            {
+              "duration": 122,
+              "start": 65845
+            },
+            {
+              "duration": 62,
+              "start": 66010
+            },
+            {
+              "duration": 56,
+              "start": 66075
+            },
+            {
+              "duration": 70,
+              "start": 66295
+            },
+            {
+              "duration": 59,
+              "start": 66544
+            },
+            {
+              "duration": 654,
+              "start": 66908
+            },
+            {
+              "duration": 69,
+              "start": 67808
+            },
+            {
+              "duration": 283,
+              "start": 67900
+            },
+            {
+              "duration": 67,
+              "start": 69472
+            },
+            {
+              "duration": 109,
+              "start": 69567
+            },
+            {
+              "duration": 68,
+              "start": 69677
+            },
+            {
+              "duration": 70,
+              "start": 69935
+            },
+            {
+              "duration": 88,
+              "start": 70005
+            },
+            {
+              "duration": 69,
+              "start": 70238
+            },
+            {
+              "duration": 81,
+              "start": 70325
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 230.2,
+          "y": 399,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 644029,
+          "geometries": 214,
+          "textures": 76,
+          "pixelRatio": 0.8,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 57.9,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 60059,
+          "scriptMs": 18402,
+          "layoutMs": 1025,
+          "styleMs": 900,
+          "domNodes": 1542,
+          "documents": 2,
+          "eventListeners": 267
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 26,
+          "frameMs": 37.9,
+          "p95FrameMs": 68.7,
+          "slowFrames": 25,
+          "heapMb": 132,
+          "longTasks": [
+            {
+              "duration": 62,
+              "start": 66010
+            },
+            {
+              "duration": 56,
+              "start": 66075
+            },
+            {
+              "duration": 70,
+              "start": 66295
+            },
+            {
+              "duration": 59,
+              "start": 66544
+            },
+            {
+              "duration": 654,
+              "start": 66908
+            },
+            {
+              "duration": 69,
+              "start": 67808
+            },
+            {
+              "duration": 283,
+              "start": 67900
+            },
+            {
+              "duration": 67,
+              "start": 69472
+            },
+            {
+              "duration": 109,
+              "start": 69567
+            },
+            {
+              "duration": 68,
+              "start": 69677
+            },
+            {
+              "duration": 70,
+              "start": 69935
+            },
+            {
+              "duration": 88,
+              "start": 70005
+            },
+            {
+              "duration": 69,
+              "start": 70238
+            },
+            {
+              "duration": 81,
+              "start": 70325
+            },
+            {
+              "duration": 108,
+              "start": 70681
+            },
+            {
+              "duration": 83,
+              "start": 70789
+            },
+            {
+              "duration": 64,
+              "start": 70932
+            },
+            {
+              "duration": 98,
+              "start": 71131
+            },
+            {
+              "duration": 76,
+              "start": 71230
+            },
+            {
+              "duration": 50,
+              "start": 71716
+            },
+            {
+              "duration": 57,
+              "start": 71836
+            },
+            {
+              "duration": 67,
+              "start": 72416
+            },
+            {
+              "duration": 73,
+              "start": 73127
+            },
+            {
+              "duration": 61,
+              "start": 73346
+            },
+            {
+              "duration": 100,
+              "start": 73488
+            },
+            {
+              "duration": 59,
+              "start": 73662
+            },
+            {
+              "duration": 76,
+              "start": 73750
+            },
+            {
+              "duration": 52,
+              "start": 73831
+            },
+            {
+              "duration": 67,
+              "start": 74162
+            },
+            {
+              "duration": 53,
+              "start": 74375
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 230.2,
+          "y": 399,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 644029,
+          "geometries": 215,
+          "textures": 77,
+          "pixelRatio": 0.7000000000000001,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 50,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 63931,
+          "scriptMs": 21584,
+          "layoutMs": 1054,
+          "styleMs": 1065,
+          "domNodes": 1915,
+          "documents": 2,
+          "eventListeners": 269
+        }
+      },
+      "taskTimePerWallPct": 94,
+      "webgl": {
+        "start": {
+          "frame": 119,
+          "calls": 224,
+          "triangles": 644029,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 222,
+          "calls": 224,
+          "triangles": 644029,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 103,
+        "renderedFps": 25
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\gioco-fermo.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      }
+    },
+    {
+      "name": "camminata-avanti",
+      "pass": true,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 33,
+          "frameMs": 30.7,
+          "p95FrameMs": 51.7,
+          "slowFrames": 11,
+          "heapMb": 140.5,
+          "longTasks": [
+            {
+              "duration": 108,
+              "start": 70681
+            },
+            {
+              "duration": 83,
+              "start": 70789
+            },
+            {
+              "duration": 64,
+              "start": 70932
+            },
+            {
+              "duration": 98,
+              "start": 71131
+            },
+            {
+              "duration": 76,
+              "start": 71230
+            },
+            {
+              "duration": 50,
+              "start": 71716
+            },
+            {
+              "duration": 57,
+              "start": 71836
+            },
+            {
+              "duration": 67,
+              "start": 72416
+            },
+            {
+              "duration": 73,
+              "start": 73127
+            },
+            {
+              "duration": 61,
+              "start": 73346
+            },
+            {
+              "duration": 100,
+              "start": 73488
+            },
+            {
+              "duration": 59,
+              "start": 73662
+            },
+            {
+              "duration": 76,
+              "start": 73750
+            },
+            {
+              "duration": 52,
+              "start": 73831
+            },
+            {
+              "duration": 67,
+              "start": 74162
+            },
+            {
+              "duration": 53,
+              "start": 74375
+            },
+            {
+              "duration": 57,
+              "start": 74788
+            },
+            {
+              "duration": 58,
+              "start": 74896
+            },
+            {
+              "duration": 57,
+              "start": 75063
+            },
+            {
+              "duration": 103,
+              "start": 75127
+            },
+            {
+              "duration": 117,
+              "start": 75243
+            },
+            {
+              "duration": 54,
+              "start": 75362
+            },
+            {
+              "duration": 96,
+              "start": 75449
+            },
+            {
+              "duration": 72,
+              "start": 75593
+            },
+            {
+              "duration": 77,
+              "start": 75813
+            },
+            {
+              "duration": 71,
+              "start": 75892
+            },
+            {
+              "duration": 86,
+              "start": 75968
+            },
+            {
+              "duration": 68,
+              "start": 77658
+            },
+            {
+              "duration": 113,
+              "start": 80360
+            },
+            {
+              "duration": 59,
+              "start": 81323
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 230.2,
+          "y": 399,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 644029,
+          "geometries": 215,
+          "textures": 77,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 56.7,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 69651,
+          "scriptMs": 25701,
+          "layoutMs": 1100,
+          "styleMs": 1313,
+          "domNodes": 2536,
+          "documents": 2,
+          "eventListeners": 277
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 28,
+          "frameMs": 36,
+          "p95FrameMs": 66.7,
+          "slowFrames": 19,
+          "heapMb": 134.2,
+          "longTasks": [
+            {
+              "duration": 67,
+              "start": 72416
+            },
+            {
+              "duration": 73,
+              "start": 73127
+            },
+            {
+              "duration": 61,
+              "start": 73346
+            },
+            {
+              "duration": 100,
+              "start": 73488
+            },
+            {
+              "duration": 59,
+              "start": 73662
+            },
+            {
+              "duration": 76,
+              "start": 73750
+            },
+            {
+              "duration": 52,
+              "start": 73831
+            },
+            {
+              "duration": 67,
+              "start": 74162
+            },
+            {
+              "duration": 53,
+              "start": 74375
+            },
+            {
+              "duration": 57,
+              "start": 74788
+            },
+            {
+              "duration": 58,
+              "start": 74896
+            },
+            {
+              "duration": 57,
+              "start": 75063
+            },
+            {
+              "duration": 103,
+              "start": 75127
+            },
+            {
+              "duration": 117,
+              "start": 75243
+            },
+            {
+              "duration": 54,
+              "start": 75362
+            },
+            {
+              "duration": 96,
+              "start": 75449
+            },
+            {
+              "duration": 72,
+              "start": 75593
+            },
+            {
+              "duration": 77,
+              "start": 75813
+            },
+            {
+              "duration": 71,
+              "start": 75892
+            },
+            {
+              "duration": 86,
+              "start": 75968
+            },
+            {
+              "duration": 68,
+              "start": 77658
+            },
+            {
+              "duration": 113,
+              "start": 80360
+            },
+            {
+              "duration": 59,
+              "start": 81323
+            },
+            {
+              "duration": 191,
+              "start": 82087
+            },
+            {
+              "duration": 71,
+              "start": 83196
+            },
+            {
+              "duration": 55,
+              "start": 83301
+            },
+            {
+              "duration": 84,
+              "start": 83688
+            },
+            {
+              "duration": 58,
+              "start": 84099
+            },
+            {
+              "duration": 61,
+              "start": 84444
+            },
+            {
+              "duration": 60,
+              "start": 84545
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 229.36,
+          "y": 398.16,
+          "velocity": 0.47,
+          "heading": -2.356,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 223,
+          "triangles": 643595,
+          "geometries": 216,
+          "textures": 78,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 49.1,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 72208,
+          "scriptMs": 27772,
+          "layoutMs": 1114,
+          "styleMs": 1451,
+          "domNodes": 2743,
+          "documents": 2,
+          "eventListeners": 284
+        }
+      },
+      "taskTimePerWallPct": 99,
+      "webgl": {
+        "start": {
+          "frame": 410,
+          "calls": 224,
+          "triangles": 644029,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 471,
+          "calls": 223,
+          "triangles": 643595,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 61,
+        "renderedFps": 23.5
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\camminata-avanti.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "movement": {
+        "from": {
+          "x": 230.2,
+          "y": 399
+        },
+        "to": {
+          "x": 229.36,
+          "y": 398.16
+        }
+      }
+    },
+    {
+      "name": "camera-panoramica",
+      "pass": true,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 31,
+          "frameMs": 31.8,
+          "p95FrameMs": 66.6,
+          "slowFrames": 15,
+          "heapMb": 138.8,
+          "longTasks": [
+            {
+              "duration": 117,
+              "start": 75243
+            },
+            {
+              "duration": 54,
+              "start": 75362
+            },
+            {
+              "duration": 96,
+              "start": 75449
+            },
+            {
+              "duration": 72,
+              "start": 75593
+            },
+            {
+              "duration": 77,
+              "start": 75813
+            },
+            {
+              "duration": 71,
+              "start": 75892
+            },
+            {
+              "duration": 86,
+              "start": 75968
+            },
+            {
+              "duration": 68,
+              "start": 77658
+            },
+            {
+              "duration": 113,
+              "start": 80360
+            },
+            {
+              "duration": 59,
+              "start": 81323
+            },
+            {
+              "duration": 191,
+              "start": 82087
+            },
+            {
+              "duration": 71,
+              "start": 83196
+            },
+            {
+              "duration": 55,
+              "start": 83301
+            },
+            {
+              "duration": 84,
+              "start": 83688
+            },
+            {
+              "duration": 58,
+              "start": 84099
+            },
+            {
+              "duration": 61,
+              "start": 84444
+            },
+            {
+              "duration": 60,
+              "start": 84545
+            },
+            {
+              "duration": 87,
+              "start": 84679
+            },
+            {
+              "duration": 52,
+              "start": 84778
+            },
+            {
+              "duration": 64,
+              "start": 84896
+            },
+            {
+              "duration": 83,
+              "start": 85088
+            },
+            {
+              "duration": 62,
+              "start": 85292
+            },
+            {
+              "duration": 77,
+              "start": 85442
+            },
+            {
+              "duration": 52,
+              "start": 85591
+            },
+            {
+              "duration": 82,
+              "start": 86543
+            },
+            {
+              "duration": 66,
+              "start": 88041
+            },
+            {
+              "duration": 62,
+              "start": 88711
+            },
+            {
+              "duration": 50,
+              "start": 89329
+            },
+            {
+              "duration": 93,
+              "start": 91179
+            },
+            {
+              "duration": 56,
+              "start": 91290
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 225.53,
+          "y": 394.33,
+          "velocity": 0,
+          "heading": -2.356,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 215,
+          "triangles": 644263,
+          "geometries": 221,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 51.9,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 77736,
+          "scriptMs": 31865,
+          "layoutMs": 1169,
+          "styleMs": 1725,
+          "domNodes": 3367,
+          "documents": 2,
+          "eventListeners": 312
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 27,
+          "frameMs": 36.6,
+          "p95FrameMs": 82.8,
+          "slowFrames": 25,
+          "heapMb": 149.1,
+          "longTasks": [
+            {
+              "duration": 55,
+              "start": 83301
+            },
+            {
+              "duration": 84,
+              "start": 83688
+            },
+            {
+              "duration": 58,
+              "start": 84099
+            },
+            {
+              "duration": 61,
+              "start": 84444
+            },
+            {
+              "duration": 60,
+              "start": 84545
+            },
+            {
+              "duration": 87,
+              "start": 84679
+            },
+            {
+              "duration": 52,
+              "start": 84778
+            },
+            {
+              "duration": 64,
+              "start": 84896
+            },
+            {
+              "duration": 83,
+              "start": 85088
+            },
+            {
+              "duration": 62,
+              "start": 85292
+            },
+            {
+              "duration": 77,
+              "start": 85442
+            },
+            {
+              "duration": 52,
+              "start": 85591
+            },
+            {
+              "duration": 82,
+              "start": 86543
+            },
+            {
+              "duration": 66,
+              "start": 88041
+            },
+            {
+              "duration": 62,
+              "start": 88711
+            },
+            {
+              "duration": 50,
+              "start": 89329
+            },
+            {
+              "duration": 93,
+              "start": 91179
+            },
+            {
+              "duration": 56,
+              "start": 91290
+            },
+            {
+              "duration": 53,
+              "start": 92692
+            },
+            {
+              "duration": 69,
+              "start": 92877
+            },
+            {
+              "duration": 73,
+              "start": 93144
+            },
+            {
+              "duration": 54,
+              "start": 93322
+            },
+            {
+              "duration": 55,
+              "start": 93378
+            },
+            {
+              "duration": 53,
+              "start": 93438
+            },
+            {
+              "duration": 59,
+              "start": 93527
+            },
+            {
+              "duration": 76,
+              "start": 93665
+            },
+            {
+              "duration": 65,
+              "start": 93793
+            },
+            {
+              "duration": 66,
+              "start": 93882
+            },
+            {
+              "duration": 73,
+              "start": 93950
+            },
+            {
+              "duration": 196,
+              "start": 94025
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 225.53,
+          "y": 394.33,
+          "velocity": 0,
+          "heading": -2.356,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 187,
+          "triangles": 636509,
+          "geometries": 221,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 62.4,
+          "heapTotalMb": 122.8,
+          "mainThreadTaskMs": 80686,
+          "scriptMs": 34104,
+          "layoutMs": 1190,
+          "styleMs": 1942,
+          "domNodes": 3609,
+          "documents": 2,
+          "eventListeners": 313
+        }
+      },
+      "taskTimePerWallPct": 91,
+      "webgl": {
+        "start": {
+          "frame": 651,
+          "calls": 215,
+          "triangles": 644263,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 718,
+          "calls": 187,
+          "triangles": 636509,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 67,
+        "renderedFps": 20.7
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\camera-panoramica.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      }
+    },
+    {
+      "name": "tentativo-ingresso-veicolo-reale",
+      "pass": false,
+      "blocked": true,
+      "details": {
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "spawn": {
+          "x": 230.2,
+          "y": 399
+        },
+        "nearestVehicles": [
+          {
+            "id": "ciro-africa-9",
+            "kind": "parked",
+            "v": "m-enduro",
+            "x": 230.79999999999998,
+            "y": 384.7499999999998,
+            "rot": 3.081592653589793,
+            "r": 0.55,
+            "distance": 14.262625985421005
+          },
+          {
+            "id": "ciro-africa-4",
+            "kind": "parked",
+            "v": "m-enduro",
+            "x": 230.79999999999998,
+            "y": 378.9999999999999,
+            "rot": 3.141592653589793,
+            "r": 0.55,
+            "distance": 20.00899797591085
+          },
+          {
+            "id": "merg-scooter-40",
+            "kind": "parked",
+            "v": "scooter",
+            "x": 233.2105895791968,
+            "y": 319.0567461656953,
+            "rot": 0,
+            "r": 0.5,
+            "distance": 79.99992177015201
+          },
+          {
+            "id": "merg-scooter-310",
+            "kind": "parked",
+            "v": "scooter",
+            "x": 185.00027861720153,
+            "y": 329.1601826053963,
+            "rot": 3.141592653589793,
+            "r": 0.5,
+            "distance": 83.19023324161435
+          },
+          {
+            "id": "merg-scooter-130",
+            "kind": "parked",
+            "v": "scooter",
+            "x": 269.02566989322065,
+            "y": 306.71981306713576,
+            "rot": 3.141592653589793,
+            "r": 0.5,
+            "distance": 100.1152612892845
+          }
+        ],
+        "approach": {
+          "moved": true,
+          "start": {
+            "x": 225.53,
+            "y": 394.33
+          },
+          "end": {
+            "x": 224.88,
+            "y": 390.58
+          },
+          "target": {
+            "x": 230.79999999999998,
+            "y": 384.7499999999998,
+            "distance": 10.933860251530739
+          },
+          "remaining": 8.31,
+          "routeWaypoints": 11,
+          "waypoints": [
+            {
+              "x": 225.53,
+              "y": 394.33
+            },
+            {
+              "x": 225.53,
+              "y": 393.58
+            },
+            {
+              "x": 225.53,
+              "y": 392.83
+            },
+            {
+              "x": 225.53,
+              "y": 392.08
+            },
+            {
+              "x": 225.53,
+              "y": 391.33
+            },
+            {
+              "x": 226.28,
+              "y": 390.58
+            },
+            {
+              "x": 227.03,
+              "y": 389.83
+            },
+            {
+              "x": 227.78,
+              "y": 389.08
+            },
+            {
+              "x": 228.53,
+              "y": 388.33
+            },
+            {
+              "x": 229.28,
+              "y": 387.58
+            },
+            {
+              "x": 230.03,
+              "y": 386.83
+            }
+          ],
+          "actions": 28,
+          "stalled": true,
+          "trace": [
+            {
+              "x": 225.53,
+              "y": 394.33
+            },
+            {
+              "x": 225.36,
+              "y": 394.16,
+              "distanceToWaypoint": 0.6
+            },
+            {
+              "x": 226,
+              "y": 393.33,
+              "distanceToWaypoint": 0.53
+            },
+            {
+              "x": 225.16,
+              "y": 394.16,
+              "distanceToWaypoint": 0.69
+            },
+            {
+              "x": 225.43,
+              "y": 392.38,
+              "distanceToWaypoint": 1.05
+            },
+            {
+              "x": 224.88,
+              "y": 391.42,
+              "distanceToWaypoint": 0.66
+            },
+            {
+              "x": 224.88,
+              "y": 390.74,
+              "distanceToWaypoint": 0.88
+            },
+            {
+              "x": 224.88,
+              "y": 390.58,
+              "distanceToWaypoint": 0.99
+            },
+            {
+              "x": 224.88,
+              "y": 390.58
+            }
+          ]
+        }
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\tentativo-ingresso-veicolo-reale.png"
+    },
+    {
+      "name": "accelerazione-moto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 29,
+          "frameMs": 34.2,
+          "p95FrameMs": 54.3,
+          "slowFrames": 22,
+          "heapMb": 170.4,
+          "longTasks": [
+            {
+              "duration": 74,
+              "start": 106783
+            },
+            {
+              "duration": 52,
+              "start": 106943
+            },
+            {
+              "duration": 64,
+              "start": 107033
+            },
+            {
+              "duration": 63,
+              "start": 107097
+            },
+            {
+              "duration": 112,
+              "start": 107162
+            },
+            {
+              "duration": 55,
+              "start": 107276
+            },
+            {
+              "duration": 52,
+              "start": 107428
+            },
+            {
+              "duration": 63,
+              "start": 107554
+            },
+            {
+              "duration": 78,
+              "start": 108009
+            },
+            {
+              "duration": 91,
+              "start": 108097
+            },
+            {
+              "duration": 56,
+              "start": 108647
+            },
+            {
+              "duration": 90,
+              "start": 108777
+            },
+            {
+              "duration": 52,
+              "start": 109237
+            },
+            {
+              "duration": 54,
+              "start": 109432
+            },
+            {
+              "duration": 56,
+              "start": 109714
+            },
+            {
+              "duration": 65,
+              "start": 109930
+            },
+            {
+              "duration": 64,
+              "start": 110052
+            },
+            {
+              "duration": 88,
+              "start": 110561
+            },
+            {
+              "duration": 54,
+              "start": 110825
+            },
+            {
+              "duration": 59,
+              "start": 111399
+            },
+            {
+              "duration": 50,
+              "start": 111590
+            },
+            {
+              "duration": 57,
+              "start": 112802
+            },
+            {
+              "duration": 56,
+              "start": 113403
+            },
+            {
+              "duration": 59,
+              "start": 113708
+            },
+            {
+              "duration": 55,
+              "start": 114323
+            },
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 220,
+          "triangles": 639903,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 80,
+          "heapTotalMb": 123.1,
+          "mainThreadTaskMs": 101535,
+          "scriptMs": 50105,
+          "layoutMs": 1426,
+          "styleMs": 2905,
+          "domNodes": 5214,
+          "documents": 2,
+          "eventListeners": 357
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 27,
+          "frameMs": 37.1,
+          "p95FrameMs": 66.7,
+          "slowFrames": 26,
+          "heapMb": 146,
+          "longTasks": [
+            {
+              "duration": 78,
+              "start": 108009
+            },
+            {
+              "duration": 91,
+              "start": 108097
+            },
+            {
+              "duration": 56,
+              "start": 108647
+            },
+            {
+              "duration": 90,
+              "start": 108777
+            },
+            {
+              "duration": 52,
+              "start": 109237
+            },
+            {
+              "duration": 54,
+              "start": 109432
+            },
+            {
+              "duration": 56,
+              "start": 109714
+            },
+            {
+              "duration": 65,
+              "start": 109930
+            },
+            {
+              "duration": 64,
+              "start": 110052
+            },
+            {
+              "duration": 88,
+              "start": 110561
+            },
+            {
+              "duration": 54,
+              "start": 110825
+            },
+            {
+              "duration": 59,
+              "start": 111399
+            },
+            {
+              "duration": 50,
+              "start": 111590
+            },
+            {
+              "duration": 57,
+              "start": 112802
+            },
+            {
+              "duration": 56,
+              "start": 113403
+            },
+            {
+              "duration": 59,
+              "start": 113708
+            },
+            {
+              "duration": 55,
+              "start": 114323
+            },
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 55.8,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 103319,
+          "scriptMs": 51599,
+          "layoutMs": 1435,
+          "styleMs": 2997,
+          "domNodes": 5397,
+          "documents": 2,
+          "eventListeners": 358
+        }
+      },
+      "taskTimePerWallPct": 95,
+      "webgl": {
+        "start": {
+          "frame": 1169,
+          "calls": 220,
+          "triangles": 639903,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1224,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 55,
+        "renderedFps": 29.4
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\accelerazione-moto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "frenata-moto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 26,
+          "frameMs": 38.1,
+          "p95FrameMs": 67,
+          "slowFrames": 32,
+          "heapMb": 148.9,
+          "longTasks": [
+            {
+              "duration": 56,
+              "start": 109714
+            },
+            {
+              "duration": 65,
+              "start": 109930
+            },
+            {
+              "duration": 64,
+              "start": 110052
+            },
+            {
+              "duration": 88,
+              "start": 110561
+            },
+            {
+              "duration": 54,
+              "start": 110825
+            },
+            {
+              "duration": 59,
+              "start": 111399
+            },
+            {
+              "duration": 50,
+              "start": 111590
+            },
+            {
+              "duration": 57,
+              "start": 112802
+            },
+            {
+              "duration": 56,
+              "start": 113403
+            },
+            {
+              "duration": 59,
+              "start": 113708
+            },
+            {
+              "duration": 55,
+              "start": 114323
+            },
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 58.3,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 104285,
+          "scriptMs": 52408,
+          "layoutMs": 1438,
+          "styleMs": 3025,
+          "domNodes": 5456,
+          "documents": 2,
+          "eventListeners": 362
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 29,
+          "frameMs": 34.9,
+          "p95FrameMs": 66.8,
+          "slowFrames": 24,
+          "heapMb": 156,
+          "longTasks": [
+            {
+              "duration": 88,
+              "start": 110561
+            },
+            {
+              "duration": 54,
+              "start": 110825
+            },
+            {
+              "duration": 59,
+              "start": 111399
+            },
+            {
+              "duration": 50,
+              "start": 111590
+            },
+            {
+              "duration": 57,
+              "start": 112802
+            },
+            {
+              "duration": 56,
+              "start": 113403
+            },
+            {
+              "duration": 59,
+              "start": 113708
+            },
+            {
+              "duration": 55,
+              "start": 114323
+            },
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 65.5,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 105984,
+          "scriptMs": 53816,
+          "layoutMs": 1450,
+          "styleMs": 3109,
+          "domNodes": 5648,
+          "documents": 2,
+          "eventListeners": 363
+        }
+      },
+      "taskTimePerWallPct": 92,
+      "webgl": {
+        "start": {
+          "frame": 1247,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1299,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 52,
+        "renderedFps": 28.2
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\frenata-moto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "sterzata-moto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 27,
+          "frameMs": 36.8,
+          "p95FrameMs": 67.2,
+          "slowFrames": 26,
+          "heapMb": 158.9,
+          "longTasks": [
+            {
+              "duration": 57,
+              "start": 112802
+            },
+            {
+              "duration": 56,
+              "start": 113403
+            },
+            {
+              "duration": 59,
+              "start": 113708
+            },
+            {
+              "duration": 55,
+              "start": 114323
+            },
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 66.6,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 106443,
+          "scriptMs": 54187,
+          "layoutMs": 1454,
+          "styleMs": 3130,
+          "domNodes": 5693,
+          "documents": 2,
+          "eventListeners": 368
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 31,
+          "frameMs": 32.8,
+          "p95FrameMs": 66.7,
+          "slowFrames": 18,
+          "heapMb": 140.9,
+          "longTasks": [
+            {
+              "duration": 60,
+              "start": 114865
+            },
+            {
+              "duration": 52,
+              "start": 115239
+            },
+            {
+              "duration": 66,
+              "start": 115961
+            },
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 49.7,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 108170,
+          "scriptMs": 55613,
+          "layoutMs": 1469,
+          "styleMs": 3223,
+          "domNodes": 5882,
+          "documents": 2,
+          "eventListeners": 369
+        }
+      },
+      "taskTimePerWallPct": 94,
+      "webgl": {
+        "start": {
+          "frame": 1311,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1369,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 58,
+        "renderedFps": 31.4
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\sterzata-moto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "accelerazione-auto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 29,
+          "frameMs": 34.9,
+          "p95FrameMs": 66.9,
+          "slowFrames": 19,
+          "heapMb": 142.6,
+          "longTasks": [
+            {
+              "duration": 51,
+              "start": 116321
+            },
+            {
+              "duration": 147,
+              "start": 116375
+            },
+            {
+              "duration": 59,
+              "start": 116651
+            },
+            {
+              "duration": 65,
+              "start": 116910
+            },
+            {
+              "duration": 62,
+              "start": 117002
+            },
+            {
+              "duration": 70,
+              "start": 117160
+            },
+            {
+              "duration": 52,
+              "start": 117236
+            },
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 220,
+          "triangles": 639903,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 50.9,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 108691,
+          "scriptMs": 56037,
+          "layoutMs": 1471,
+          "styleMs": 3245,
+          "domNodes": 5921,
+          "documents": 2,
+          "eventListeners": 373
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 30,
+          "frameMs": 33.8,
+          "p95FrameMs": 67.1,
+          "slowFrames": 17,
+          "heapMb": 149.6,
+          "longTasks": [
+            {
+              "duration": 53,
+              "start": 117467
+            },
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 58,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 110501,
+          "scriptMs": 57513,
+          "layoutMs": 1486,
+          "styleMs": 3327,
+          "domNodes": 6104,
+          "documents": 2,
+          "eventListeners": 374
+        }
+      },
+      "taskTimePerWallPct": 95,
+      "webgl": {
+        "start": {
+          "frame": 1382,
+          "calls": 220,
+          "triangles": 639903,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1432,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 50,
+        "renderedFps": 26.3
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\accelerazione-auto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "frenata-auto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 28,
+          "frameMs": 35.6,
+          "p95FrameMs": 67.1,
+          "slowFrames": 19,
+          "heapMb": 151.2,
+          "longTasks": [
+            {
+              "duration": 50,
+              "start": 117962
+            },
+            {
+              "duration": 51,
+              "start": 118476
+            },
+            {
+              "duration": 74,
+              "start": 118597
+            },
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 59.3,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 110949,
+          "scriptMs": 57843,
+          "layoutMs": 1488,
+          "styleMs": 3349,
+          "domNodes": 6146,
+          "documents": 2,
+          "eventListeners": 378
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 33,
+          "frameMs": 30.3,
+          "p95FrameMs": 66.7,
+          "slowFrames": 13,
+          "heapMb": 158.8,
+          "longTasks": [
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            },
+            {
+              "duration": 77,
+              "start": 126855
+            },
+            {
+              "duration": 63,
+              "start": 127079
+            },
+            {
+              "duration": 61,
+              "start": 127715
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 67,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 112642,
+          "scriptMs": 59296,
+          "layoutMs": 1502,
+          "styleMs": 3421,
+          "domNodes": 6323,
+          "documents": 2,
+          "eventListeners": 379
+        }
+      },
+      "taskTimePerWallPct": 91,
+      "webgl": {
+        "start": {
+          "frame": 1445,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1502,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 57,
+        "renderedFps": 30.6
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\frenata-auto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "retromarcia-auto",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 33,
+          "frameMs": 30,
+          "p95FrameMs": 66.6,
+          "slowFrames": 14,
+          "heapMb": 160.4,
+          "longTasks": [
+            {
+              "duration": 80,
+              "start": 118760
+            },
+            {
+              "duration": 56,
+              "start": 119040
+            },
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            },
+            {
+              "duration": 77,
+              "start": 126855
+            },
+            {
+              "duration": 63,
+              "start": 127079
+            },
+            {
+              "duration": 61,
+              "start": 127715
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 68.2,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 112950,
+          "scriptMs": 59500,
+          "layoutMs": 1502,
+          "styleMs": 3437,
+          "domNodes": 6353,
+          "documents": 2,
+          "eventListeners": 383
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 39,
+          "frameMs": 25.4,
+          "p95FrameMs": 50,
+          "slowFrames": 6,
+          "heapMb": 143.5,
+          "longTasks": [
+            {
+              "duration": 79,
+              "start": 119097
+            },
+            {
+              "duration": 57,
+              "start": 119186
+            },
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            },
+            {
+              "duration": 77,
+              "start": 126855
+            },
+            {
+              "duration": 63,
+              "start": 127079
+            },
+            {
+              "duration": 61,
+              "start": 127715
+            },
+            {
+              "duration": 52,
+              "start": 129098
+            },
+            {
+              "duration": 58,
+              "start": 129238
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 51.3,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 114616,
+          "scriptMs": 60877,
+          "layoutMs": 1515,
+          "styleMs": 3520,
+          "domNodes": 6567,
+          "documents": 2,
+          "eventListeners": 384
+        }
+      },
+      "taskTimePerWallPct": 88,
+      "webgl": {
+        "start": {
+          "frame": 1514,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1577,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 63,
+        "renderedFps": 33.2
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\retromarcia-auto.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "multitouch-guida",
+      "pass": false,
+      "actionError": null,
+      "start": {
+        "performance": {
+          "fps": 36,
+          "frameMs": 27.5,
+          "p95FrameMs": 50.2,
+          "slowFrames": 11,
+          "heapMb": 145.3,
+          "longTasks": [
+            {
+              "duration": 66,
+              "start": 119416
+            },
+            {
+              "duration": 73,
+              "start": 119812
+            },
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            },
+            {
+              "duration": 77,
+              "start": 126855
+            },
+            {
+              "duration": 63,
+              "start": 127079
+            },
+            {
+              "duration": 61,
+              "start": 127715
+            },
+            {
+              "duration": 52,
+              "start": 129098
+            },
+            {
+              "duration": 58,
+              "start": 129238
+            },
+            {
+              "duration": 62,
+              "start": 130834
+            },
+            {
+              "duration": 67,
+              "start": 131194
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 52.7,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 115004,
+          "scriptMs": 61172,
+          "layoutMs": 1519,
+          "styleMs": 3537,
+          "domNodes": 6607,
+          "documents": 2,
+          "eventListeners": 388
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 35,
+          "frameMs": 28.6,
+          "p95FrameMs": 50.2,
+          "slowFrames": 13,
+          "heapMb": 153.5,
+          "longTasks": [
+            {
+              "duration": 65,
+              "start": 120104
+            },
+            {
+              "duration": 88,
+              "start": 120976
+            },
+            {
+              "duration": 60,
+              "start": 121577
+            },
+            {
+              "duration": 56,
+              "start": 121639
+            },
+            {
+              "duration": 75,
+              "start": 121739
+            },
+            {
+              "duration": 62,
+              "start": 121816
+            },
+            {
+              "duration": 57,
+              "start": 122160
+            },
+            {
+              "duration": 57,
+              "start": 122673
+            },
+            {
+              "duration": 59,
+              "start": 122997
+            },
+            {
+              "duration": 55,
+              "start": 123160
+            },
+            {
+              "duration": 73,
+              "start": 124044
+            },
+            {
+              "duration": 67,
+              "start": 124131
+            },
+            {
+              "duration": 88,
+              "start": 124307
+            },
+            {
+              "duration": 53,
+              "start": 124496
+            },
+            {
+              "duration": 70,
+              "start": 124640
+            },
+            {
+              "duration": 66,
+              "start": 124799
+            },
+            {
+              "duration": 94,
+              "start": 125060
+            },
+            {
+              "duration": 60,
+              "start": 125653
+            },
+            {
+              "duration": 82,
+              "start": 125932
+            },
+            {
+              "duration": 57,
+              "start": 126118
+            },
+            {
+              "duration": 69,
+              "start": 126326
+            },
+            {
+              "duration": 77,
+              "start": 126855
+            },
+            {
+              "duration": 63,
+              "start": 127079
+            },
+            {
+              "duration": 61,
+              "start": 127715
+            },
+            {
+              "duration": 52,
+              "start": 129098
+            },
+            {
+              "duration": 58,
+              "start": 129238
+            },
+            {
+              "duration": 62,
+              "start": 130834
+            },
+            {
+              "duration": 67,
+              "start": 131194
+            },
+            {
+              "duration": 87,
+              "start": 132275
+            },
+            {
+              "duration": 64,
+              "start": 132559
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 208,
+          "triangles": 637693,
+          "geometries": 222,
+          "textures": 79,
+          "pixelRatio": 0.6,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "host": {
+          "heapMb": 61,
+          "heapTotalMb": 123.3,
+          "mainThreadTaskMs": 116781,
+          "scriptMs": 62627,
+          "layoutMs": 1528,
+          "styleMs": 3646,
+          "domNodes": 6794,
+          "documents": 2,
+          "eventListeners": 389
+        }
+      },
+      "taskTimePerWallPct": 95,
+      "webgl": {
+        "start": {
+          "frame": 1591,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 1651,
+          "calls": 208,
+          "triangles": 637693,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 60,
+        "renderedFps": 32.1
+      },
+      "screenshot": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\multitouch-guida.png",
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": []
+      },
+      "blocked": true,
+      "reason": "Nessun veicolo guidabile raggiunto; non simulo il risultato."
+    },
+    {
+      "name": "dashboard-attivo",
+      "dashboard": true,
+      "quality": "predefinita",
+      "entry": {
+        "ready": true,
+        "loadMs": 47290,
+        "telemetry": true,
+        "sceneLoading": {
+          "hidden": true,
+          "text": "Preparazione della grafica…Riprova"
+        }
+      },
+      "viewport": {
+        "game": {
+          "width": 390,
+          "height": 844,
+          "dpr": 1
+        },
+        "browser": {
+          "width": 390,
+          "height": 844
+        },
+        "dashboard": {
+          "width": 645,
+          "height": 1396,
+          "heapMb": 210.9
+        }
+      },
+      "start": {
+        "performance": {
+          "fps": 10,
+          "frameMs": 100.6,
+          "p95FrameMs": 250.8,
+          "slowFrames": 68,
+          "heapMb": 215.9,
+          "longTasks": [
+            {
+              "duration": 9572,
+              "start": 52735
+            },
+            {
+              "duration": 100,
+              "start": 62522
+            },
+            {
+              "duration": 77,
+              "start": 62676
+            },
+            {
+              "duration": 80,
+              "start": 62943
+            },
+            {
+              "duration": 51,
+              "start": 63665
+            },
+            {
+              "duration": 323,
+              "start": 63717
+            },
+            {
+              "duration": 56,
+              "start": 64129
+            },
+            {
+              "duration": 233,
+              "start": 64629
+            },
+            {
+              "duration": 104,
+              "start": 64864
+            },
+            {
+              "duration": 101,
+              "start": 64973
+            },
+            {
+              "duration": 88,
+              "start": 65257
+            },
+            {
+              "duration": 60,
+              "start": 65364
+            },
+            {
+              "duration": 816,
+              "start": 65514
+            },
+            {
+              "duration": 88,
+              "start": 66409
+            },
+            {
+              "duration": 103,
+              "start": 66580
+            },
+            {
+              "duration": 61,
+              "start": 66692
+            },
+            {
+              "duration": 91,
+              "start": 66763
+            },
+            {
+              "duration": 62,
+              "start": 66932
+            },
+            {
+              "duration": 78,
+              "start": 67016
+            },
+            {
+              "duration": 100,
+              "start": 67110
+            },
+            {
+              "duration": 104,
+              "start": 67361
+            },
+            {
+              "duration": 122,
+              "start": 67507
+            },
+            {
+              "duration": 186,
+              "start": 67638
+            },
+            {
+              "duration": 63,
+              "start": 67828
+            },
+            {
+              "duration": 51,
+              "start": 67979
+            },
+            {
+              "duration": 66,
+              "start": 68031
+            },
+            {
+              "duration": 59,
+              "start": 68392
+            },
+            {
+              "duration": 55,
+              "start": 68453
+            },
+            {
+              "duration": 66,
+              "start": 68520
+            },
+            {
+              "duration": 95,
+              "start": 68589
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 232,
+          "triangles": 705327,
+          "geometries": 205,
+          "textures": 74,
+          "pixelRatio": 0.9,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 110,
+          "heapTotalMb": 157.2,
+          "mainThreadTaskMs": 63583,
+          "scriptMs": 14683,
+          "layoutMs": 1727,
+          "styleMs": 859,
+          "domNodes": 4286,
+          "documents": 2,
+          "eventListeners": 403
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 22,
+          "frameMs": 45.1,
+          "p95FrameMs": 83.7,
+          "slowFrames": 35,
+          "heapMb": 210.5,
+          "longTasks": [
+            {
+              "duration": 91,
+              "start": 66763
+            },
+            {
+              "duration": 62,
+              "start": 66932
+            },
+            {
+              "duration": 78,
+              "start": 67016
+            },
+            {
+              "duration": 100,
+              "start": 67110
+            },
+            {
+              "duration": 104,
+              "start": 67361
+            },
+            {
+              "duration": 122,
+              "start": 67507
+            },
+            {
+              "duration": 186,
+              "start": 67638
+            },
+            {
+              "duration": 63,
+              "start": 67828
+            },
+            {
+              "duration": 51,
+              "start": 67979
+            },
+            {
+              "duration": 66,
+              "start": 68031
+            },
+            {
+              "duration": 59,
+              "start": 68392
+            },
+            {
+              "duration": 55,
+              "start": 68453
+            },
+            {
+              "duration": 66,
+              "start": 68520
+            },
+            {
+              "duration": 95,
+              "start": 68589
+            },
+            {
+              "duration": 67,
+              "start": 68798
+            },
+            {
+              "duration": 66,
+              "start": 68942
+            },
+            {
+              "duration": 56,
+              "start": 69399
+            },
+            {
+              "duration": 52,
+              "start": 69458
+            },
+            {
+              "duration": 78,
+              "start": 69547
+            },
+            {
+              "duration": 50,
+              "start": 69626
+            },
+            {
+              "duration": 58,
+              "start": 69678
+            },
+            {
+              "duration": 50,
+              "start": 70025
+            },
+            {
+              "duration": 50,
+              "start": 70711
+            },
+            {
+              "duration": 80,
+              "start": 70944
+            },
+            {
+              "duration": 51,
+              "start": 71086
+            },
+            {
+              "duration": 50,
+              "start": 71225
+            },
+            {
+              "duration": 51,
+              "start": 71276
+            },
+            {
+              "duration": 75,
+              "start": 71724
+            },
+            {
+              "duration": 52,
+              "start": 72090
+            },
+            {
+              "duration": 51,
+              "start": 72180
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 232,
+          "triangles": 705327,
+          "geometries": 205,
+          "textures": 74,
+          "pixelRatio": 0.7000000000000001,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 104.3,
+          "heapTotalMb": 158.9,
+          "mainThreadTaskMs": 67288,
+          "scriptMs": 17283,
+          "layoutMs": 1883,
+          "styleMs": 1018,
+          "domNodes": 5203,
+          "documents": 2,
+          "eventListeners": 405
+        }
+      },
+      "taskTimePerWallPct": 90,
+      "webgl": {
+        "start": {
+          "frame": 49,
+          "calls": 232,
+          "triangles": 705327,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 144,
+          "calls": 232,
+          "triangles": 705327,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 95,
+        "renderedFps": 23
+      },
+      "profile": {
+        "sampledCpuMs": 65257,
+        "topFunctions": [
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 31085,
+            "share": 48
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 5668,
+            "share": 9
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 4235,
+            "share": 6
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 2907,
+            "share": 4
+          },
+          {
+            "frame": "(garbage collector) · built-in · -1",
+            "cpuMs": 1993,
+            "share": 3
+          },
+          {
+            "frame": "texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1484,
+            "share": 2
+          },
+          {
+            "frame": "land · http://127.0.0.1:3081/world/world3d.js · 967",
+            "cpuMs": 1464,
+            "share": 2
+          },
+          {
+            "frame": "b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 829,
+            "share": 1
+          },
+          {
+            "frame": "qt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 819,
+            "share": 1
+          },
+          {
+            "frame": "chunkStaticGeometry · http://127.0.0.1:3081/world/geometry-chunks.js · 4",
+            "cpuMs": 671,
+            "share": 1
+          },
+          {
+            "frame": "edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 513,
+            "share": 1
+          },
+          {
+            "frame": "sign · http://127.0.0.1:3081/world/world3d.js · 1509",
+            "cpuMs": 510,
+            "share": 1
+          }
+        ],
+        "topInclusiveFunctions": [
+          {
+            "frame": "(root) · built-in · -1",
+            "cpuMs": 65254,
+            "share": 100
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 31085,
+            "share": 48
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97",
+            "cpuMs": 10179,
+            "share": 16
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 10176,
+            "share": 16
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 10032,
+            "share": 15
+          },
+          {
+            "frame": "traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 5796,
+            "share": 9
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 5668,
+            "share": 9
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934",
+            "cpuMs": 5474,
+            "share": 8
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 4690,
+            "share": 7
+          },
+          {
+            "frame": "parkedProps · http://127.0.0.1:3081/app.js · 9",
+            "cpuMs": 4554,
+            "share": 7
+          },
+          {
+            "frame": "napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104",
+            "cpuMs": 4503,
+            "share": 7
+          },
+          {
+            "frame": "roadAt · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 4411,
+            "share": 7
+          }
+        ],
+        "topStacks": [
+          {
+            "frame": "(root) · built-in · -1 → (program) · built-in · -1",
+            "cpuMs": 31085,
+            "share": 48
+          },
+          {
+            "frame": "(root) · built-in · -1 → (idle) · built-in · -1",
+            "cpuMs": 5668,
+            "share": 9
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → parkedProps · http://127.0.0.1:3081/app.js · 9 → napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 123 → roadAt · http://127.0.0.1:3081/shared/napoli.js · 109 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 4116,
+            "share": 6
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 2907,
+            "share": 4
+          },
+          {
+            "frame": "(root) · built-in · -1 → (garbage collector) · built-in · -1",
+            "cpuMs": 1993,
+            "share": 3
+          },
+          {
+            "frame": "Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → upload · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → wo · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → E · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → L · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1484,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → landFn · http://127.0.0.1:3081/world/world3d.js · 967 → land · http://127.0.0.1:3081/world/world3d.js · 967",
+            "cpuMs": 690,
+            "share": 1
+          },
+          {
+            "frame": "(root) · built-in · -1 → chunkStaticGeometry · http://127.0.0.1:3081/world/geometry-chunks.js · 4",
+            "cpuMs": 671,
+            "share": 1
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → getUniforms · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 666,
+            "share": 1
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/world/world3d.js · 1929 → compileAsync · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → compile · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → traverse · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Lt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → qt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 629,
+            "share": 1
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 513,
+            "share": 1
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → shopfront · http://127.0.0.1:3081/world/world3d.js · 1295 → sign · http://127.0.0.1:3081/world/world3d.js · 1509",
+            "cpuMs": 510,
+            "share": 1
+          }
+        ]
+      },
+      "errors": {
+        "console": [
+          "Failed to load resource: the server responded with a status of 404 (Not Found)"
+        ],
+        "page": [],
+        "requests": [
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/suv.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan-sports.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/race.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "http": []
+      }
+    },
+    {
+      "name": "qualita-ridotta",
+      "dashboard": false,
+      "quality": "min",
+      "entry": {
+        "ready": true,
+        "loadMs": 33085,
+        "telemetry": true,
+        "sceneLoading": {
+          "hidden": true,
+          "text": "Preparazione della grafica…Riprova"
+        }
+      },
+      "viewport": {
+        "game": {
+          "width": 390,
+          "height": 844,
+          "dpr": 1
+        },
+        "browser": {
+          "width": 390,
+          "height": 844
+        },
+        "dashboard": null
+      },
+      "start": {
+        "performance": {
+          "fps": 18,
+          "frameMs": 55.2,
+          "p95FrameMs": 170.7,
+          "slowFrames": 21,
+          "heapMb": 150.2,
+          "longTasks": [
+            {
+              "duration": 114,
+              "start": 7891
+            },
+            {
+              "duration": 53,
+              "start": 8074
+            },
+            {
+              "duration": 87,
+              "start": 8207
+            },
+            {
+              "duration": 241,
+              "start": 8487
+            },
+            {
+              "duration": 104,
+              "start": 8752
+            },
+            {
+              "duration": 91,
+              "start": 8933
+            },
+            {
+              "duration": 1200,
+              "start": 9794
+            },
+            {
+              "duration": 393,
+              "start": 11028
+            },
+            {
+              "duration": 103,
+              "start": 11422
+            },
+            {
+              "duration": 5105,
+              "start": 12646
+            },
+            {
+              "duration": 1513,
+              "start": 17796
+            },
+            {
+              "duration": 127,
+              "start": 19344
+            },
+            {
+              "duration": 51,
+              "start": 19710
+            },
+            {
+              "duration": 138,
+              "start": 20573
+            },
+            {
+              "duration": 3299,
+              "start": 20774
+            },
+            {
+              "duration": 1872,
+              "start": 24465
+            },
+            {
+              "duration": 96,
+              "start": 26337
+            },
+            {
+              "duration": 69,
+              "start": 27302
+            },
+            {
+              "duration": 834,
+              "start": 27648
+            },
+            {
+              "duration": 94,
+              "start": 28623
+            },
+            {
+              "duration": 6565,
+              "start": 28718
+            },
+            {
+              "duration": 642,
+              "start": 35385
+            },
+            {
+              "duration": 56,
+              "start": 36036
+            },
+            {
+              "duration": 53,
+              "start": 36313
+            },
+            {
+              "duration": 164,
+              "start": 36953
+            },
+            {
+              "duration": 95,
+              "start": 37710
+            },
+            {
+              "duration": 231,
+              "start": 38236
+            },
+            {
+              "duration": 246,
+              "start": 38546
+            },
+            {
+              "duration": 65,
+              "start": 38840
+            },
+            {
+              "duration": 60,
+              "start": 38951
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 701587,
+          "geometries": 197,
+          "textures": 74,
+          "pixelRatio": 0.72,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 55.1,
+          "heapTotalMb": 125.8,
+          "mainThreadTaskMs": 33577,
+          "scriptMs": 12896,
+          "layoutMs": 714,
+          "styleMs": 631,
+          "domNodes": 1198,
+          "documents": 2,
+          "eventListeners": 266
+        }
+      },
+      "end": {
+        "performance": {
+          "fps": 33,
+          "frameMs": 30.3,
+          "p95FrameMs": 50.7,
+          "slowFrames": 12,
+          "heapMb": 150.1,
+          "longTasks": [
+            {
+              "duration": 104,
+              "start": 8752
+            },
+            {
+              "duration": 91,
+              "start": 8933
+            },
+            {
+              "duration": 1200,
+              "start": 9794
+            },
+            {
+              "duration": 393,
+              "start": 11028
+            },
+            {
+              "duration": 103,
+              "start": 11422
+            },
+            {
+              "duration": 5105,
+              "start": 12646
+            },
+            {
+              "duration": 1513,
+              "start": 17796
+            },
+            {
+              "duration": 127,
+              "start": 19344
+            },
+            {
+              "duration": 51,
+              "start": 19710
+            },
+            {
+              "duration": 138,
+              "start": 20573
+            },
+            {
+              "duration": 3299,
+              "start": 20774
+            },
+            {
+              "duration": 1872,
+              "start": 24465
+            },
+            {
+              "duration": 96,
+              "start": 26337
+            },
+            {
+              "duration": 69,
+              "start": 27302
+            },
+            {
+              "duration": 834,
+              "start": 27648
+            },
+            {
+              "duration": 94,
+              "start": 28623
+            },
+            {
+              "duration": 6565,
+              "start": 28718
+            },
+            {
+              "duration": 642,
+              "start": 35385
+            },
+            {
+              "duration": 56,
+              "start": 36036
+            },
+            {
+              "duration": 53,
+              "start": 36313
+            },
+            {
+              "duration": 164,
+              "start": 36953
+            },
+            {
+              "duration": 95,
+              "start": 37710
+            },
+            {
+              "duration": 231,
+              "start": 38236
+            },
+            {
+              "duration": 246,
+              "start": 38546
+            },
+            {
+              "duration": 65,
+              "start": 38840
+            },
+            {
+              "duration": 60,
+              "start": 38951
+            },
+            {
+              "duration": 119,
+              "start": 39184
+            },
+            {
+              "duration": 52,
+              "start": 39449
+            },
+            {
+              "duration": 69,
+              "start": 41801
+            },
+            {
+              "duration": 51,
+              "start": 41932
+            }
+          ]
+        },
+        "player": {
+          "id": "1f8a553f-c44e-4652-9ab9-ea6327484ac8",
+          "room": "mergellina",
+          "x": 224.88,
+          "y": 390.58,
+          "velocity": 0,
+          "heading": -1.571,
+          "vehicle": null,
+          "seat": null,
+          "velocityEstimated": true
+        },
+        "renderer": {
+          "drawCalls": 224,
+          "triangles": 701587,
+          "geometries": 197,
+          "textures": 74,
+          "pixelRatio": 0.72,
+          "gpuMemory": "non esposta dal browser"
+        },
+        "world": {
+          "loaded": true,
+          "collisionBodies": 0,
+          "collisionCounts": {
+            "circles": 2459,
+            "rects": 0
+          }
+        },
+        "host": {
+          "heapMb": 54.7,
+          "heapTotalMb": 125.8,
+          "mainThreadTaskMs": 36807,
+          "scriptMs": 15679,
+          "layoutMs": 738,
+          "styleMs": 768,
+          "domNodes": 1620,
+          "documents": 2,
+          "eventListeners": 268
+        }
+      },
+      "taskTimePerWallPct": 78,
+      "webgl": {
+        "start": {
+          "frame": 47,
+          "calls": 224,
+          "triangles": 701587,
+          "points": 390,
+          "lines": 0
+        },
+        "end": {
+          "frame": 166,
+          "calls": 224,
+          "triangles": 701587,
+          "points": 390,
+          "lines": 0
+        },
+        "renderedFrames": 119,
+        "renderedFps": 28.6
+      },
+      "profile": {
+        "sampledCpuMs": 37643,
+        "topFunctions": [
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 5614,
+            "share": 15
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 4584,
+            "share": 12
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 3223,
+            "share": 9
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 3006,
+            "share": 8
+          },
+          {
+            "frame": "land · http://127.0.0.1:3081/world/world3d.js · 967",
+            "cpuMs": 1445,
+            "share": 4
+          },
+          {
+            "frame": "(garbage collector) · built-in · -1",
+            "cpuMs": 1226,
+            "share": 3
+          },
+          {
+            "frame": "b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1068,
+            "share": 3
+          },
+          {
+            "frame": "pulse · http://127.0.0.1:3081/audio/ambient.js · 58",
+            "cpuMs": 843,
+            "share": 2
+          },
+          {
+            "frame": "texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 771,
+            "share": 2
+          },
+          {
+            "frame": "edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 678,
+            "share": 2
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/app.js · 52",
+            "cpuMs": 467,
+            "share": 1
+          },
+          {
+            "frame": "signMat · http://127.0.0.1:3081/world/world3d.js · 792",
+            "cpuMs": 462,
+            "share": 1
+          }
+        ],
+        "topInclusiveFunctions": [
+          {
+            "frame": "(root) · built-in · -1",
+            "cpuMs": 37642,
+            "share": 100
+          },
+          {
+            "frame": "buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 10545,
+            "share": 28
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97",
+            "cpuMs": 9687,
+            "share": 26
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 9674,
+            "share": 26
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 5614,
+            "share": 15
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 4584,
+            "share": 12
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934",
+            "cpuMs": 4035,
+            "share": 11
+          },
+          {
+            "frame": "parkedProps · http://127.0.0.1:3081/app.js · 9",
+            "cpuMs": 3407,
+            "share": 9
+          },
+          {
+            "frame": "napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104",
+            "cpuMs": 3402,
+            "share": 9
+          },
+          {
+            "frame": "roadAt · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 3398,
+            "share": 9
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 3373,
+            "share": 9
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/shared/napoli.js · 123",
+            "cpuMs": 3274,
+            "share": 9
+          }
+        ],
+        "topStacks": [
+          {
+            "frame": "(root) · built-in · -1 → (idle) · built-in · -1",
+            "cpuMs": 5614,
+            "share": 15
+          },
+          {
+            "frame": "(root) · built-in · -1 → (program) · built-in · -1",
+            "cpuMs": 4584,
+            "share": 12
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → parkedProps · http://127.0.0.1:3081/app.js · 9 → napoliParkedVehicles · http://127.0.0.1:3081/shared/napoli.js · 104 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 123 → roadAt · http://127.0.0.1:3081/shared/napoli.js · 109 → (anonima) · http://127.0.0.1:3081/shared/napoli.js · 109",
+            "cpuMs": 3112,
+            "share": 8
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961",
+            "cpuMs": 3006,
+            "share": 8
+          },
+          {
+            "frame": "(root) · built-in · -1 → (garbage collector) · built-in · -1",
+            "cpuMs": 1226,
+            "share": 3
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → getUniforms · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → b · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1018,
+            "share": 3
+          },
+          {
+            "frame": "(root) · built-in · -1 → (anonima) · http://127.0.0.1:3081/audio/ambient.js · 18 → pulse · http://127.0.0.1:3081/audio/ambient.js · 58",
+            "cpuMs": 843,
+            "share": 2
+          },
+          {
+            "frame": "Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → upload · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → wo · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → E · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → L · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → texSubImage2D · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 771,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → landFn · http://127.0.0.1:3081/world/world3d.js · 967 → land · http://127.0.0.1:3081/world/world3d.js · 967",
+            "cpuMs": 695,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → edgeNear · http://127.0.0.1:3081/world/world3d.js · 1143",
+            "cpuMs": 678,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → ws.onmessage · http://127.0.0.1:3081/networking/api.js · 16 → dispatchEvent · built-in · -1 → (anonima) · http://127.0.0.1:3081/app.js · 52",
+            "cpuMs": 467,
+            "share": 1
+          },
+          {
+            "frame": "(root) · built-in · -1 → buildNapoli · http://127.0.0.1:3081/world/world3d.js · 961 → signpost · http://127.0.0.1:3081/world/world3d.js · 797 → (anonima) · http://127.0.0.1:3081/world/world3d.js · 798 → signMat · http://127.0.0.1:3081/world/world3d.js · 792",
+            "cpuMs": 462,
+            "share": 1
+          }
+        ]
+      },
+      "errors": {
+        "console": [],
+        "page": [],
+        "requests": [
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan-sports.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/suv.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/race.glb",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "http": []
+      }
+    }
+  ],
+  "runtimeProfiles": [
+    {
+      "name": "profilo CPU · giocatore fermo",
+      "durationMs": 5000,
+      "actionError": null,
+      "frameBefore": {
+        "fps": 25,
+        "frameMs": 39.6,
+        "p95FrameMs": 68.7,
+        "slowFrames": 30,
+        "heapMb": 136.4,
+        "longTasks": [
+          {
+            "duration": 109,
+            "start": 69567
+          },
+          {
+            "duration": 68,
+            "start": 69677
+          },
+          {
+            "duration": 70,
+            "start": 69935
+          },
+          {
+            "duration": 88,
+            "start": 70005
+          },
+          {
+            "duration": 69,
+            "start": 70238
+          },
+          {
+            "duration": 81,
+            "start": 70325
+          },
+          {
+            "duration": 108,
+            "start": 70681
+          },
+          {
+            "duration": 83,
+            "start": 70789
+          },
+          {
+            "duration": 64,
+            "start": 70932
+          },
+          {
+            "duration": 98,
+            "start": 71131
+          },
+          {
+            "duration": 76,
+            "start": 71230
+          },
+          {
+            "duration": 50,
+            "start": 71716
+          },
+          {
+            "duration": 57,
+            "start": 71836
+          },
+          {
+            "duration": 67,
+            "start": 72416
+          },
+          {
+            "duration": 73,
+            "start": 73127
+          },
+          {
+            "duration": 61,
+            "start": 73346
+          },
+          {
+            "duration": 100,
+            "start": 73488
+          },
+          {
+            "duration": 59,
+            "start": 73662
+          },
+          {
+            "duration": 76,
+            "start": 73750
+          },
+          {
+            "duration": 52,
+            "start": 73831
+          },
+          {
+            "duration": 67,
+            "start": 74162
+          },
+          {
+            "duration": 53,
+            "start": 74375
+          },
+          {
+            "duration": 57,
+            "start": 74788
+          },
+          {
+            "duration": 58,
+            "start": 74896
+          },
+          {
+            "duration": 57,
+            "start": 75063
+          },
+          {
+            "duration": 103,
+            "start": 75127
+          },
+          {
+            "duration": 117,
+            "start": 75243
+          },
+          {
+            "duration": 54,
+            "start": 75362
+          },
+          {
+            "duration": 96,
+            "start": 75449
+          },
+          {
+            "duration": 72,
+            "start": 75593
+          }
+        ]
+      },
+      "frameAfter": {
+        "fps": 33,
+        "frameMs": 30.1,
+        "p95FrameMs": 51.7,
+        "slowFrames": 11,
+        "heapMb": 139.6,
+        "longTasks": [
+          {
+            "duration": 108,
+            "start": 70681
+          },
+          {
+            "duration": 83,
+            "start": 70789
+          },
+          {
+            "duration": 64,
+            "start": 70932
+          },
+          {
+            "duration": 98,
+            "start": 71131
+          },
+          {
+            "duration": 76,
+            "start": 71230
+          },
+          {
+            "duration": 50,
+            "start": 71716
+          },
+          {
+            "duration": 57,
+            "start": 71836
+          },
+          {
+            "duration": 67,
+            "start": 72416
+          },
+          {
+            "duration": 73,
+            "start": 73127
+          },
+          {
+            "duration": 61,
+            "start": 73346
+          },
+          {
+            "duration": 100,
+            "start": 73488
+          },
+          {
+            "duration": 59,
+            "start": 73662
+          },
+          {
+            "duration": 76,
+            "start": 73750
+          },
+          {
+            "duration": 52,
+            "start": 73831
+          },
+          {
+            "duration": 67,
+            "start": 74162
+          },
+          {
+            "duration": 53,
+            "start": 74375
+          },
+          {
+            "duration": 57,
+            "start": 74788
+          },
+          {
+            "duration": 58,
+            "start": 74896
+          },
+          {
+            "duration": 57,
+            "start": 75063
+          },
+          {
+            "duration": 103,
+            "start": 75127
+          },
+          {
+            "duration": 117,
+            "start": 75243
+          },
+          {
+            "duration": 54,
+            "start": 75362
+          },
+          {
+            "duration": 96,
+            "start": 75449
+          },
+          {
+            "duration": 72,
+            "start": 75593
+          },
+          {
+            "duration": 77,
+            "start": 75813
+          },
+          {
+            "duration": 71,
+            "start": 75892
+          },
+          {
+            "duration": 86,
+            "start": 75968
+          },
+          {
+            "duration": 68,
+            "start": 77658
+          },
+          {
+            "duration": 113,
+            "start": 80360
+          },
+          {
+            "duration": 59,
+            "start": 81323
+          }
+        ]
+      },
+      "renderer": {
+        "drawCalls": 224,
+        "triangles": 644029,
+        "geometries": 215,
+        "textures": 77,
+        "pixelRatio": 0.6,
+        "gpuMemory": "non esposta dal browser"
+      },
+      "hostStart": {
+        "heapMb": 54,
+        "heapTotalMb": 122.8,
+        "mainThreadTaskMs": 65002,
+        "scriptMs": 22401,
+        "layoutMs": 1069,
+        "styleMs": 1121,
+        "domNodes": 1973,
+        "documents": 2,
+        "eventListeners": 274
+      },
+      "hostEnd": {
+        "heapMb": 56.3,
+        "heapTotalMb": 122.8,
+        "mainThreadTaskMs": 69581,
+        "scriptMs": 25639,
+        "layoutMs": 1100,
+        "styleMs": 1311,
+        "domNodes": 2532,
+        "documents": 2,
+        "eventListeners": 277
+      },
+      "profile": {
+        "sampledCpuMs": 5730,
+        "topFunctions": [
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 1703,
+            "share": 30
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 1235,
+            "share": 22
+          },
+          {
+            "frame": "updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 527,
+            "share": 9
+          },
+          {
+            "frame": "Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 250,
+            "share": 4
+          },
+          {
+            "frame": "updateMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 235,
+            "share": 4
+          },
+          {
+            "frame": "multiplyMatrices · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 209,
+            "share": 4
+          },
+          {
+            "frame": "bindVertexArray · built-in · -1",
+            "cpuMs": 170,
+            "share": 3
+          },
+          {
+            "frame": "Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 127,
+            "share": 2
+          },
+          {
+            "frame": "copy · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 100,
+            "share": 2
+          },
+          {
+            "frame": "refreshMaterialUniforms · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 97,
+            "share": 2
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 87,
+            "share": 2
+          },
+          {
+            "frame": "setValue · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 74,
+            "share": 1
+          }
+        ],
+        "topInclusiveFunctions": [
+          {
+            "frame": "(root) · built-in · -1",
+            "cpuMs": 5730,
+            "share": 100
+          },
+          {
+            "frame": "updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 3886,
+            "share": 68
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 2732,
+            "share": 48
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97",
+            "cpuMs": 2732,
+            "share": 48
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934",
+            "cpuMs": 2681,
+            "share": 47
+          },
+          {
+            "frame": "render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 2582,
+            "share": 45
+          },
+          {
+            "frame": "present · http://127.0.0.1:3081/world/world3d.js · 1893",
+            "cpuMs": 2569,
+            "share": 45
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 1703,
+            "share": 30
+          },
+          {
+            "frame": "Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1633,
+            "share": 28
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 1235,
+            "share": 22
+          },
+          {
+            "frame": "Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1142,
+            "share": 20
+          },
+          {
+            "frame": "Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1142,
+            "share": 20
+          }
+        ],
+        "topStacks": [
+          {
+            "frame": "(root) · built-in · -1 → (idle) · built-in · -1",
+            "cpuMs": 1703,
+            "share": 30
+          },
+          {
+            "frame": "(root) · built-in · -1 → (program) · built-in · -1",
+            "cpuMs": 1235,
+            "share": 22
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 363,
+            "share": 6
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → setup · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → o · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → bindVertexArray · built-in · -1",
+            "cpuMs": 170,
+            "share": 3
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 127,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 118,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 115,
+            "share": 2
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → multiplyMatrices · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 111,
+            "share": 2
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → refreshMaterialUniforms · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 97,
+            "share": 2
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 96,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 83,
+            "share": 1
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → intersectsObject · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → applyMatrix4 · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → applyMatrix4 · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 68,
+            "share": 1
+          }
+        ]
+      }
+    },
+    {
+      "name": "profilo CPU · camminata",
+      "durationMs": 5000,
+      "actionError": null,
+      "frameBefore": {
+        "fps": 26,
+        "frameMs": 38.7,
+        "p95FrameMs": 73,
+        "slowFrames": 24,
+        "heapMb": 138,
+        "longTasks": [
+          {
+            "duration": 76,
+            "start": 73750
+          },
+          {
+            "duration": 52,
+            "start": 73831
+          },
+          {
+            "duration": 67,
+            "start": 74162
+          },
+          {
+            "duration": 53,
+            "start": 74375
+          },
+          {
+            "duration": 57,
+            "start": 74788
+          },
+          {
+            "duration": 58,
+            "start": 74896
+          },
+          {
+            "duration": 57,
+            "start": 75063
+          },
+          {
+            "duration": 103,
+            "start": 75127
+          },
+          {
+            "duration": 117,
+            "start": 75243
+          },
+          {
+            "duration": 54,
+            "start": 75362
+          },
+          {
+            "duration": 96,
+            "start": 75449
+          },
+          {
+            "duration": 72,
+            "start": 75593
+          },
+          {
+            "duration": 77,
+            "start": 75813
+          },
+          {
+            "duration": 71,
+            "start": 75892
+          },
+          {
+            "duration": 86,
+            "start": 75968
+          },
+          {
+            "duration": 68,
+            "start": 77658
+          },
+          {
+            "duration": 113,
+            "start": 80360
+          },
+          {
+            "duration": 59,
+            "start": 81323
+          },
+          {
+            "duration": 191,
+            "start": 82087
+          },
+          {
+            "duration": 71,
+            "start": 83196
+          },
+          {
+            "duration": 55,
+            "start": 83301
+          },
+          {
+            "duration": 84,
+            "start": 83688
+          },
+          {
+            "duration": 58,
+            "start": 84099
+          },
+          {
+            "duration": 61,
+            "start": 84444
+          },
+          {
+            "duration": 60,
+            "start": 84545
+          },
+          {
+            "duration": 87,
+            "start": 84679
+          },
+          {
+            "duration": 52,
+            "start": 84778
+          },
+          {
+            "duration": 64,
+            "start": 84896
+          },
+          {
+            "duration": 83,
+            "start": 85088
+          },
+          {
+            "duration": 62,
+            "start": 85292
+          }
+        ]
+      },
+      "frameAfter": {
+        "fps": 32,
+        "frameMs": 31.4,
+        "p95FrameMs": 65.2,
+        "slowFrames": 14,
+        "heapMb": 138.2,
+        "longTasks": [
+          {
+            "duration": 117,
+            "start": 75243
+          },
+          {
+            "duration": 54,
+            "start": 75362
+          },
+          {
+            "duration": 96,
+            "start": 75449
+          },
+          {
+            "duration": 72,
+            "start": 75593
+          },
+          {
+            "duration": 77,
+            "start": 75813
+          },
+          {
+            "duration": 71,
+            "start": 75892
+          },
+          {
+            "duration": 86,
+            "start": 75968
+          },
+          {
+            "duration": 68,
+            "start": 77658
+          },
+          {
+            "duration": 113,
+            "start": 80360
+          },
+          {
+            "duration": 59,
+            "start": 81323
+          },
+          {
+            "duration": 191,
+            "start": 82087
+          },
+          {
+            "duration": 71,
+            "start": 83196
+          },
+          {
+            "duration": 55,
+            "start": 83301
+          },
+          {
+            "duration": 84,
+            "start": 83688
+          },
+          {
+            "duration": 58,
+            "start": 84099
+          },
+          {
+            "duration": 61,
+            "start": 84444
+          },
+          {
+            "duration": 60,
+            "start": 84545
+          },
+          {
+            "duration": 87,
+            "start": 84679
+          },
+          {
+            "duration": 52,
+            "start": 84778
+          },
+          {
+            "duration": 64,
+            "start": 84896
+          },
+          {
+            "duration": 83,
+            "start": 85088
+          },
+          {
+            "duration": 62,
+            "start": 85292
+          },
+          {
+            "duration": 77,
+            "start": 85442
+          },
+          {
+            "duration": 52,
+            "start": 85591
+          },
+          {
+            "duration": 82,
+            "start": 86543
+          },
+          {
+            "duration": 66,
+            "start": 88041
+          },
+          {
+            "duration": 62,
+            "start": 88711
+          },
+          {
+            "duration": 50,
+            "start": 89329
+          },
+          {
+            "duration": 93,
+            "start": 91179
+          },
+          {
+            "duration": 56,
+            "start": 91290
+          }
+        ]
+      },
+      "renderer": {
+        "drawCalls": 215,
+        "triangles": 644263,
+        "geometries": 221,
+        "textures": 79,
+        "pixelRatio": 0.6,
+        "gpuMemory": "non esposta dal browser"
+      },
+      "hostStart": {
+        "heapMb": 52.6,
+        "heapTotalMb": 122.8,
+        "mainThreadTaskMs": 73039,
+        "scriptMs": 28476,
+        "layoutMs": 1125,
+        "styleMs": 1489,
+        "domNodes": 2819,
+        "documents": 2,
+        "eventListeners": 289
+      },
+      "hostEnd": {
+        "heapMb": 51.8,
+        "heapTotalMb": 122.8,
+        "mainThreadTaskMs": 77702,
+        "scriptMs": 31835,
+        "layoutMs": 1169,
+        "styleMs": 1723,
+        "domNodes": 3360,
+        "documents": 2,
+        "eventListeners": 312
+      },
+      "profile": {
+        "sampledCpuMs": 5703,
+        "topFunctions": [
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 1467,
+            "share": 26
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 1311,
+            "share": 23
+          },
+          {
+            "frame": "updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 582,
+            "share": 10
+          },
+          {
+            "frame": "updateMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 370,
+            "share": 6
+          },
+          {
+            "frame": "Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 159,
+            "share": 3
+          },
+          {
+            "frame": "upd · http://127.0.0.1:3081/ui/install.js · 20",
+            "cpuMs": 146,
+            "share": 3
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 138,
+            "share": 2
+          },
+          {
+            "frame": "bindVertexArray · built-in · -1",
+            "cpuMs": 113,
+            "share": 2
+          },
+          {
+            "frame": "copy · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 93,
+            "share": 2
+          },
+          {
+            "frame": "(anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 86,
+            "share": 2
+          },
+          {
+            "frame": "setFromRotationMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 86,
+            "share": 2
+          },
+          {
+            "frame": "renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 85,
+            "share": 1
+          }
+        ],
+        "topInclusiveFunctions": [
+          {
+            "frame": "(root) · built-in · -1",
+            "cpuMs": 5703,
+            "share": 100
+          },
+          {
+            "frame": "updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 3832,
+            "share": 67
+          },
+          {
+            "frame": "frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 2734,
+            "share": 48
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97",
+            "cpuMs": 2734,
+            "share": 48
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934",
+            "cpuMs": 2536,
+            "share": 44
+          },
+          {
+            "frame": "render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 2299,
+            "share": 40
+          },
+          {
+            "frame": "present · http://127.0.0.1:3081/world/world3d.js · 1893",
+            "cpuMs": 2250,
+            "share": 39
+          },
+          {
+            "frame": "(program) · built-in · -1",
+            "cpuMs": 1467,
+            "share": 26
+          },
+          {
+            "frame": "(idle) · built-in · -1",
+            "cpuMs": 1311,
+            "share": 23
+          },
+          {
+            "frame": "Vt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 1035,
+            "share": 18
+          },
+          {
+            "frame": "Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 898,
+            "share": 16
+          },
+          {
+            "frame": "Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 898,
+            "share": 16
+          }
+        ],
+        "topStacks": [
+          {
+            "frame": "(root) · built-in · -1 → (program) · built-in · -1",
+            "cpuMs": 1467,
+            "share": 26
+          },
+          {
+            "frame": "(root) · built-in · -1 → (idle) · built-in · -1",
+            "cpuMs": 1311,
+            "share": 23
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 315,
+            "share": 6
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 195,
+            "share": 3
+          },
+          {
+            "frame": "(root) · built-in · -1 → upd · http://127.0.0.1:3081/ui/install.js · 20",
+            "cpuMs": 146,
+            "share": 3
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 143,
+            "share": 3
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98",
+            "cpuMs": 138,
+            "share": 2
+          },
+          {
+            "frame": "frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrixWorld · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → updateMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 137,
+            "share": 2
+          },
+          {
+            "frame": "draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → setup · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → o · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → bindVertexArray · built-in · -1",
+            "cpuMs": 113,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → update · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → apply · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → fromArray · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → (anonima) · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → setFromQuaternion · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → setFromRotationMatrix · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 86,
+            "share": 2
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Ht · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Wt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → Xt · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → renderBufferDirect · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 85,
+            "share": 1
+          },
+          {
+            "frame": "(root) · built-in · -1 → frame · http://127.0.0.1:3081/app.js · 97 → frame0 · http://127.0.0.1:3081/app.js · 98 → draw · http://127.0.0.1:3081/world/world3d.js · 1934 → present · http://127.0.0.1:3081/world/world3d.js · 1893 → render · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → sort · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5 → El · http://127.0.0.1:3081/vendor/three/three.module.min.js · 5",
+            "cpuMs": 84,
+            "share": 1
+          }
+        ]
+      }
+    }
+  ],
+  "errors": {
+    "console": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    ],
+    "page": [],
+    "requests": [
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/suv.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/race.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/sedan-sports.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/suv.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/race.glb",
+        "error": "net::ERR_ABORTED"
+      },
+      {
+        "url": "http://127.0.0.1:3081/assets/world/napoli/vehicles/kenney-car-kit/hatchback-sports.glb",
+        "error": "net::ERR_ABORTED"
+      }
+    ],
+    "http": []
+  },
+  "limits": [
+    "La guida reale è bloccata dal mancato ingresso in un veicolo vicino allo spawn; il report include la distanza dai veicoli statici."
+  ],
+  "screenshots": [
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\gioco-normale-mobile.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\gioco-fermo.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\camminata-avanti.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\camera-panoramica.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\tentativo-ingresso-veicolo-reale.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\accelerazione-moto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\frenata-moto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\sterzata-moto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\accelerazione-auto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\frenata-auto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\retromarcia-auto.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\multitouch-guida.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\dashboard-attivo.png",
+    "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-performance-dashboard-1s-drive\\qualita-ridotta.png"
+  ],
+  "cpuMetricNote": "CDP TaskDuration/ScriptDuration misura tempo di lavoro del renderer, non l’uso percentuale dell’intera CPU; il rapporto può superare 100% se include contesti/worker paralleli.",
+  "gpuMetricNote": "Chrome espone adattatore e driver, ma non l’utilizzo GPU né la VRAM su questo sistema.",
+  "webglFrameMetricNote": "WebGLRenderer.info.render.frame conta le chiamate di rendering; sui profili mobile usati qui è un passaggio per frame, mentre il profilo ultra può eseguire più passaggi.",
+  "qaUser": "Ciro_7356",
+  "nearbyVehicleAudit": {
+    "spawn": {
+      "x": 230.2,
+      "y": 399
+    },
+    "count": 196,
+    "motorcycles": [
+      {
+        "id": "ciro-africa-9",
+        "kind": "parked",
+        "v": "m-enduro",
+        "x": 230.79999999999998,
+        "y": 384.7499999999998,
+        "rot": 3.081592653589793,
+        "r": 0.55,
+        "distance": 14.262625985421005
+      },
+      {
+        "id": "ciro-africa-4",
+        "kind": "parked",
+        "v": "m-enduro",
+        "x": 230.79999999999998,
+        "y": 378.9999999999999,
+        "rot": 3.141592653589793,
+        "r": 0.55,
+        "distance": 20.00899797591085
+      },
+      {
+        "id": "merg-scooter-40",
+        "kind": "parked",
+        "v": "scooter",
+        "x": 233.2105895791968,
+        "y": 319.0567461656953,
+        "rot": 0,
+        "r": 0.5,
+        "distance": 79.99992177015201
+      },
+      {
+        "id": "merg-scooter-310",
+        "kind": "parked",
+        "v": "scooter",
+        "x": 185.00027861720153,
+        "y": 329.1601826053963,
+        "rot": 3.141592653589793,
+        "r": 0.5,
+        "distance": 83.19023324161435
+      },
+      {
+        "id": "merg-scooter-130",
+        "kind": "parked",
+        "v": "scooter",
+        "x": 269.02566989322065,
+        "y": 306.71981306713576,
+        "rot": 3.141592653589793,
+        "r": 0.5,
+        "distance": 100.1152612892845
+      }
+    ],
+    "cars": [
+      {
+        "id": "merg-car-53",
+        "kind": "parked",
+        "v": "auto",
+        "x": -6.234281287946143,
+        "y": 484.5113651280799,
+        "rot": -2.836081970680822,
+        "r": 0.95,
+        "distance": 251.42267784393562
+      },
+      {
+        "id": "merg-car-55",
+        "kind": "parked",
+        "v": "auto",
+        "x": -19.488428631167263,
+        "y": 430.99678220670665,
+        "rot": -3.127307911002397,
+        "r": 0.95,
+        "distance": 251.7302235804929
+      },
+      {
+        "id": "merg-car-56",
+        "kind": "parked",
+        "v": "auto",
+        "x": -21.9932377336972,
+        "y": 402.9651297147174,
+        "rot": 6.233382287466338,
+        "r": 0.95,
+        "distance": 252.22440685282547
+      },
+      {
+        "id": "merg-car-54",
+        "kind": "parked",
+        "v": "auto",
+        "x": -18.695207487463275,
+        "y": 459.0527112468925,
+        "rot": 0.28605144171731833,
+        "r": 0.95,
+        "distance": 256.03740437352127
+      },
+      {
+        "id": "merg-car-57",
+        "kind": "parked",
+        "v": "auto",
+        "x": -26.263829398421407,
+        "y": 377.7720038902033,
+        "rot": -1.9928013566971123,
+        "r": 0.95,
+        "distance": 257.34087045889186
+      }
+    ]
+  },
+  "gpuInfo": {
+    "modelName": "ANGLE (Intel, Intel(R) UHD Graphics (0x00004E55) Direct3D11 vs_5_0 ps_5_0, D3D11-31.0.101.2140)",
+    "vendor": "Google Inc. (Intel)",
+    "driver": "OpenGL ES 3.0 (ANGLE 2.1.28853 git hash: 170484eea03a)"
+  },
+  "vehicleApproach": {
+    "moved": true,
+    "start": {
+      "x": 225.53,
+      "y": 394.33
+    },
+    "end": {
+      "x": 224.88,
+      "y": 390.58
+    },
+    "target": {
+      "x": 230.79999999999998,
+      "y": 384.7499999999998,
+      "distance": 10.933860251530739
+    },
+    "remaining": 8.31,
+    "routeWaypoints": 11,
+    "waypoints": [
+      {
+        "x": 225.53,
+        "y": 394.33
+      },
+      {
+        "x": 225.53,
+        "y": 393.58
+      },
+      {
+        "x": 225.53,
+        "y": 392.83
+      },
+      {
+        "x": 225.53,
+        "y": 392.08
+      },
+      {
+        "x": 225.53,
+        "y": 391.33
+      },
+      {
+        "x": 226.28,
+        "y": 390.58
+      },
+      {
+        "x": 227.03,
+        "y": 389.83
+      },
+      {
+        "x": 227.78,
+        "y": 389.08
+      },
+      {
+        "x": 228.53,
+        "y": 388.33
+      },
+      {
+        "x": 229.28,
+        "y": 387.58
+      },
+      {
+        "x": 230.03,
+        "y": 386.83
+      }
+    ],
+    "actions": 28,
+    "stalled": true,
+    "trace": [
+      {
+        "x": 225.53,
+        "y": 394.33
+      },
+      {
+        "x": 225.36,
+        "y": 394.16,
+        "distanceToWaypoint": 0.6
+      },
+      {
+        "x": 226,
+        "y": 393.33,
+        "distanceToWaypoint": 0.53
+      },
+      {
+        "x": 225.16,
+        "y": 394.16,
+        "distanceToWaypoint": 0.69
+      },
+      {
+        "x": 225.43,
+        "y": 392.38,
+        "distanceToWaypoint": 1.05
+      },
+      {
+        "x": 224.88,
+        "y": 391.42,
+        "distanceToWaypoint": 0.66
+      },
+      {
+        "x": 224.88,
+        "y": 390.74,
+        "distanceToWaypoint": 0.88
+      },
+      {
+        "x": 224.88,
+        "y": 390.58,
+        "distanceToWaypoint": 0.99
+      },
+      {
+        "x": 224.88,
+        "y": 390.58
+      }
+    ]
+  },
+  "finishedAt": "2026-10-12T22:47:25.720Z"
+}

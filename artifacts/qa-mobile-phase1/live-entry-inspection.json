@@ -1,0 +1,24 @@
+{
+  "http": 200,
+  "account": "Ciro_1408",
+  "inspect": {
+    "url": "http://127.0.0.1:3181/debug-controls",
+    "title": "Napoli Life · AI Game Tester",
+    "frameSrc": "http://127.0.0.1:3181/?qa=1&qaVehicle=1",
+    "frame": {
+      "readyState": "complete",
+      "title": "Napoli life",
+      "body": "Ciro_1408\n🟢 Online: 1\n—\n—\n+\n🍽️ 100 · 💧 100\nMergellina☀ 12:53\n−\n+\nProfilo\nVoice\nAmici\n☰\nChat\nInventario\nTelefono\n0\nkm/h\n⛽\n100%\n📯 Clacson\n⬇ Scendi\n←\n→\n▲\nGAS\n▼\nFRENO\nNAPOLI\nLIFE\n▶\nENTRA IN CITTÀ\n🧍\nPersonaggio\n🚗\nGarage\n⚙️\nImpostazioni",
+      "go": true,
+      "pregame": true,
+      "qa": true,
+      "auth": true,
+      "hudHidden": true,
+      "world": true
+    },
+    "dashboard": "STRUMENTI DI SVILUPPO\nAI Game Tester\n\nAnteprima reale dell’HUD e diagnostica locale, senza interventi su mappa o mondo.\n\n← Torna al gioco\nViewport e HUD veicolo\nIl riquadro usa la dimensione CSS scelta, indipendente dal monitor.\nGioco collegato\nVerticale · 390 × 844\nCompatto · 360 × 800\nPiccolo · 320 × 640\nOrizzontale · 844 × 390\nOrizzontale · 740 × 360\n390 × 844 · verticale\nProva a piedi\nMostra aree touch\nTest camminata\nTest multitouch\nRicarica anteprima\n\nAnteprima veicolo: volante, acceleratore e freno raccolgono input di prova; non inviano comandi di guida al personaggio.\n\nPrestazioni live\nCampionamento nella pagina di gioco\n●\nFPS\n3\nframe 306.2 ms · lenti 22\nFrame p95\n680.6\nms\nHeap JS\n49.2\nMB · se disponibile\nDraw calls\n0\ngeometrie 0 · texture 0\nGiocatore / area\nf3d9476f-ca90-4924-8617-9fb73dfda159 · mergellina\nPosizione / velocità\nx 230.2 · y 399 · null m/s · heading -1.571\nVeicolo / camera\na piedi · third · yaw 0 · pitch 0\nInput attivi\nNessuno\nAree touch e sovrapposizioni\n15 aree "
+  },
+  "errors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)"
+  ]
+}

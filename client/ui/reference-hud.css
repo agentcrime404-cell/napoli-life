@@ -1,0 +1,111 @@
+/* Disposizione delle foto di riferimento: comandi in vetro scuro e scena libera. */
+body.is3d{--ref-button:clamp(44px,5.6vw,72px);--ref-map:clamp(136px,18vw,248px)}
+body.is3d .social{top:calc(18px + var(--safe-top));right:calc(18px + var(--safe-right));left:auto;display:flex;gap:12px;overflow:visible;max-height:none;padding:0}
+body.is3d .social button,body.is3d .actions button,body.is3d #cam3d button{width:var(--ref-button);height:var(--ref-button);min-height:44px;padding:0;border-radius:50%;border:1.5px solid #ffffffbb;background:rgba(9,25,39,.78);color:#fff;box-shadow:0 3px 12px #0003;display:grid;place-items:center}
+body.is3d #hud .social button svg,body.is3d #hud .actions button svg{width:28px;height:28px}
+body.is3d .social span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+body.is3d .social #settings{position:static;margin:0;font-size:30px;opacity:1}
+body.is3d .social #profile{position:fixed;left:calc(18px + var(--safe-left));top:calc(18px + var(--safe-top));width:44px;height:44px}
+body.is3d #hud .identity{left:calc(72px + var(--safe-left));top:calc(18px + var(--safe-top));width:208px;padding:5px 10px;background:rgba(9,25,39,.65);border-radius:12px;gap:0}
+body.is3d .identity .portrait,body.is3d #hud-vip,body.is3d .identity .level-line{display:none}
+body.is3d .identity strong{font-size:14px}.is3d .identity .wallet{height:21px;gap:10px}.is3d .identity .wallet span{font-size:12px}.is3d .identity .online-count{font-size:10px}
+#hud-needs{display:block;font-size:11px;color:#d8e7ef;letter-spacing:.2px;margin-top:2px}#hud-needs.low{color:#ff9c75;animation:pulse-needs 1.5s infinite}@keyframes pulse-needs{50%{opacity:.55}}
+body.is3d #hud aside.map{top:auto;bottom:calc(128px + var(--safe-bottom));right:calc(18px + var(--safe-right));width:var(--ref-map);height:var(--ref-map);padding:0;border:0;border-radius:50%;background:none;box-shadow:none;overflow:visible}
+body.is3d .map .map-view{width:100%;height:100%}
+body.is3d .map canvas{width:100%;height:100%;border-radius:50%;border:2px solid #fff;background:#16618b;box-shadow:0 4px 18px #0005}
+body.is3d .map .map-head{position:absolute;bottom:calc(100% + 8px);right:0;background:rgba(9,25,39,.76);border-radius:8px;padding:4px 9px;font-size:11px;white-space:nowrap}
+body.is3d .map-view::after{content:'N';position:absolute;bottom:-9px;left:calc(50% - 17px);width:34px;height:34px;display:grid;place-items:center;background:#07121e;border-radius:50%;color:#fff;font:bold 19px system-ui;pointer-events:none}
+body.is3d .map-view button{bottom:10px;width:30px;height:30px;background:#0c1726de}
+body.is3d #map-minus{left:12px}body.is3d #map-plus{right:12px}
+body.is3d #hud #joystick{display:grid;left:calc(28px + var(--safe-left));bottom:calc(28px + var(--safe-bottom));width:clamp(130px,18vw,240px);height:clamp(130px,18vw,240px);border:2px solid #ffffffe0;background:rgba(18,31,44,.43);box-shadow:0 3px 12px #0003}
+body.is3d #joystick>div{width:42%;height:42%;border:2px solid #fff;background:linear-gradient(145deg,#dce5eee0,#9faabada);box-shadow:0 3px 12px #0003}
+body.is3d #hud .actions{display:flex;flex-direction:row;right:calc(18px + var(--safe-right));bottom:calc(24px + var(--safe-bottom));gap:14px;align-items:center}
+body.is3d .actions button,body.is3d .actions #inventory,body.is3d .actions #phone{width:var(--ref-button);height:var(--ref-button);margin:0;border-radius:50%;background:rgba(9,25,39,.78);border:1.5px solid #ffffffbb;box-shadow:0 3px 12px #0003}
+body.is3d .actions #inventory,body.is3d .actions #phone{width:44px;height:44px;position:absolute;right:0;bottom:calc(104px + var(--ref-map));}
+body.is3d .actions #inventory{right:54px}body.is3d .actions #phone svg{width:18px;height:28px}
+/* Telefono e inventario restano nella barra bassa: non coprono strada e minimappa. */
+body.is3d #hud .actions #inventory,body.is3d #hud .actions #phone{position:static;right:auto;bottom:auto;}
+body.is3d #chat{left:calc(18px + var(--safe-left));right:auto;bottom:calc(64px + clamp(130px,18vw,240px) + var(--safe-bottom));top:auto;transform:none;width:clamp(240px,27vw,360px);border-radius:14px!important;padding:10px;background:rgba(9,25,39,.76)}
+body.is3d #messages{max-height:160px;padding:0 4px 8px;font-size:14px;line-height:1.7;overflow:auto}
+body.is3d #chat-form{border-top:1px solid #ffffff26;padding-top:6px}body.is3d #chat-form button{width:32px;height:32px;min-height:32px;padding:5px}body.is3d #chat-input{font-size:12px;padding:6px 2px}
+body.is3d #cam3d{top:calc(106px + var(--safe-top));right:calc(18px + var(--safe-right));flex-direction:column;gap:10px}
+body.is3d #cam3d button{width:44px;height:44px;font-size:21px}body.is3d #cam3d .cam-label{position:absolute;right:54px;top:0;white-space:nowrap}
+body.is3d #toast{top:calc(106px + var(--safe-top));max-width:40vw;padding:7px 12px;font-size:12px}
+body.is3d #nearby-hint{bottom:calc(108px + var(--safe-bottom));max-width:40vw;text-align:center;background:rgba(9,25,39,.7);border-radius:22px;padding:8px 16px}
+body.is3d #nearby-hint:empty{display:none}
+body[data-room-kind="bar"] #interact[data-label="Siediti"],body[data-room-kind="bar"] #interact[data-label="Alzati"]{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(24px + var(--safe-bottom));width:220px;border-radius:36px;display:flex;justify-content:center;gap:14px}
+body[data-room-kind="bar"] #interact[data-label="Siediti"]::after,body[data-room-kind="bar"] #interact[data-label="Alzati"]::after{content:attr(data-label);font:bold 21px system-ui}
+body[data-room-kind="bar"] #interact svg{width:32px;height:32px}
+@media(max-width:700px) and (orientation:portrait){
+ body[data-room-kind="bar"] #interact[data-label="Siediti"],body[data-room-kind="bar"] #interact[data-label="Alzati"]{left:auto;right:12px;bottom:244px;transform:none;width:154px;height:48px;gap:8px}
+ body[data-room-kind="bar"] #interact[data-label="Siediti"]::after,body[data-room-kind="bar"] #interact[data-label="Alzati"]::after{font-size:16px}
+ body[data-room-kind="bar"] .actions #inventory,body[data-room-kind="bar"] .actions #phone{bottom:300px}
+}
+body.in-cockpit #hud aside.map{left:calc(22px + var(--safe-left));right:auto;top:calc(106px + var(--safe-top));bottom:auto}
+body.in-cockpit .actions{bottom:calc(28vw + var(--safe-bottom))}
+@media(max-width:700px) and (orientation:portrait){
+ body.is3d{--ref-button:46px;--ref-map:136px}
+ body.is3d .social{gap:8px;right:12px;top:12px}body.is3d .social #profile{top:12px;left:12px}
+ body.is3d #hud .identity{top:66px;left:12px;width:156px}body.is3d .identity strong{font-size:12px}
+ body.is3d #hud aside.map{bottom:94px;right:12px}body.is3d .map .map-head{font-size:10px}
+ body.is3d #hud #joystick{left:16px;bottom:20px;width:132px;height:132px}
+ body.is3d #hud .actions{right:12px;bottom:24px;gap:8px}body.is3d .actions #inventory,body.is3d .actions #phone{bottom:244px}
+ body.is3d #cam3d{top:116px;right:12px;gap:8px;flex-direction:row}body.is3d #cam3d button{width:36px;height:36px;min-height:36px;font-size:17px}
+ body.is3d #chat{left:12px;bottom:174px;width:calc(100vw - 180px);min-width:180px;padding:6px}body.is3d #messages{font-size:12px;max-height:110px}
+ body.is3d #chat-form #chat-mic,body.is3d #chat-form #emote{display:none}body.is3d #toast{top:166px;max-width:65vw}
+ body.is3d #nearby-hint{bottom:166px;max-width:60vw;font-size:12px}
+ body.in-cockpit #hud aside.map{top:172px;left:12px}body.in-cockpit .actions{bottom:34vw}
+}
+@media(max-height:500px) and (orientation:landscape){
+ body.is3d{--ref-button:44px;--ref-map:116px}
+ body.is3d .social{top:10px;right:12px;gap:8px}body.is3d #hud aside.map{bottom:78px;right:12px}
+ body.is3d #hud #joystick{width:128px;height:128px;left:16px;bottom:16px}
+ body.is3d #hud .actions{bottom:16px;gap:8px;right:12px}body.is3d .actions #inventory,body.is3d .actions #phone{bottom:200px}
+ body.is3d #cam3d{top:74px;right:154px;flex-direction:row;gap:6px}body.is3d #cam3d button{width:36px;height:36px;min-height:36px}
+ body.is3d #chat{bottom:164px;width:230px}body.is3d #messages{max-height:64px;font-size:11px}body.is3d #chat-input{font-size:11px}
+ body.is3d #hud .identity{top:10px;width:170px}body.is3d #toast{top:72px;font-size:11px}
+ body.in-cockpit #hud aside.map{top:82px;bottom:auto}body.in-cockpit .actions{bottom:16px;right:174px}
+}
+
+body.is3d #cam3d button svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8}
+#scene-loading{position:fixed;inset:0;z-index:45;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:#0b1c2bf5;color:#f3ece0;font:500 18px system-ui;letter-spacing:.01em}
+#scene-loading::before{content:'';width:32px;height:32px;border:2px solid #ffffff30;border-top-color:#d7ba80;border-radius:50%;animation:scene-spin .8s linear infinite}
+#scene-loading button{padding:10px 22px;border:1px solid #d7ba80;border-radius:8px;background:#233747;color:white;font:600 16px system-ui}
+@keyframes scene-spin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){#scene-loading::before{animation:none}}
+/* Layout HUD stabile: i comandi hanno zone separate e non coprono la minimappa. */
+body.is3d #hud .social{z-index:12;pointer-events:auto}
+body.is3d #cam3d{z-index:11;display:flex;align-items:center;pointer-events:auto}
+body.is3d #hud aside.map{z-index:10}
+body.is3d #hud .actions{z-index:12;pointer-events:auto}
+body.is3d #hud #chat{z-index:11}
+@media(min-width:701px) and (min-height:501px){
+ body.is3d #cam3d{top:calc(92px + var(--safe-top));right:calc(18px + var(--safe-right));}
+ body.is3d #hud aside.map{bottom:calc(118px + var(--safe-bottom));}
+ body.is3d #hud .actions{bottom:calc(24px + var(--safe-bottom));}
+ body.is3d #hud .actions #inventory,body.is3d #hud .actions #phone{bottom:calc(108px + var(--ref-map));}
+}
+@media(max-width:700px) and (orientation:portrait){
+ body.is3d #hud .social{top:calc(10px + var(--safe-top));right:calc(10px + var(--safe-right));gap:6px;}
+ body.is3d #cam3d{top:calc(62px + var(--safe-top));right:calc(10px + var(--safe-right));gap:6px;}
+ body.is3d #hud aside.map{bottom:calc(92px + var(--safe-bottom));right:calc(10px + var(--safe-right));}
+ body.is3d #hud .actions{right:calc(10px + var(--safe-right));bottom:calc(18px + var(--safe-bottom));gap:7px;}
+ body.is3d #hud .actions #inventory,body.is3d #hud .actions #phone{bottom:calc(304px + var(--safe-bottom));}
+ body.is3d #hud #chat{bottom:calc(166px + var(--safe-bottom));}
+}
+#drive-hud .dh-lock{position:fixed;right:calc(18px + var(--safe-right));bottom:calc(24px + var(--safe-bottom));z-index:13;}
+@media(max-height:500px) and (orientation:landscape){
+ body.is3d #cam3d{top:calc(62px + var(--safe-top));right:calc(154px + var(--safe-right));}
+ body.is3d #hud aside.map{bottom:calc(72px + var(--safe-bottom));}
+ body.is3d #hud .actions{bottom:calc(12px + var(--safe-bottom));right:calc(10px + var(--safe-right));}
+ body.is3d #hud .actions #inventory,body.is3d #hud .actions #phone{bottom:calc(236px + var(--safe-bottom));}
+}
+body.in-cockpit #hud .actions{bottom:calc(28vw + var(--safe-bottom))}
+@media(max-height:500px) and (orientation:landscape){body.in-cockpit #hud .actions{bottom:16px;right:174px}}
+#scene-loading[hidden]{display:none}
+/* La modalità furto non è più un comando HUD: i veicoli fermi sono interagibili direttamente. */
+#steal-btn{display:none!important}
+/* La scelta della qualità grafica è nel menu Impostazioni, non sopra la mappa. */
+body.is3d #cam3d button:nth-of-type(3){display:none!important}
+#scene-loading{padding:0 16px;text-align:center}#scene-loading[data-state=error]::before{display:none}
+#scene-loading small{max-width:min(90vw,520px);font-size:13px;opacity:.75;overflow-wrap:anywhere}#scene-loading small[hidden],#scene-loading button[hidden]{display:none}

@@ -58,7 +58,7 @@ export class Renderer{
   for(const it of items){const key=it.kind+'|'+it.label.split(' · x ')[0];let d=old.get(key);if(!d||keep.has(key)){d=document.createElement('div');d.dataset.key=key;layer.append(d);}keep.add(key);
    d.className='insp insp-'+(it.kind==='building'?'b':it.kind==='player'?'p':'o');Object.assign(d.style,{left:Math.round(it.x)+'px',top:Math.round(it.y)+'px',width:Math.round(it.w)+'px',height:Math.round(it.h)+'px'});if(d.dataset.label!==it.label){d.title=it.label;d.setAttribute('aria-label',it.label);d.dataset.label=it.label;}}
   for(const [k,d] of old)if(!keep.has(k))d.remove();}
- draw(players,me,dt){if(!me)return;if(window.HUMANA_3D&&!this.imagesOk){if(me.id)this.loadImages().catch(()=>{});return;}/* 3D: disegno 2D solo quando le sue immagini sono arrivate */FRONT_NOW=MODE.front&&me.room==='lungomare';this.time+=dt;this.hitPlayers=[];const c=this.ctx;c.setTransform(this.dpr,0,0,this.dpr,0,0);const sky=c.createLinearGradient(0,0,0,this.h);sky.addColorStop(0,'#6dbad7');sky.addColorStop(.36,'#129fb8');sky.addColorStop(1,'#075b82');c.fillStyle=sky;c.fillRect(0,0,this.w,this.h);
+ draw(players,me,dt){if(!me)return;if(!this.imagesOk&&me.id)this.loadImages().catch(()=>{});/* 3D: disegno 2D solo quando le sue immagini sono arrivate */FRONT_NOW=MODE.front&&me.room==='lungomare';this.time+=dt;this.hitPlayers=[];const c=this.ctx;c.setTransform(this.dpr,0,0,this.dpr,0,0);const sky=c.createLinearGradient(0,0,0,this.h);sky.addColorStop(0,'#6dbad7');sky.addColorStop(.36,'#129fb8');sky.addColorStop(1,'#075b82');c.fillStyle=sky;c.fillRect(0,0,this.w,this.h);
   const target=this.freeCam?{...this.freeCam}:iso(me.x,me.y);if(Math.hypot(target.x-this.camera.x,target.y-this.camera.y)>900)this.camera={...target};const smooth=1-Math.exp(-8*dt);this.camera.x+=(target.x-this.camera.x)*smooth;this.camera.y+=(target.y-this.camera.y)*smooth;const zoom=(this.freeCam?this.freeZoom||1:this.zoom)*Math.min(1.10,Math.max(.62,Math.min(this.h/775,this.w/400)));this.viewZoom=zoom;
   const shoreline=FRONT_NOW?F.SEA*F.K:(SHORE-BEACH)*19,screenY=wy=>(wy-this.camera.y)*zoom+this.h*ANCHOR;
   // Panorama agganciato all'orizzonte del mare disegnato: scorre con la telecamera, non resta incollato allo schermo.
@@ -392,7 +392,7 @@ export class Renderer{
   for(const e of items)e.kind==='building'?this.building(g,e,far):this.prop(g,e);
   this.miniCache={room,canvas:cv,minX,minY};return this.miniCache;}
  minimap(canvas,players,me,width=240){
-  const large=width>240,w=width,h=large?width*170/240:width*150/240,dpr=Math.min(this.dpr||1,2);if(canvas.width!==w*dpr){canvas.width=w*dpr;canvas.height=h*dpr;}
+  const large=width>240,w=width,h=large?width*170/240:window.HUMANA_3D?width:width*150/240,dpr=Math.min(this.dpr||1,2);if(canvas.width!==w*dpr||canvas.height!==h*dpr){canvas.width=w*dpr;canvas.height=h*dpr;}
   const c=canvas.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
   if(large)return this.topMap(c,w,h,players,me);
   const bake=this.miniBake(me.room),k=.13*(this.miniZoom||1),centre=iso(me.x,me.y);

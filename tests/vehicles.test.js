@@ -11,3 +11,29 @@ test('Mezzi: sblocco, noleggio, saldo e mezzo ripreso al rientro',()=>{
  me.room='bar';assert.throws(()=>call('use',{id:'monopattino'}),/aperto/);});
 test('Mezzi: la velocità cresce solo all’aperto',()=>{const at=room=>{const p={room,x:MAPS[room].spawn?.x??10,y:MAPS[room].spawn?.y??10,vehicle:'auto'},x=p.x;for(let i=0;i<20;i++)step(p,{x:1,y:0},.1);return p.x-x;};
  const walk={room:'lungomare',x:MAPS.lungomare.spawn?.x??10,y:MAPS.lungomare.spawn?.y??10};const x0=walk.x;for(let i=0;i<20;i++)step(walk,{x:1,y:0},.1);assert.ok(at('lungomare')>(walk.x-x0)*1.6,'in 2 secondi l’auto (che accelera) supera di molto chi cammina');});
+
+test('Guida touch: sterzo progressivo indipendente da acceleratore e freno',()=>{
+ const p={room:'lungomare',x:MAPS.lungomare.spawn.x,y:MAPS.lungomare.spawn.y,vehicle:'scooter',heading:0,direction:0};
+ for(let i=0;i<8;i++)step(p,{drive:true,steer:0,throttle:1,brake:0},.05);
+ assert.ok(p.vel>0,'l’acceleratore aumenta la velocità');
+ const before=p.heading;step(p,{drive:true,steer:1,throttle:1,brake:0},.05);
+ assert.ok(p.heading>before&&p.heading-before<.3,'lo sterzo gira gradualmente, non ruota istantaneamente');
+ const turned=p.heading;for(let i=0;i<6;i++)step(p,{drive:true,steer:0,throttle:1,brake:0},.05);
+ assert.ok(Math.abs(p.heading-turned)<.01,'rilasciare lo sterzo mantiene la traiettoria');
+ p.vehicle='bici';for(let i=0;i<40;i++)step(p,{drive:true,steer:0,throttle:0,brake:1},.05);
+ assert.ok(p.vel>=0&&p.vel<.1,'la bici frena senza retromarcia');
+});
+
+test('Guida auto: la retromarcia entra solo dopo aver quasi fermato il mezzo',()=>{
+ const p={room:'lungomare',x:MAPS.lungomare.spawn.x+5,y:MAPS.lungomare.spawn.y,vehicle:'auto',heading:0,direction:0,vel:4};
+ step(p,{drive:true,steer:0,throttle:0,brake:1},.05);assert.ok(p.vel>0,'il primo freno riduce la velocità senza invertire subito');
+ let reverse=false;for(let i=0;i<18;i++){step(p,{drive:true,steer:0,throttle:0,brake:1},.05);reverse||=p.vel<0;}
+ assert.ok(reverse,'l’auto può arretrare solo dopo la frenata a bassa velocità');
+});
+
+test('Guida scooter: il freno inserisce la retromarcia solo quasi da fermo',()=>{
+ const p={room:'lungomare',x:MAPS.lungomare.spawn.x+5,y:MAPS.lungomare.spawn.y,vehicle:'scooter',heading:0,direction:0,vel:3};
+ step(p,{drive:true,steer:0,throttle:0,brake:1},.05);assert.ok(p.vel>0,'lo scooter frena prima di arretrare');
+ let reverse=false;for(let i=0;i<30;i++){step(p,{drive:true,steer:0,throttle:0,brake:1},.05);reverse||=p.vel<0;}
+ assert.ok(reverse,'lo scooter può arretrare lentamente dopo la frenata');assert.ok(p.vel>=-1.21,'la retromarcia dello scooter resta lenta');
+});

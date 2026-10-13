@@ -1,6 +1,7 @@
 // Dettagli veri di Mergellina presi da OpenStreetMap: distributori, caserme e ambulatori veri (con cartello), semafori e strisce pedonali ai nodi con semaforo,
 // barche ormeggiate ai pontili e barche che navigano al largo (posizione = orologio del server, uguale per tutti).
 import * as THREE from '../vendor/three/three.module.min.js';
+import {chaletDetail} from './chalet-detail.js';
 import {NAPOLI,napoliCell,napoliServices,signalPhase} from '/shared/napoli.js';
 const H=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h);};
 const lam=(c,o={})=>new THREE.MeshLambertMaterial({color:c,...o}),bas=c=>new THREE.MeshBasicMaterial({color:c});
@@ -36,32 +37,35 @@ export class MergExtra{
    if(stripes.length){const im=new THREE.InstancedMesh(new THREE.BoxGeometry(.55,.02,3.2),new THREE.MeshLambertMaterial({color:'#f4f2ea',polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}),stripes.length),o=new THREE.Object3D();stripes.forEach((s,i)=>{o.position.set(s[0],.045,s[1]);o.rotation.y=s[2];o.updateMatrix();im.setMatrixAt(i,o.matrix);});im.frustumCulled=false;w.static.add(im);}}
   try{this.buildCiro();}catch(e){console.warn('Ciro',e);}
   this.built=true;}
- // Chalet Ciro (Via Caracciolo, Mergellina): padiglione basso crema con vetrate, tende a strisce blu e bianche, siepi sul tetto, insegna, tavolini; scooter in fila sul marciapiede e platani lungo la strada.
- buildCiro(){const w=this.w,D=NAPOLI.data,b=D.buildings.find(q=>q.name==='Chalet Ciro');if(!b)return;const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4,gy=w.groundY||.12,g=new THREE.Group();
-  g.position.set(cx,gy,cy);g.rotation.y=Math.PI/2;const L=(c)=>lam(c),cream=L('#f0e8d6'),white=L('#faf7f0'),navy=L('#1c2a4a'),green=L('#2e6a34'),glass=new THREE.MeshLambertMaterial({color:'#27394d',transparent:true,opacity:.7});
-  const H=3.7;box(g,Wd,H,Dp,0,H/2,0,cream);box(g,Wd+.5,.3,Dp+.5,0,H+.15,0,white);
+ // Chalet del Golfo (Via Caracciolo, Mergellina): padiglione basso crema con vetrate, tende a strisce blu e bianche, siepi sul tetto, insegna, tavolini; scooter in fila sul marciapiede e platani lungo la strada.
+ buildCiro(){const w=this.w,D=NAPOLI.data,b=D.buildings.find(q=>q.name==='Chalet del Golfo');if(!b)return;const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4,gy=w.groundY||.12,g=new THREE.Group();
+  g.position.set(cx,gy,cy);g.rotation.y=Math.PI/2;const L=(c)=>w.sm(c),cream=w.gfx==='ultra'?w.pbr('painted_plaster_wall',{color:'#f0e8d6',roughness:.95,envMapIntensity:.25,normalScale:new THREE.Vector2(.18,.18)}):L('#f0e8d6'),white=L('#faf7f0'),navy=L('#1c2a4a'),green=w.gfx==='ultra'?L('#526344'):L('#2e6a34'),glass=new THREE.MeshLambertMaterial({color:'#27394d',transparent:true,opacity:.7});
+  const H=3.7;w.shopInside(g,{interior:'bar'},Wd,Dp,31,{accent:'#40382d'});box(g,Wd,.7,Dp,0,H-.35,0,cream);box(g,Wd+.5,.3,Dp+.5,0,H+.15,0,white);
   // vetrate e montanti
-  {const ic=document.createElement('canvas');ic.width=1024;ic.height=256;const q=ic.getContext('2d');const gr=q.createLinearGradient(0,0,0,256);gr.addColorStop(0,'#7a4a22');gr.addColorStop(.45,'#e9b26a');gr.addColorStop(1,'#5a3418');q.fillStyle=gr;q.fillRect(0,0,1024,256);
-   for(let i=0;i<9;i++){const x=60+i*115;const lg=q.createRadialGradient(x,40,2,x,40,70);lg.addColorStop(0,'rgba(255,240,200,1)');lg.addColorStop(1,'rgba(255,200,120,0)');q.fillStyle=lg;q.fillRect(x-70,0,140,130);q.fillStyle='#fff3d6';q.beginPath();q.arc(x,36,7,0,7);q.fill();}
-   q.fillStyle='rgba(60,30,10,.55)';q.fillRect(0,92,1024,6);for(let i=0;i<14;i++){const x=20+i*75;q.fillStyle=['#3a2a20','#c9b79a','#5b2b2b','#2c3e55'][i%4];q.fillRect(x+8,118,16,40);q.beginPath();q.arc(x+16,110,9,0,7);q.fill();}
-   for(let i=0;i<8;i++){const x=40+i*125;q.fillStyle='#f4ead8';q.fillRect(x,168,70,8);q.fillStyle='#4a2c16';q.fillRect(x+31,176,8,50);q.fillStyle='#2f6b3c';q.beginPath();q.arc(x+100,150,16,0,7);q.fill();}
-   q.fillStyle='rgba(255,255,255,.08)';for(let i=0;i<6;i++)q.fillRect(i*190,0,40,256);
-   const it=new THREE.CanvasTexture(ic);it.colorSpace=THREE.SRGBColorSpace;const im=new THREE.Mesh(new THREE.PlaneGeometry(Wd-1.2,2.4),new THREE.MeshBasicMaterial({map:it}));im.position.set(0,1.75,Dp/2+.03);g.add(im);}for(let x=-Wd/2+1.2;x<=Wd/2-1.2;x+=2.4)box(g,.1,2.5,.16,x,1.75,Dp/2+.05,white);box(g,Wd-.8,.12,.2,0,2.98,Dp/2+.06,white);
+  for(let x=-Wd/2+1.2;x<=Wd/2-1.2;x+=2.4)box(g,.1,2.5,.16,x,1.75,Dp/2+.05,white);box(g,Wd-.8,.12,.2,0,2.98,Dp/2+.06,white);
   {const lamp=new THREE.MeshBasicMaterial({color:'#ffe2a0'}),iron=L('#1e2228'),pot=L('#b5663c'),leaf=L('#3f7d3a');
    for(let x=-Wd/2+1.2;x<=Wd/2-1.1;x+=2.4){box(g,.06,.3,.3,x,2.55,Dp/2+.2,iron);const l=new THREE.Mesh(new THREE.BoxGeometry(.22,.32,.22),lamp);l.position.set(x,2.5,Dp/2+.38);g.add(l);box(g,.3,.05,.3,x,2.69,Dp/2+.38,iron);
-    const p=new THREE.Mesh(new THREE.CylinderGeometry(.24,.18,.42,10),pot);p.position.set(x,.21,Dp/2+.42);g.add(p);const b=new THREE.Mesh(new THREE.SphereGeometry(.36,8,6),leaf);b.position.set(x,.68,Dp/2+.42);g.add(b);}}
+    const p=new THREE.Mesh(new THREE.CylinderGeometry(.24,.18,.42,10),pot);p.position.set(x,.21,Dp/2+.42);g.add(p);const b=w.foliage(.36,Math.round(x*10));b.position.set(x,.68,Dp/2+.42);g.add(b);}}
   // siepi sul tetto
   for(const z of [-1,1])box(g,Wd+.5,.75,.55,0,H+.3+.37,z*(Dp/2+.0),green);for(const x of [-1,1])box(g,.55,.75,Dp+.5,x*(Wd/2+.0),H+.3+.37,0,green);
-  for(let i=0;i<7;i++){const s=new THREE.Mesh(new THREE.SphereGeometry(.55,8,6),green);s.position.set(-Wd/2+1.5+i*2.6,H+1.1,Dp/2+.05);g.add(s);}
+  for(let i=0;i<7;i++){const s=w.foliage(.55,i);s.position.set(-Wd/2+1.5+i*2.6,H+1.1,Dp/2+.05);g.add(s);}
   // tende a strisce
-  const c=document.createElement('canvas');c.width=128;c.height=64;{const q=c.getContext('2d');for(let i=0;i<8;i++){q.fillStyle=i%2?'#ffffff':'#1c2a4a';q.fillRect(i*16,0,16,64);}}const st=new THREE.CanvasTexture(c);st.colorSpace=THREE.SRGBColorSpace;const am=new THREE.MeshLambertMaterial({map:st});
+  const c=document.createElement('canvas');c.width=128;c.height=64;{const q=c.getContext('2d');for(let i=0;i<8;i++){q.fillStyle=i%2?'#ffffff':'#1c2a4a';q.fillRect(i*16,0,16,64);}}const st=new THREE.CanvasTexture(c);st.colorSpace=THREE.SRGBColorSpace;const am=new THREE.MeshStandardMaterial({map:st,roughness:1,metalness:0,...(w.gfx==='ultra'?{normalMap:w.tex('white_plaster_rough_01','nor'),normalScale:new THREE.Vector2(.08,.08)}:{})});
   const n=Math.max(3,Math.round((Wd-1)/3.4)),aw=(Wd-1)/n;for(let i=0;i<n;i++){const a=box(g,aw-.1,.07,2.1,-Wd/2+.5+aw*(i+.5),3.15,Dp/2+1.0,am);a.rotation.x=.26;box(g,aw-.1,.28,.06,-Wd/2+.5+aw*(i+.5),2.62,Dp/2+2.0,am);}
-  // insegna Chalet Ciro (blu corsivo su fondo bianco) sulla facciata e sul lato
-  const sc=document.createElement('canvas');sc.width=512;sc.height=128;{const q=sc.getContext('2d');q.fillStyle='#ffffff';q.fillRect(0,0,512,128);q.fillStyle='#1d5fb0';q.font='italic bold 66px "Brush Script MT","Segoe Script",cursive,serif';q.textAlign='center';q.textBaseline='middle';q.fillText('Chalet Ciro',256,56);q.font='italic 26px serif';q.fillText('dal 1936 · Mergellina',256,108);}const sx=new THREE.CanvasTexture(sc);sx.colorSpace=THREE.SRGBColorSpace;
+  // insegna Chalet del Golfo (blu corsivo su fondo bianco) sulla facciata e sul lato
+  const sc=document.createElement('canvas');sc.width=512;sc.height=128;{const q=sc.getContext('2d');q.fillStyle='#ffffff';q.fillRect(0,0,512,128);q.fillStyle='#1d5fb0';q.font='italic bold 66px "Brush Script MT","Segoe Script",cursive,serif';q.textAlign='center';q.textBaseline='middle';q.fillText('Chalet del Golfo',256,56);q.font='italic 26px serif';q.fillText('dal 1936 · Mergellina',256,108);}const sx=new THREE.CanvasTexture(sc);sx.colorSpace=THREE.SRGBColorSpace;
   for(const [px,pz,ry,sw] of [[0,Dp/2+.35,0,4.8],[-Wd/2-.3,0,-Math.PI/2,4.2],[Wd/2+.3,0,Math.PI/2,4.2]]){const pl=new THREE.Mesh(new THREE.PlaneGeometry(sw,sw/4),new THREE.MeshBasicMaterial({map:sx,side:THREE.DoubleSide}));pl.position.set(px,H+2.0,pz);pl.rotation.y=ry;g.add(pl);box(g,sw+.2,sw/4+.2,.1,px,H+2.0,pz-.08*(ry?0:1),white).rotation.y=ry;}
   // tavolini sotto le tende
   const chair=L('#2a3a5c'),top=white;for(let i=0;i<Math.floor(Wd/3);i++){const x=-Wd/2+1.8+i*3;const t=new THREE.Mesh(new THREE.CylinderGeometry(.46,.46,.05,10),top);t.position.set(x,.76,Dp/2+1.4);g.add(t);box(g,.07,.74,.07,x,.38,Dp/2+1.4,L('#555'));for(const sd of [-1,1]){box(g,.42,.05,.42,x+sd*.75,.46,Dp/2+1.4,L('#8a5a32'));box(g,.05,.5,.42,x+sd*.96,.72,Dp/2+1.4,L('#8a5a32'));for(const lz of [-.17,.17])box(g,.05,.46,.05,x+sd*.75,.23,Dp/2+1.4+lz,L('#5a3a20'));}}
-  w.static.add(g);
+  if(w.gfx==='ultra'){
+   const stone=w.pbr('large_sandstone_blocks',{color:'#ded4c0',roughness:.88,envMapIntensity:.35});
+   const metal=new THREE.MeshStandardMaterial({color:'#5b6267',roughness:.32,metalness:.8});
+   const joint=new THREE.MeshStandardMaterial({color:'#48443e',roughness:1});
+   for(const m of [stone,metal,joint])m.userData.merge=true;
+   chaletDetail(g,Wd,Dp,{stone,metal,joint});
+  }
+  // Il locale viene creato dopo il bake del quartiere: unire qui gli arredi fermi.
+  w.bake(g);w.static.add(g);
   // scooter in fila lungo il marciapiede davanti allo chalet, platani lungo la strada
   const cols=['#1b1b1f','#c7ccd4','#b3261e','#1d4e89'],mk=[(c)=>w.scooter(c,{top:true}),(c)=>w.moto(c,'xadv'),(c)=>w.scooter(c,{top:true}),(c)=>w.moto(c,'africa')],byc=cols.map(()=>[]);let k=0;for(let y=cy-Wd/2+1;y<cy+Wd/2-.5;y+=1.15){const x=cx+Dp/2+4.4;if(napoliCell(x,y)&&(k===4||k===9)){byc[3].push([x,y,Math.PI+ (k%3-1)*.06]);w.col.c.push([x,y,.45]);}k++;}/* solo mezzi veri: due Africa Twin (modello vero), niente motorini disegnati */
   byc.forEach((l,i)=>{if(l.length)w.instanced(mk[i](cols[i]),l);});

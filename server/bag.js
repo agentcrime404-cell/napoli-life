@@ -21,7 +21,7 @@ export class Bag{
  // Usa un oggetto: controlli prima, poi l'effetto, poi si toglie dallo zaino (la rosa resta: si regala).
  use(p,itemId){const it=ITEM.get(String(itemId||''));if(!it)fail('Oggetto sconosciuto');if(this.qty(p.id,it.id)<1)fail('Non ce l’hai nello zaino');if(p.jail)fail('Sei in prigione');
   if(it.use==='drink'||it.use==='food'){if(p.consuming)fail('Finisci prima quello che hai in mano');if(p.vehicle||p.seat)fail('Scendi prima dal mezzo');if(!this.game.service)fail('Non disponibile');
-   this.take(p.id,it.id);this.game.service.serve(p,{id:it.id,icon:it.icon,kind:it.use,alc:it.alc||0});if(!(it.alc>0))this.tell(p,(it.use==='food'?'😋 Mangi: ':'🥤 Bevi: ')+it.icon+' '+it.name);return this.view(p.id);}
+   this.take(p.id,it.id);this.game.service.serve(p,{id:it.id,icon:it.icon,kind:it.use,alc:it.alc||0});this.game.needs?.restore(p,it.use);if(!(it.alc>0))this.tell(p,(it.use==='food'?'😋 Mangi: ':'🥤 Bevi: ')+it.icon+' '+it.name);return this.view(p.id);}
   if(it.use==='fuel'){const fu=this.game.fuel;fu?.sync(p);const id=p.vehicle||p.fuelFor;if(!isMotor(id))fail('Non hai un mezzo a motore da rifornire');if(p.fueling)fail('Il benzinaio sta già lavorando');
    const level=p.vehicle?p.fuel:(p.tanks?.[id]??p.fuel??FUEL.tank);if(level>=95)fail('Il serbatoio è già pieno');this.take(p.id,it.id);
    const next=Math.min(FUEL.tank,level+BAG.fuel);p.tanks={...(p.tanks||{}),[id]:next};if(p.fuelFor===id||p.vehicle===id)p.fuel=next;p.emptyWarned=false;if(next>FUEL.low)p.lowFuel=false;

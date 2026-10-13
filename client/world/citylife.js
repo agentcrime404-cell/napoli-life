@@ -73,10 +73,11 @@ export class CityLife{
   if(a.state==='party'&&a.busk){a.act='Wave';return;}
   if(a.state==='sit'||a.state==='wait'||a.state==='party'){a.act=a.state==='party'&&a.dance?'Dance':a.state==='wait'&&(a.t=(a.t||0)+dt)%14<2?'Wave':'Idle';if(a.state==='party'&&!a.dance){a.t+=dt;a.act=(a.t%16)<3?'Wave':'Idle';}return;}
   if(a.state==='chat'){a.t+=dt;a.act=a.wave?((a.t%12)<3.5?'Wave':'Idle'):'Idle';return;}
+  if(a.state==='knock'){a.t-=dt;a.act=(Math.floor((a.t||0)*3)%2?'Wave':'Idle');if(a.t<=0){a.state='in';a.t=a.kind==='diner'?rnd(35,110):rnd(15,50);this.release(a);}return;}
   if(a.state==='in'){a.t-=dt;if(a.t<=0){a.state='out';a.x=a.door.x;a.z=a.door.y;a.on=true;}return;}
   const R=this.rings[a.ring];
   if(a.state==='toDoor'||a.state==='out'){const tx=a.state==='toDoor'?a.door.x:a.back.x,tz=a.state==='toDoor'?a.door.y:a.back.y,dx=tx-a.x,dz=tz-a.z,d=Math.hypot(dx,dz),v=Math.min(d,1.25*dt);a.act='Walk';if(d>.05){a.x+=dx/d*v;a.z+=dz/d*v;a.yaw=Math.atan2(dx,dz);}
-   if(d<.1){if(a.state==='toDoor'){a.state='in';this.release(a);a.t=a.kind==='diner'?rnd(35,110):rnd(15,50);}else{a.state='walk';a.s=a.door.i;a.dir=Math.random()<.5?1:-1;a.next=rnd(25,80);a.door=null;a.cool=4;}}return;}
+   if(d<.1){if(a.state==='toDoor'){a.state='knock';a.t=2.8;a.act='Wave';}else{a.state='walk';a.s=a.door.i;a.dir=Math.random()<.5?1:-1;a.next=rnd(25,80);a.door=null;a.cool=4;}}return;}
   if(a.state==='waitCross'){a.act='Idle';a.t+=dt;const g=a.gate,ok=lightState(g.I,g.axis==='x'?'ns':'ew',this.time())==='red'||a.t>26;if(ok){a.state='cross';a.t=0;a.x=a.cross.fx;a.z=a.cross.fz;}return;}
   if(a.state==='cross'){const c=a.cross,dx=c.tx-a.x,dz=c.tz-a.z,d=Math.hypot(dx,dz),v=Math.min(d,1.5*dt);a.act='Walk';if(d>1e-6){a.x+=dx/d*v;a.z+=dz/d*v;a.yaw=Math.atan2(dx,dz);}if(d<.15){a.ring=c.b;a.s=c.j;a.state='walk';a.dir=Math.random()<.5?1:-1;a.next=rnd(20,60);}return;}
   // camminata sull'anello

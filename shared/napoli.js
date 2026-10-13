@@ -1,8 +1,9 @@
 // Zona "Mergellina" di HUMANA life 3D: mappa vera da OpenStreetMap (© OpenStreetMap contributors, ODbL).
 // La griglia (1 cella = 1 m) dice dove si cammina: niente palazzi né mare; i pontili sono calpestabili.
 export const NAPOLI={data:null,grid:null,x0:0,y0:0,w:0,h:0};
+const BUILDING_CELL=48;
 const decode=b64=>typeof Buffer!=='undefined'?new Uint8Array(Buffer.from(b64,'base64')):Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
-export function setNapoli(data){const g=data.grid;Object.assign(NAPOLI,{data,grid:decode(g.bits),x0:g.x0,y0:g.y0,w:g.w,h:g.h,tunnels:[]});carveTunnels();}
+export function setNapoli(data){const g=data.grid;Object.assign(NAPOLI,{data,grid:decode(g.bits),x0:g.x0,y0:g.y0,w:g.w,h:g.h,tunnels:[],buildingIndex:new Map(),places:null,parkedVehicles:null,services:null,villas:null});carveTunnels();indexBuildings();}
 // Gallerie vere (Galleria della Vittoria, delle Quattro Giornate, di Posillipo...): il corridoio si può percorrere a piedi e in auto,
 // gli edifici sopra il tracciato non si disegnano (la collina è il tubo) e ogni carreggiata larga al massimo 7 m.
 const NOT_CAR=new Set(['footway','steps','path','cycleway','pedestrian']);
@@ -28,17 +29,20 @@ function carveTunnels(){const D=NAPOLI.data,T=NAPOLI.tunnels,cand=[];
   for(const t of T){const R=t.w/2+1.8;for(let i=1;i<t.p.length&&!hit;i++){const a=t.p[i-1],c=t.p[i];if(P.some(q=>segD(q[0],q[1],a,c)<R))hit=true;else{const L=Math.hypot(c[0]-a[0],c[1]-a[1]);for(let d=0;d<=L&&!hit;d+=3)if(inPoly(a[0]+(c[0]-a[0])*d/L,a[1]+(c[1]-a[1])*d/L,P))hit=true;}}if(hit)break;}
   if(hit)b.tn=1;}}
 export function napoliInTunnel(x,y,pad=.5){for(const t of NAPOLI.tunnels||[])for(let i=1;i<t.p.length;i++){const a=t.p[i-1],b=t.p[i],dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy||1,k=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/l));if(Math.hypot(x-a[0]-dx*k,y-a[1]-dy*k)<t.w/2+pad)return true;}return false;}
+function indexBuildings(){const index=NAPOLI.buildingIndex;for(const b of NAPOLI.data?.buildings||[]){if(b.tn||!Array.isArray(b.p)||b.p.length<3)continue;const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),item={p:b.p,x0:Math.min(...xs),x1:Math.max(...xs),y0:Math.min(...ys),y1:Math.max(...ys)};for(let x=Math.floor(item.x0/BUILDING_CELL);x<=Math.floor(item.x1/BUILDING_CELL);x++)for(let y=Math.floor(item.y0/BUILDING_CELL);y<=Math.floor(item.y1/BUILDING_CELL);y++){const k=x+','+y;let list=index.get(k);if(!list)index.set(k,list=[]);list.push(item);}}}
+function buildingAt(x,y){for(const b of NAPOLI.buildingIndex?.get(Math.floor(x/BUILDING_CELL)+','+Math.floor(y/BUILDING_CELL))||[]){if(x<b.x0||x>b.x1||y<b.y0||y>b.y1)continue;let inside=false;for(let i=0,j=b.p.length-1;i<b.p.length;j=i++){const a=b.p[i],q=b.p[j];if(((a[1]>y)!==(q[1]>y))&&x<(q[0]-a[0])*(y-a[1])/(q[1]-a[1])+a[0])inside=!inside;}if(inside)return true;}return false;}
 export function napoliCell(x,y){if(!NAPOLI.grid)return false;const cx=Math.floor(x)-NAPOLI.x0,cy=Math.floor(y)-NAPOLI.y0;if(cx<0||cy<0||cx>=NAPOLI.w||cy>=NAPOLI.h)return false;const i=cy*NAPOLI.w+cx;return !!(NAPOLI.grid[i>>3]&(1<<(i&7)));}
-// Un giocatore (raggio r) sta in piedi se il centro e i quattro lati sono calpestabili.
-export function napoliStand(x,y,r=.25){return napoliCell(x,y)&&napoliCell(x+r,y)&&napoliCell(x-r,y)&&napoliCell(x,y+r)&&napoliCell(x,y-r);}
+// La griglia è l'autorità per strade e marciapiedi; i poligoni OSM chiudono le celle
+// che in alcuni isolati risultano erroneamente calpestabili dentro un edificio.
+export function napoliStand(x,y,r=.25){if(!Number.isFinite(x)||!Number.isFinite(y)||r<0)return false;const points=[[0,0],[r,0],[-r,0],[0,r],[0,-r]];if(r)for(const dx of [-1,1])for(const dy of [-1,1])points.push([dx*r*.70710678,dy*r*.70710678]);for(const [dx,dy] of points){const px=x+dx,py=y+dy;if(!napoliCell(px,py)||buildingAt(px,py))return false;}return true;}
 // Punto di partenza: Piazza Sannazaro (o la cella libera più vicina).
 export function napoliSpawn(){const want={x:230.2,y:399};if(!NAPOLI.grid)return want;for(let d=0;d<200;d++)for(let a=0;a<16;a++){const x=want.x+Math.cos(a/16*Math.PI*2)*d,y=want.y+Math.sin(a/16*Math.PI*2)*d;if(napoliStand(x,y,.4))return {x:Math.round(x*10)/10,y:Math.round(y*10)/10};}return want;}
 // Locali di Mergellina: ogni bar, ristorante, banca… della mappa vera porta all'interno corrispondente del gioco
 // (stessi interni del Lungomare). Se il locale esiste su OpenStreetMap ne tiene il nome (real:true), altrimenti ha un nome di fantasia (real:false).
 const KIND={bar:'bar',cafe:'bar',ice_cream:'bar',pastry:'bar',restaurant:['trattoria','osteria','vesuvio','panorama'],fast_food:['pizzeria','pizzeria','burger'],pub:'club',bank:'bank',
  supermarket:'shop',convenience:'shop',greengrocer:'shop',deli:'shop',dairy:'shop',bakery:'shop',seafood:'shop',butcher:'shop',clothes:'fashion',tailor:'fashion',hairdresser:'barber',beauty:'barber',bookmaker:'casino'};
-const NAMES={bar:['Bar Sirena','Caffè del Molo','Bar Partenope','Bar Posillipo','Caffè Sannazaro','Bar Marechiaro','Caffè Mergellina','Gelateria del Porto'],trattoria:['Trattoria Mergellina','Trattoria Sannazaro','Da Gennaro'],osteria:['Osteria del Porto','Osteria Lucia'],vesuvio:['Ristorante Vesuvio','Ristorante Lucia'],panorama:['Ristorante Panorama','Terrazza sul Golfo'],
- pizzeria:['Pizzeria Sannazaro','Pizza a Portafoglio','Pizzeria del Molo'],burger:['Friggitoria del Molo'],club:['Discoteca Luna'],bank:['Banca del Golfo'],shop:['Bottega Mergellina','Alimentari del Porto','Bottega Marina'],fashion:['Moda Mergellina','Sartoria del Golfo'],barber:['Barbiere Totò','Salone Sirena'],casino:['Sala Slot Vesuvio']};
+const NAMES={bar:['Bar Vele','Caffè del Porto','Bar Onda','Caffè del Borgo','Caffè Levante','Bar Tramonto','Caffè Marina','Gelateria Brezza'],trattoria:['Trattoria Vele','Trattoria del Faro','Da Mimmo'],osteria:['Osteria Blu','Osteria del Vicolo'],vesuvio:['Ristorante Cratere','Ristorante Brezza'],panorama:['Ristorante Belvedere','Terrazza Marina'],
+ pizzeria:['Pizzeria Vesuviana','Pizza al Taglio 21','Pizzeria del Faro'],burger:['Friggitoria Onda'],club:['Discoteca Orbita'],bank:['Banca Partenopea'],shop:['Bottega del Porto','Alimentari Vela','Emporio Marina'],fashion:['Moda Vela','Sartoria Levante'],barber:['Barbiere Raffa','Salone Brezza'],casino:['Sala Fortuna']};
 const H=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h);};
 // Porta = cella libera più vicina al punto del locale (davanti all'ingresso).
 const near=(x,y)=>{for(let d=0;d<12;d+=.5)for(let a=0;a<12;a++){const px=x+Math.cos(a/12*Math.PI*2)*d,py=y+Math.sin(a/12*Math.PI*2)*d;if(napoliStand(px,py,.35))return {x:px,y:py};}return null;};
@@ -94,3 +98,30 @@ export function napoliPlaces(){if(NAPOLI.places)return NAPOLI.places;const out={
   if(d.t==='bank'){const a=near(d.x+1.4,d.y);if(a)out.props.push({id:'matmb'+n,kind:'atm',x:a.x,y:a.y,r:.35});}});
  {const vs=napoliVillas();vs.forEach((v,i)=>{if(v.door&&!out.doors.some(d=>Math.hypot(d.x-v.door.x,d.y-v.door.y)<MIN_GAP))out.doors.push({id:'mv'+i+'v',name:v.name,x:v.door.x,y:v.door.y,exitX:v.door.x,exitY:v.door.y,to:'ospiti-villa',kind:'villa',real:false,fantasy:true});});}
  return NAPOLI.places=out;}
+
+// Mezzi fermi visibili nella scena 3D di Mergellina. La scena li genera dal
+// dataset stradale, quindi il server deve usare la stessa lista per rendere
+// interagibili anche le auto e le moto che non sono POI della mappa 2D.
+export function napoliParkedVehicles(){
+ if(NAPOLI.parkedVehicles)return NAPOLI.parkedVehicles;
+ const D=NAPOLI.data;if(!D)return [];
+ const walkOnly=new Set(['footway','steps','path','cycleway','pedestrian']);
+ const roads=(D.roads||[]).filter(r=>!walkOnly.has(r.k));
+ const roadAt=(x,y)=>roads.some(r=>{const w=Number(r.w)||5,rr=w/2+.35;for(let i=1;i<r.p.length;i++){const a=r.p[i-1],b=r.p[i],dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/l));if(Math.hypot(x-(a[0]+dx*t),y-(a[1]+dy*t))<=rr)return true;}return false;});
+ const main=r=>['primary','secondary','tertiary','trunk'].includes(r.k),out=[];let k=0;
+ // Stesse berline parcheggiate che world3d costruisce lungo le strade secondarie.
+ for(const r of roads){if(main(r)||(Number(r.w)||5)<5.5)continue;let acc=12;
+  for(let i=1;i<r.p.length;i++){const a=r.p[i-1],b=r.p[i],L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<1)continue;const tx=(b[0]-a[0])/L,ty=(b[1]-a[1])/L;
+   for(;acc<L;acc+=28){const sd=k%2?1:-1,x=a[0]+tx*acc-ty*((Number(r.w)||5)/2-1.15)*sd,y=a[1]+ty*acc+tx*((Number(r.w)||5)/2-1.15)*sd;if(k<160&&roadAt(x,y))out.push({id:'merg-car-'+out.length,kind:'parked',v:'auto',x,y,rot:Math.atan2(tx,ty)+(sd>0?0:Math.PI),r:.95});k++;}
+   acc-=L;
+  }
+ }
+ // Le due Africa Twin davanti allo Chalet del Golfo sono create da merg-extra.js.
+ const b=D.buildings?.find(q=>q.name==='Chalet del Golfo');if(b){const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4;let i=0;for(let y=cy-Wd/2+1;y<cy+Wd/2-.5;y+=1.15){const x=cx+Dp/2+4.4;if(napoliCell(x,y)&&(i===4||i===9))out.push({id:'ciro-africa-'+i,kind:'parked',v:'m-enduro',x,y,rot:Math.PI+(i%3-1)*.06,r:.55});i++;}}
+ // Anche i motorini accanto ai lampioni sono mezzi reali della scena, non
+ // semplice arredo: riproduciamo la stessa selezione deterministica del 3D.
+ let n=0,lamps=[];const named=/Caracciolo|Mergellina|Sannazaro|Posillipo|Partenope|Eldorado/;
+ for(const r of roads){if(!named.test(r.name||''))continue;for(let i=1;i<r.p.length;i++){const a=r.p[i-1],b=r.p[i],L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<1)continue;for(let s=0;s<L;s+=22){const t=s/L,x=a[0]+(b[0]-a[0])*t,y=a[1]+(b[1]-a[1])*t,nx=-(b[1]-a[1])/L,ny=(b[0]-a[0])/L,off=(Number(r.w)||5)/2+2.5;for(const sg of [-1,1]){const qx=x+nx*off*sg,qy=y+ny*off*sg;if(!napoliCell(qx,qy)||[[0,0],[1.6,0],[-1.6,0],[0,1.6],[0,-1.6]].some(([ox,oy])=>roadAt(qx+ox,qy+oy)))continue;n++;if(n%2===0)lamps.push([qx,qy,n]);}}}}
+ lamps.forEach(([x,y],i)=>{if(i%9!==4)return;for(const [ox,oy] of [[1.8,0],[-1.8,0],[0,1.8],[0,-1.8]]){const qx=x+ox,qy=y+oy;if(napoliCell(qx,qy)&&!roadAt(qx,qy)&&!roadAt(qx+ox*.6,qy+oy*.6)&&napoliStand(qx,qy,.7)){out.push({id:'merg-scooter-'+i,kind:'parked',v:'scooter',x:qx,y:qy,rot:(i%4)*Math.PI/2,r:.5});break;}}});
+ return NAPOLI.parkedVehicles=out;
+}

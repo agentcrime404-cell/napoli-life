@@ -6,7 +6,7 @@ export class Police{
  constructor(game){this.game=game;}
  nearest(p){return [...POLICE].sort((a,b)=>Math.hypot(a.x-p.x,a.y-p.y)-Math.hypot(b.x-p.x,b.y-p.y))[0];}
  // Ricercato e cella restano salvati: uscire e rientrare non li cancella.
- save(p){try{const g=state(this.game.db,p.id).progress;if(p.jail)g.jail={until:p.jail.until,t0:p.jail.t0,station:p.jail.station,name:p.jail.name};else delete g.jail;if(p.wanted)g.wanted={...p.wanted};else delete g.wanted;this.game.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),p.id);}catch(e){console.warn('police.save',e.message);}}
+ save(p){if(!this.game.db)return;try{const g=state(this.game.db,p.id).progress;if(p.jail)g.jail={until:p.jail.until,t0:p.jail.t0,station:p.jail.station,name:p.jail.name};else delete g.jail;if(p.wanted)g.wanted={...p.wanted};else delete g.wanted;this.game.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),p.id);}catch(e){console.warn('police.save',e.message);}}
  tell(p,message){this.game.send(p.ws,{type:'notification',message});}
  crime(p,amount){if(!p||p.jail)return;const now=Date.now(),st=this.nearest(p);
   if(p.wanted){this.tell(p,'🚨 Stai già rubando: gli agenti ti cercano!');return;}

@@ -34,7 +34,7 @@ export class Living{
  pay(id,amount){if(!this.take(id,amount))fail('Monete insufficienti');}
  // Auto di proprietà: restano dove le lasci (anche sulla mappa) finché non ci risali; da lontano non si chiamano.
  carList(g){return Object.entries(g.parked||{}).map(([k,c])=>({v:k,x:c.x,y:c.y,h:c.h,room:c.room||'lungomare'}));}
- parkCar(p,x,y,h,v,room){const was=v||p?.vehicle;if(!p||!was||this.edition!=='3d'||!isCar(was))return;if(this.edition!=='3d'||!was||!isCar(was))return;const g=state(this.db,p.id).progress;if(!(g.vehicles||[]).includes(was))return;g.parked={...(g.parked||{})};g.parked[was]={x:x??p.x,y:y??p.y,h:h??(Number.isFinite(p.heading)?p.heading:p.direction||0),room:(room||p.room)==='mergellina'?'mergellina':'lungomare'};this.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),p.id);p.myCars=this.carList(g);}
+ parkCar(p,x,y,h,v,room){const was=v||p?.vehicle;if(!p||!was||this.edition!=='3d'||!['auto','cabrio','furgone','scooter'].includes(VEHICLE[was]?.base||was))return;const g=state(this.db,p.id).progress;if(!(g.vehicles||[]).includes(was)){g.vehicles=[...(g.vehicles||[]),was];}g.parked={...(g.parked||{})};g.parked[was]={x:x??p.x,y:y??p.y,h:h??(Number.isFinite(p.heading)?p.heading:p.direction||0),room:(room||p.room)==='mergellina'?'mergellina':'lungomare'};this.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),p.id);p.myCars=this.carList(g);}
  unparkCar(p,v){const g=state(this.db,p.id).progress;if(!g.parked?.[v])return;delete g.parked[v];this.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),p.id);p.myCars=this.carList(g);}
  route(path,method,user,b){const p=this.game.players.get(user.id),three=this.edition==='3d';
   if(three&&path.startsWith('/api/rp')&&this.game.rp)return this.game.rp.route(path,method,p,b||{});
@@ -49,11 +49,22 @@ export class Living{
  canUse(id,vid){const g=state(this.db,id).progress;return (g.vehicles||[]).includes(vid)||(g.rentals?.[vid]||0)>Date.now();}
  // Al rientro si riprende il mezzo usato per ultimo, se ancora valido.
  lastVehicle(id){const v=state(this.db,id).progress.activeVehicle;return v&&this.canUse(id,v)?v:null;}
+  enterNearbyParked(p){
+   if(!p||p.vehicle||this.edition!=='3d'||!['lungomare','mergellina'].includes(p.room))return null;
+   const g=state(this.db,p.id).progress, parked=g.parked||{};
+   const hit=Object.entries(parked).find(([v,q])=>q&&(q.room||'lungomare')===p.room&&distance(q,p)<2.8&&this.canUse(p.id,v));
+   if(!hit)return null;
+   const [v,q]=hit; this.unparkCar(p,v); const fresh=state(this.db,p.id).progress; fresh.activeVehicle=v;
+   this.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(fresh),p.id);
+   p.vehicle=v;p.vehicleOwner=p.id;p.vehicleLocked=fresh.vehicleLocked===true;p.heading=Number.isFinite(q.h)?q.h:p.direction||0;
+   return v;
+  }
  garage(id){const g=state(this.db,id).progress,p=this.game.players.get(id);return {balance:this.db.prepare('SELECT balance FROM player_state WHERE user_id=?').get(id).balance,active:p?.vehicle||null,vehicles:[...VEHICLES,...VEHICLES_3D.filter(v=>(g.vehicles||[]).includes(v.id))].map(v=>({...v,owned:(g.vehicles||[]).includes(v.id),until:(g.rentals?.[v.id]||0)>Date.now()?g.rentals[v.id]:0}))};}
  routeInner(path,method,user,b){
   const id=user.id,db=this.db,p=this.game.players.get(id);ensureState(db,id);if(p?.arena&&method==='POST'&&['/api/vehicle/','/api/boat','/api/giostra'].some(q=>path.startsWith(q)))fail('Esci prima dall’arena');
   if(path==='/api/state'&&method==='GET')return this.snapshot(id);
   if(path==='/api/vehicles'&&method==='GET')return this.garage(id);
+  if(path==='/api/vehicle/lock'&&method==='POST'){if(!p?.vehicle||(!p.vehicleOwner&&!this.canUse(id,p.vehicle))||(p.vehicleOwner&&p.vehicleOwner!==id))fail('Devi essere alla guida del tuo mezzo',403);const g=state(db,id).progress;g.vehicleLocked=body.locked===undefined?!g.vehicleLocked:body.locked===true;db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(g),id);p.vehicleOwner=id;p.vehicleLocked=g.vehicleLocked;return {locked:g.vehicleLocked};}
   if(path==='/api/dealer'&&method==='POST'){const d=DEALERS.find(q=>q.id===b.shop);if(!d)fail('Negozio sconosciuto');const g=state(db,id).progress;return {shop:d.id,balance:db.prepare('SELECT balance FROM player_state WHERE user_id=?').get(id).balance,active:p?.vehicle||null,vehicles:VEHICLES_3D.filter(v=>v.shop===d.id).map(v=>({...v,owned:(g.vehicles||[]).includes(v.id),until:0}))};}
   if(path==='/api/vehicle/buy'&&method==='POST'){const v=VEHICLE[b.id];if(!v?.buy)fail('Mezzo non acquistabile');if(v.shop){const d=DEALERS.find(q=>q.id===v.shop);if(!p||p.room!=='lungomare'||distance({x:d.x+d.w/2,y:d.y+d.h+1.2},p)>9)fail('Vai al negozio: '+d.name,403);}const s=state(db,id);const own=s.progress.vehicles||[];if(own.includes(v.id))fail('Lo possiedi già');this.pay(id,v.buy);const fresh=state(db,id).progress;fresh.vehicles=[...own,v.id];db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(fresh),id);if(this.edition==='3d'&&v.shop&&isCar(v.id)){const d=DEALERS.find(q=>q.id===v.shop);this.parkCar(p,d.x+d.w/2+(Math.random()-.5)*3,d.y+d.h+2.6,Math.PI/2,v.id);}return this.garage(id);}
   if(path==='/api/vehicle/rent'&&method==='POST'){const v=VEHICLE[b.id];if(!v?.rent)fail('Mezzo non noleggiabile');this.pay(id,v.rent);const fresh=state(db,id).progress;fresh.rentals={...(fresh.rentals||{})};fresh.rentals[v.id]=Math.max(Date.now(),fresh.rentals[v.id]||0)+v.minutes*60000;fresh.activeVehicle=v.id;db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(fresh),id);if(p)p.vehicle=v.id;return this.garage(id);}

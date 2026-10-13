@@ -10,5 +10,6 @@ test('Lavori: consegna verificata dal server, missioni giornaliere, premi di liv
  const bal=db.prepare('SELECT balance FROM player_state WHERE user_id=?').get('a').balance;assert.ok(bal>=sent.at(-1).coins);
  for(let i=0;i<2;i++){jobs.start('a');Object.assign(p,p.job);jobs.tick(p);}
  assert.equal(jobs.view('a').missions.find(m=>m.id==='deliver').done,true);jobs.claim('a','deliver');assert.throws(()=>jobs.claim('a','deliver'),/già/);assert.throws(()=>jobs.claim('a','walk'),/non ancora/);
+ p.work='taxi';p.duty=true;jobs.service(p,301);assert.equal(jobs.view('a').missions.find(m=>m.id==='service').done,true);jobs.claim('a','service');
  for(const r of ['bar','club','bar','pizzeria'])jobs.visit(p,r);assert.equal(jobs.view('a').missions.find(m=>m.id==='visit').done,true);
  jobs.level(p);p.travel=250;jobs.level(p);assert.equal(sent.at(-1).type,'levelUp');assert.equal(sent.at(-1).coins,100);});

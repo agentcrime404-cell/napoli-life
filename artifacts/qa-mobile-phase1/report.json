@@ -1,0 +1,27 @@
+{
+  "name": "Napoli Life · test mobile live",
+  "startedAt": "2026-10-12T23:29:19.201Z",
+  "baseURL": "http://127.0.0.1:3181",
+  "mode": "live-game",
+  "checks": [
+    {
+      "test": "dashboard e telemetria della partita reale",
+      "pass": true
+    },
+    {
+      "test": "apertura della partita reale",
+      "pass": false,
+      "details": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#pg-go')\u001b[22m\n"
+    }
+  ],
+  "profiles": [],
+  "knownLimits": [
+    "Il flusso di ingresso non ha mostrato il menu di gioco: locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#pg-go')\u001b[22m\n"
+  ],
+  "qaAccount": "Ciro_8699",
+  "fatalError": "locator.click: Timeout 10000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#game-frame').contentFrame().locator('#pg-go')\u001b[22m\n\n    at run (C:\\Users\\joker\\Desktop\\Napoli life\\scripts\\qa-mobile-live.mjs:107:39)\n    at async file:///C:/Users/joker/Desktop/Napoli%20life/scripts/qa-mobile-live.mjs:190:16",
+  "video": "C:\\Users\\joker\\Desktop\\Napoli life\\artifacts\\qa-mobile-phase1\\videos\\page@bd8d533b1a1da58e4f40700b5b0ee9b6.webm",
+  "finishedAt": "2026-10-12T23:38:54.510Z",
+  "passed": 1,
+  "failed": 1
+}

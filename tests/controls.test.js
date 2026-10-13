@@ -8,7 +8,7 @@ function fixture(){
  const stick=element(),run=element(),controls=new Controls(stick,run,()=>{});return {handlers,stick,run,controls};
 }
 test('Multitouch: joystick e corsa indipendenti, rilascio non lascia movimento bloccato',()=>{
- const {stick,run,controls}=fixture();stick.onpointerdown({pointerId:1,clientX:80,clientY:50});run.onpointerdown({pointerId:2});
+ const {stick,run,controls}=fixture(),event={preventDefault(){},stopPropagation(){}};stick.onpointerdown({...event,pointerId:1,clientX:80,clientY:50});run.onpointerdown({pointerId:2});
  assert.ok(controls.input().x>0);assert.equal(controls.input().run,true);
  stick.onpointerup({pointerId:2});assert.ok(controls.input().x>0);
  stick.onpointercancel({pointerId:1});assert.equal(controls.input().x,0);assert.equal(controls.input().run,true);

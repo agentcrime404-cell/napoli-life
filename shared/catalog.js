@@ -81,7 +81,7 @@ export const DEALERS=[
  {id:'moto',name:'Moto e Scooter Vesuvio',icon:'🏍️',x:96,y:40,w:11,h:8,color:'#1d4e89'},
  {id:'bici',name:'Ciclofficina Partenope',icon:'🚲',x:36,y:104,w:11,h:8,color:'#1f6f50'}];
 export const VEHICLES_3D=[
- {id:'a-500',shop:'auto',base:'auto',model:'fiat500',name:'Cinquino tondo',emoji:'🚗',buy:700,speed:2.7,color:'#8b9098'},{id:'a-panda',shop:'auto',base:'auto',model:'panda',name:'Pandina quadrata',emoji:'🚙',buy:600,speed:2.6,color:'#eceeee'},{id:'a-rossa',shop:'auto',base:'auto',model:'sportscar',name:'Sportiva rossa',emoji:'🏎️',buy:3800,speed:3.6,color:'#a31621'},{id:'a-city',shop:'auto',base:'auto',model:'city',name:'Citycar tre porte',emoji:'🚗',buy:900,speed:2.7,color:'#f4f4ef'},
+ {id:'a-500',shop:'auto',base:'auto',model:'fiat500',name:'Compatta Tonda',emoji:'🚗',buy:700,speed:2.7,color:'#8b9098'},{id:'a-panda',shop:'auto',base:'auto',model:'panda',name:'Compatta Quadra',emoji:'🚙',buy:600,speed:2.6,color:'#eceeee'},{id:'a-rossa',shop:'auto',base:'auto',model:'sportscar',name:'Sportiva Rossa',emoji:'🏎️',buy:3800,speed:3.6,color:'#a31621'},{id:'a-city',shop:'auto',base:'auto',model:'city',name:'Citycar Tre Porte',emoji:'🚗',buy:900,speed:2.7,color:'#f4f4ef'},
  {id:'a-berlina',shop:'auto',base:'auto',model:'sedan',name:'Berlina sportiva',emoji:'🚘',buy:1800,speed:3,color:'#1f3a6b'},
  {id:'a-suv',shop:'auto',base:'auto',model:'suv',name:'Fuoristrada 4x4',emoji:'🚙',buy:2600,speed:2.9,color:'#2b2f36'},
  {id:'a-gt',shop:'auto',base:'auto',model:'gt',name:'Granturismo a motore anteriore',emoji:'🏎️',buy:4200,speed:3.5,color:'#0b0b0f'},
@@ -91,7 +91,7 @@ export const VEHICLES_3D=[
  {id:'m-50',shop:'moto',base:'scooter',model:'scooter',name:'Scooter 50',emoji:'🛵',buy:350,speed:2.2,color:'#2ec4c4'},
  {id:'m-epoca',shop:'moto',base:'scooter',model:'scooter',name:'Scooter d’epoca',emoji:'🛵',buy:700,speed:2.3,color:'#e9e1d2'},
  {id:'m-naked',shop:'moto',base:'scooter',model:'naked',name:'Moto naked',emoji:'🏍️',buy:1500,speed:3,color:'#2b2f36'},
- {id:'m-xadv',shop:'moto',base:'scooter',model:'xadv',name:'Maxi scooter sportivo',emoji:'🛵',buy:2400,speed:3.1,color:'#2b2f36'},{id:'m-enduro',shop:'moto',base:'scooter',model:'africa',name:'Maxi enduro bicilindrica',emoji:'🏍️',buy:2200,speed:3.2,color:'#f4f4ef'},
+ {id:'m-xadv',shop:'moto',base:'scooter',model:'xadv',name:'Maxi Scooter Sportivo',emoji:'🛵',buy:2400,speed:3.1,color:'#2b2f36'},{id:'m-enduro',shop:'moto',base:'scooter',model:'africa',name:'Maxi Enduro Bimotore',emoji:'🏍️',buy:2200,speed:3.2,color:'#f4f4ef'},
  {id:'m-cruiser',shop:'moto',base:'scooter',model:'cruiser',name:'Custom da viaggio',emoji:'🏍️',buy:2600,speed:2.9,color:'#7a1f2b'},
  {id:'m-sport',shop:'moto',base:'scooter',model:'sport',name:'Sportiva carenata',emoji:'🏍️',buy:3400,speed:3.7,color:'#c1121f'},
  {id:'b-bmx',shop:'bici',base:'bici',model:'bmx',name:'BMX',emoji:'🚲',buy:300,speed:1.8,color:'#e5484d'},

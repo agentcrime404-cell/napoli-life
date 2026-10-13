@@ -1,0 +1,258 @@
+/* HUD touch-first: zone distinte per guida, mappa e azioni, con safe area. */
+body.is3d #hud #joystick{
+  border:1px solid #ffffffa8;
+  background:radial-gradient(circle,rgba(255,255,255,.08) 0 43%,rgba(10,24,39,.48) 44% 100%);
+  box-shadow:0 5px 18px #0005,inset 0 0 0 1px #ffffff18;
+}
+body.is3d #hud #joystick::before{content:none;background:none}
+body.is3d #hud #joystick>div{
+  width:40%;height:40%;border:1px solid #ffffffd8;
+  background:radial-gradient(circle at 34% 27%,#eff7ff,#aebdce 72%,#8194a9);
+  box-shadow:0 4px 12px #0006;will-change:transform;
+}
+body.is3d #hud .social,body.is3d #hud .actions,body.is3d #cam3d{z-index:16}
+body.is3d #hud aside.map{z-index:14}
+body.is3d #drive-hud{z-index:17}
+body.is3d .drive-controls{z-index:15}
+body.is3d .dh-lock{z-index:17}
+body.is3d #hud .actions button,body.is3d #cam3d button{touch-action:none;-webkit-tap-highlight-color:transparent}
+body.is3d #hud #joystick,body.is3d .drive-controls [data-drive],body.is3d .drive-controls .dh-steer{touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+body.is3d .drive-controls[hidden]{display:none}
+body.is3d .drive-controls{position:fixed;inset:0;pointer-events:none}
+body.is3d .dh-steer,body.is3d .dh-pedals{position:absolute;bottom:calc(18px + var(--safe-bottom));pointer-events:auto}
+body.is3d .dh-steer{
+  left:calc(14px + var(--safe-left));width:clamp(132px,38vw,184px);height:72px;
+  display:grid;place-items:center;
+}
+body.is3d .dh-steer-track{
+  position:relative;width:100%;height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 13px;border:1px solid #ffffffad;border-radius:22px;
+  background:linear-gradient(180deg,rgba(20,43,62,.85),rgba(8,22,36,.72));
+  box-shadow:0 5px 16px #0007,inset 0 1px 0 #ffffff24;overflow:hidden;
+}
+body.is3d .dh-steer-track::before{
+  content:'';position:absolute;left:50%;top:50%;width:1px;height:62%;background:#ffffff48;transform:translate(-50%,-50%);
+}
+body.is3d .dh-steer-track b{position:relative;color:#d8e8f5;font:700 14px/1 system-ui;opacity:.8;pointer-events:none}
+body.is3d .dh-steer-thumb{
+  position:absolute;left:50%;top:50%;width:46px;height:46px;border-radius:50%;
+  border:1px solid #ffffffd9;background:radial-gradient(circle at 35% 28%,#eef8ff,#91a8bf 75%,#6e8297);
+  box-shadow:0 3px 10px #0009;transform:translate(-50%,-50%);pointer-events:none;
+}
+body.is3d .dh-pedals{
+  right:calc(14px + var(--safe-right));display:flex;flex-direction:row;align-items:center;gap:8px;
+  padding:4px;border:1px solid #ffffff4d;border-radius:20px;background:rgba(8,20,32,.48);
+  box-shadow:0 5px 16px #0006;backdrop-filter:blur(5px);pointer-events:none;
+}
+body.is3d .dh-pedals button{
+  width:clamp(60px,7.4vw,70px);height:64px;min-height:0;padding:4px;
+  border:1px solid #ffffffbd;border-radius:17px;color:#fff;font-size:22px;font-weight:850;
+  background:linear-gradient(160deg,#188b61e8,#07543fe8);box-shadow:0 5px 15px #0007;pointer-events:auto;
+}
+body.is3d .dh-pedals [data-drive=brake]{background:linear-gradient(160deg,#bd5353ed,#772c38ed)}
+body.is3d .dh-pedals button small{display:block;margin-top:2px;color:#fff;font-size:7.5px;line-height:1.05;letter-spacing:.01em;white-space:nowrap}
+body.is3d .dh-pedals button.active,body.is3d .dh-steer.active .dh-steer-thumb{filter:brightness(1.25);box-shadow:0 0 0 2px #b7edff,0 4px 14px #0009}
+body.is3d #drive-hud{
+  left:calc(12px + var(--safe-left));right:auto;top:calc(102px + var(--safe-top));bottom:auto;
+  transform:none;width:max-content;max-width:calc(100vw - 132px);min-height:42px;gap:5px;
+  flex-wrap:nowrap;justify-content:flex-start;padding:4px 6px;border-radius:14px;
+  background:rgba(8,20,32,.84);border-color:#ffffff38;font-size:11px;
+}
+body.is3d #drive-hud .dh-speed{min-width:43px;gap:2px;padding:0 5px}
+body.is3d #drive-hud .dh-speed b{font-size:17px}
+body.is3d #drive-hud .dh-speed small{font-size:9px}
+body.is3d #drive-hud .dh-gear{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 3px;border-radius:5px;background:#a33b42;color:#fff;font-size:11px;font-weight:900}
+body.is3d #drive-hud .dh-gear[hidden]{display:none}
+body.is3d #drive-hud .dh-fuel{gap:3px}
+body.is3d #drive-hud .dh-bar{width:clamp(28px,8vw,42px);height:6px}
+body.is3d #drive-hud .dh-fuel b{font-size:9px}
+body.is3d #drive-hud .dh-horn,body.is3d #drive-hud .dh-off{
+  display:grid;place-items:center;width:34px;height:34px;min-height:34px;flex:0 0 34px;
+  overflow:hidden;padding:0;border-radius:11px;font-size:0;line-height:1;
+}
+body.is3d #drive-hud .dh-horn::before{content:'📯';font-size:17px}
+body.is3d #drive-hud .dh-off{width:42px;flex-basis:42px;background:#1d3550}
+body.is3d #drive-hud .dh-off::before{content:'⬇';font-size:18px}
+body.is3d .dh-lock{left:auto;right:calc(12px + var(--safe-right));top:calc(205px + var(--safe-top));bottom:auto;width:38px;height:38px;min-height:38px;padding:0;border-radius:12px;font-size:17px}
+body.in-cockpit .drive-controls:not([hidden]){display:block}
+body.in-cockpit #cockpit button{display:none}
+body.is3d #nearby-hint{max-width:min(40vw,260px);bottom:calc(104px + var(--safe-bottom));padding:6px 12px;font-size:12px}
+body.is3d #toast{z-index:18;max-width:min(56vw,420px)}
+body.is3d #alc-hud{z-index:17}
+
+@media (max-width:700px),(pointer:coarse){
+  body.is3d{--ref-button:clamp(42px,11vw,48px);--ref-map:clamp(92px,25vw,120px)}
+  body.is3d .social{top:calc(8px + var(--safe-top));right:calc(8px + var(--safe-right));gap:5px}
+  body.is3d .social button{width:var(--ref-button);height:var(--ref-button);min-height:var(--ref-button)}
+  body.is3d .social #profile{left:calc(10px + var(--safe-left));top:calc(10px + var(--safe-top));width:42px;height:42px;min-height:42px}
+  body.is3d #hud .identity{left:calc(60px + var(--safe-left));top:calc(9px + var(--safe-top));width:clamp(142px,42vw,184px);min-width:0;padding:4px 7px;border-radius:11px}
+  body.is3d #hud .identity strong{font-size:12px}
+  body.is3d .identity .wallet{height:18px;gap:6px}
+  body.is3d .identity .wallet span{font-size:10px}
+  body.is3d .identity .wallet svg{width:13px;height:13px}
+  body.is3d #hud-needs{font-size:9px;margin-top:0}
+  body.is3d #hud aside.map{
+    top:calc(62px + var(--safe-top));bottom:auto;right:calc(10px + var(--safe-right));
+    width:var(--ref-map);height:var(--ref-map);
+  }
+  body.is3d .map .map-head{bottom:calc(100% + 4px);font-size:9px;padding:3px 6px}
+  body.is3d .map .map-head #online{display:none}
+  body.is3d .map-view button{width:23px;height:23px;min-height:23px;bottom:4px;font-size:13px}
+  body.is3d #map-minus{left:4px}body.is3d #map-plus{right:4px}
+  body.is3d #cam3d{top:calc(164px + var(--safe-top));right:calc(10px + var(--safe-right));flex-direction:row;gap:6px}
+  body.is3d #cam3d button{width:36px;height:36px;min-height:36px;font-size:17px}
+  body.is3d #cam3d button svg{width:19px;height:19px}
+  body.is3d #cam3d .cam-label{top:40px;right:0;font-size:9px}
+  body.is3d #hud #joystick{left:calc(14px + var(--safe-left));bottom:calc(16px + var(--safe-bottom));width:clamp(112px,33vw,136px);height:clamp(112px,33vw,136px)}
+  body.is3d #hud .actions{left:auto;right:calc(10px + var(--safe-right));bottom:calc(12px + var(--safe-bottom));gap:6px}
+  body.is3d #hud .actions button{width:clamp(34px,10.8vw,42px);height:clamp(34px,10.8vw,42px);min-height:clamp(34px,10.8vw,42px)}
+  body.is3d #hud .actions button svg{width:21px;height:21px}
+  body.is3d #hud .actions #phone{width:clamp(34px,10.8vw,42px);height:clamp(34px,10.8vw,42px)}
+  body.is3d #hud .actions #phone svg{width:18px;height:28px}
+  body.in-vehicle #hud #joystick{display:none!important}
+  body.in-vehicle #hud .actions{left:calc(12px + var(--safe-left));right:auto;bottom:calc(142px + var(--safe-bottom));gap:7px}
+  body.in-vehicle #hud .actions #run,body.in-vehicle #hud .actions #interact{display:none!important}
+  body.in-vehicle #hud .actions #phone,body.in-vehicle #hud .actions #inventory{position:static;width:40px;height:40px;min-height:40px}
+  body.in-vehicle #hud .actions #phone svg{width:17px;height:26px}
+  body.is3d #chat{left:calc(10px + var(--safe-left));right:calc(10px + var(--safe-right));top:calc(174px + var(--safe-top));bottom:auto;width:auto;max-width:420px;height:min(30dvh,220px);z-index:20}
+  body.is3d #chat #messages{font-size:11px}
+  body.is3d #nearby-hint{bottom:calc(92px + var(--safe-bottom));max-width:44vw}
+  body.in-vehicle .dh-steer{bottom:calc(16px + var(--safe-bottom))}
+  body.in-vehicle .dh-pedals{bottom:calc(16px + var(--safe-bottom))}
+  body.in-vehicle .dh-pedals button{width:clamp(60px,7.4vw,68px);height:clamp(58px,15vw,64px)}
+  body.in-vehicle #drive-hud .dh-horn::before{content:'📯'}
+  body.in-vehicle .dh-lock{top:calc(205px + var(--safe-top))}
+}
+
+@media (max-width:700px) and (orientation:portrait){
+  body.is3d #drive-hud{top:calc(102px + var(--safe-top))}
+  body.is3d #hud aside.map{top:calc(62px + var(--safe-top))}
+  body.is3d #cam3d{top:calc(var(--safe-top) + var(--ref-map) + 68px)}
+  body.is3d #hud #joystick{width:clamp(112px,33vw,132px);height:clamp(112px,33vw,132px)}
+  body.is3d #hud .actions{bottom:calc(12px + var(--safe-bottom))}
+}
+
+@media (max-height:500px) and (orientation:landscape){
+  body.is3d{--ref-button:42px;--ref-map:clamp(92px,24vh,116px)}
+  body.is3d .social{top:calc(8px + var(--safe-top));right:calc(8px + var(--safe-right));gap:5px}
+  body.is3d #hud .identity{top:calc(8px + var(--safe-top));width:170px}
+  body.is3d #drive-hud{top:calc(74px + var(--safe-top));max-width:calc(100vw - 148px)}
+  body.is3d #hud aside.map{top:calc(60px + var(--safe-top));bottom:auto}
+  body.is3d #cam3d{top:calc(var(--safe-top) + var(--ref-map) + 66px);right:calc(10px + var(--safe-right))}
+  body.is3d #hud #joystick{left:calc(14px + var(--safe-left));bottom:calc(12px + var(--safe-bottom));width:112px;height:112px}
+  body.is3d #hud .actions{bottom:calc(12px + var(--safe-bottom))}
+  body.in-vehicle .dh-steer,body.in-vehicle .dh-pedals{bottom:calc(12px + var(--safe-bottom))}
+  body.in-vehicle .dh-steer{height:68px}
+  body.in-vehicle .dh-steer-track{height:60px}
+  body.in-vehicle .dh-pedals button{height:58px}
+  body.in-vehicle #hud .actions{left:calc(12px + var(--safe-left));right:auto;bottom:calc(132px + var(--safe-bottom))}
+  body.is3d #chat{left:calc(12px + var(--safe-left));top:calc(112px + var(--safe-top));bottom:auto;width:min(260px,34vw);height:min(42dvh,170px)}
+}
+
+@media (max-width:360px) and (orientation:portrait){
+  body.is3d{--ref-map:92px}
+  /* The compact profile must fit between the profile button and social actions. */
+  body.is3d #hud .identity{left:calc(52px + var(--safe-left));width:calc(100vw - 200px)!important;min-width:0;padding:4px;gap:3px}
+  body.is3d #hud .identity .portrait{display:none}
+  body.is3d #hud .identity .id-main{min-width:0;padding:0}
+  body.is3d #hud .identity strong{max-width:100%;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  body.is3d #hud .identity .wallet{gap:3px;min-width:0}
+  body.is3d #hud .identity .wallet span{font-size:9px}
+  body.is3d #drive-hud{gap:3px;padding:3px}
+  body.is3d #drive-hud .dh-speed{min-width:38px;padding:0 3px}
+  body.is3d #drive-hud .dh-bar{width:26px}
+  body.is3d .dh-pedals{right:calc(8px + var(--safe-right));gap:6px;padding:3px}
+  body.is3d .dh-steer{left:calc(8px + var(--safe-left));width:clamp(124px,39vw,140px)}
+  body.is3d #hud .actions{right:calc(8px + var(--safe-right));gap:3px}
+  body.is3d #hud .actions button{width:34px;height:34px;min-height:34px}
+  body.is3d #hud .actions #phone{width:34px;height:34px}
+  body.is3d #hud #joystick{left:8px;bottom:12px;width:102px;height:102px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  body.is3d #hud .actions button,body.is3d .dh-pedals button{transition:none}
+}
+
+/* Anteprima QA: mostra i comandi veicolo senza cambiare lo stato o l'input del gioco. */
+body.is3d.qa-vehicle-preview .drive-controls[hidden]{display:block!important}
+body.is3d.qa-vehicle-preview #drive-hud[hidden]{display:flex!important}
+body.is3d.qa-vehicle-preview #drive-hud .dh-horn[hidden],
+body.is3d.qa-vehicle-preview #drive-hud .dh-fuel[hidden]{display:flex!important}
+body.is3d.qa-vehicle-preview #hud #joystick{display:none!important}
+body.is3d.qa-vehicle-preview #hud .actions{left:calc(12px + var(--safe-left));right:auto;bottom:calc(142px + var(--safe-bottom));gap:7px}
+body.is3d.qa-vehicle-preview #hud .actions #run,
+body.is3d.qa-vehicle-preview #hud .actions #interact{display:none!important}
+body.is3d.qa-vehicle-preview #hud .actions #phone,
+body.is3d.qa-vehicle-preview #hud .actions #inventory{position:static;width:40px;height:40px;min-height:40px}
+body.is3d.qa-vehicle-preview .dh-steer,
+body.is3d.qa-vehicle-preview .dh-pedals{bottom:calc(16px + var(--safe-bottom))}
+body.is3d.qa-vehicle-preview .dh-lock{top:calc(205px + var(--safe-top))}
+@media (max-height:500px) and (orientation:landscape){
+  body.is3d.qa-vehicle-preview .dh-steer,
+  body.is3d.qa-vehicle-preview .dh-pedals{bottom:calc(12px + var(--safe-bottom))}
+  body.is3d.qa-vehicle-preview .dh-steer{height:68px}
+  body.is3d.qa-vehicle-preview .dh-steer-track{height:60px}
+  body.is3d.qa-vehicle-preview .dh-pedals button{height:58px}
+  body.is3d.qa-vehicle-preview #hud .actions{bottom:calc(132px + var(--safe-bottom))}
+}
+body.is3d.qa-vehicle-preview #auth{display:none!important}
+body.is3d.qa-vehicle-preview #hud[hidden]{display:block!important}
+
+/* Layout touch ispirato ai riferimenti: minimappa separata dalla barra sociale e azioni diverse a piedi/in guida. */
+@media(max-width:700px),(pointer:coarse){
+ body.is3d{--ref-map:clamp(96px,27vw,116px);--ref-button:42px}
+ body.is3d .social{top:calc(8px + var(--safe-top));right:calc(8px + var(--safe-right));left:auto;gap:5px}
+ body.is3d .social button{width:40px;height:40px;min-height:40px}
+ body.is3d #hud .identity{left:calc(54px + var(--safe-left));top:calc(8px + var(--safe-top));width:clamp(142px,43vw,180px);max-width:calc(100vw - 210px);padding:4px 7px}
+ body.is3d #hud aside.map{left:calc(10px + var(--safe-left));right:auto;top:calc(92px + var(--safe-top));bottom:auto;width:var(--ref-map);height:var(--ref-map);padding:0;border:0;background:transparent;box-shadow:none;overflow:visible}
+ body.is3d #hud aside.map .map-view{width:100%;height:100%}
+ body.is3d #hud aside.map canvas{width:100%;height:100%;aspect-ratio:1;border:1.5px solid #fff;border-radius:50%;box-shadow:0 4px 14px #0008}
+ body.is3d #hud aside.map .map-head{position:absolute;top:calc(100% + 2px);right:auto;left:0;bottom:auto;max-width:100%;padding:3px 6px;border-radius:7px;background:#091927c9;font-size:9px}
+ body.is3d #hud aside.map .map-head #online{display:none}
+ body.is3d #cam3d{left:calc(10px + var(--safe-left));right:auto;top:calc(92px + var(--safe-top) + var(--ref-map) + 22px);flex-direction:row;gap:5px}
+ body.is3d #cam3d button{width:34px;height:34px;min-height:34px}
+ body.is3d #cam3d .cam-label{top:36px;right:auto;left:0}
+ body.is3d #hud #joystick{left:calc(12px + var(--safe-left));bottom:calc(16px + var(--safe-bottom));width:clamp(108px,31vw,126px);height:clamp(108px,31vw,126px)}
+ body.is3d #hud #joystick>div{width:42%;height:42%}
+ body.is3d #hud .actions{left:auto;right:calc(12px + var(--safe-right));bottom:calc(14px + var(--safe-bottom));display:grid;grid-template-columns:52px 52px;grid-template-rows:repeat(3,44px);gap:6px;align-items:center;justify-items:center}
+ body.is3d #hud .actions button{position:static;width:42px;height:42px;min-height:42px;margin:0;border-radius:50%}
+ body.is3d #hud .actions #interact{grid-column:2;grid-row:1;width:52px;height:52px;min-height:52px}
+ body.is3d #hud .actions #run{grid-column:2;grid-row:2;width:46px;height:46px;min-height:46px}
+ body.is3d #hud .actions #chat-toggle{grid-column:1;grid-row:1}
+ body.is3d #hud .actions #emote{grid-column:1;grid-row:2}
+ body.is3d #hud .actions #inventory{grid-column:1;grid-row:3;width:42px;height:42px;min-height:42px}
+ body.is3d #hud .actions #phone{grid-column:2;grid-row:3;width:42px;height:46px;min-height:42px;border-radius:12px}
+ body.is3d #hud .actions svg{width:22px;height:22px}
+ body.is3d #drive-hud{left:50%;right:auto;top:auto;bottom:calc(88px + var(--safe-bottom));transform:translateX(-50%);width:max-content;max-width:calc(100vw - 154px);min-height:38px;gap:4px;padding:3px 5px}
+ body.is3d #drive-hud .dh-speed{min-width:38px;padding:0 3px}
+ body.is3d #drive-hud .dh-speed b{font-size:16px}
+ body.is3d #drive-hud .dh-bar{width:clamp(24px,7vw,38px)}
+ body.is3d #drive-hud .dh-horn,body.is3d #drive-hud .dh-off{width:32px;height:32px;min-height:32px;flex-basis:32px;border-radius:50%}
+ body.is3d .dh-steer{left:calc(12px + var(--safe-left));right:auto;bottom:calc(14px + var(--safe-bottom));width:clamp(126px,35vw,150px);height:70px}
+ body.is3d .dh-steer-track{height:62px;padding:0 11px;border-radius:19px}
+ body.is3d .dh-steer-thumb{width:42px;height:42px}
+ body.is3d .dh-pedals{left:auto;right:calc(10px + var(--safe-right));bottom:calc(12px + var(--safe-bottom));display:flex;flex-direction:column;gap:5px;padding:0;border:0;background:transparent;box-shadow:none}
+ body.is3d .dh-pedals button{width:clamp(54px,15vw,62px);height:clamp(54px,15vw,62px);padding:3px;border-radius:50%;font-size:19px}
+ body.is3d .dh-pedals button small{font-size:7px}
+ body.in-vehicle #hud #joystick,body.in-vehicle #hud .actions #interact,body.in-vehicle #hud .actions #run{display:none!important}
+ body.in-vehicle #hud .actions{left:calc(12px + var(--safe-left));right:auto;bottom:calc(100px + var(--safe-bottom));display:flex;flex-direction:row;gap:6px}
+ body.in-vehicle #hud .actions #phone,body.in-vehicle #hud .actions #inventory{display:grid;position:static;width:38px;height:38px;min-height:38px}
+ body.in-vehicle #hud .actions #chat-toggle,body.in-vehicle #hud .actions #emote{display:none!important}
+ body.is3d #nearby-hint{bottom:calc(90px + var(--safe-bottom));max-width:42vw;font-size:11px}
+}
+@media(max-width:700px) and (orientation:portrait){body.is3d #hud #joystick{width:clamp(108px,30vw,120px);height:clamp(108px,30vw,120px)}body.is3d #hud .actions{bottom:calc(12px + var(--safe-bottom))}body.is3d .dh-steer{bottom:calc(12px + var(--safe-bottom))}body.is3d .dh-pedals{bottom:calc(10px + var(--safe-bottom))}}
+@media(max-height:500px) and (orientation:landscape){
+ body.is3d #hud aside.map{top:calc(76px + var(--safe-top));width:clamp(88px,17vh,102px);height:clamp(88px,17vh,102px)}
+ body.is3d #cam3d{top:calc(76px + var(--safe-top) + clamp(88px,17vh,102px) + 18px)}
+ body.is3d #hud #joystick{left:calc(10px + var(--safe-left));bottom:calc(10px + var(--safe-bottom));width:94px;height:94px}
+ body.is3d #hud .actions{right:calc(10px + var(--safe-right));bottom:calc(8px + var(--safe-bottom));grid-template-columns:48px 48px;grid-template-rows:repeat(3,38px);gap:3px}
+ body.is3d #hud .actions button{width:36px;height:36px;min-height:36px}
+ body.is3d #hud .actions #interact{width:44px;height:44px;min-height:44px}
+ body.is3d #hud .actions #run{width:40px;height:40px;min-height:40px}
+ body.is3d .dh-steer{left:calc(10px + var(--safe-left));bottom:calc(8px + var(--safe-bottom));width:clamp(120px,23vw,180px);height:58px}
+ body.is3d .dh-steer-track{height:52px}
+ body.is3d .dh-pedals{right:calc(10px + var(--safe-right));bottom:calc(8px + var(--safe-bottom));flex-direction:row}
+ body.is3d .dh-pedals button{width:52px;height:52px}
+ body.is3d #drive-hud{bottom:calc(74px + var(--safe-bottom));max-width:calc(100vw - 250px)}
+ body.in-vehicle #hud .actions{bottom:calc(72px + var(--safe-bottom))}
+}

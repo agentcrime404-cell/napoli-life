@@ -3,7 +3,8 @@ import assert from 'node:assert/strict';
 import {WebSocket} from 'ws';
 import {readFileSync} from 'node:fs';
 import {createApp} from '../server/index.js';
-import {NAPOLI,napoliPlaces,napoliStand,napoliCell,setNapoli} from '../shared/napoli.js';
+import {NAPOLI,napoliPlaces,napoliStand,napoliCell,napoliSpawn,setNapoli} from '../shared/napoli.js';
+import {canStand} from '../shared/world.js';
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 
 test('Mergellina: scala 1:1, locali ben distanziati, tutti calpestabili e raggiungibili dalla regione principale',()=>{
@@ -21,6 +22,17 @@ test('Mergellina: scala 1:1, locali ben distanziati, tutti calpestabili e raggiu
  assert.equal(bad.length,0,'zone senza locali: '+bad.join(' '));
  // la fontana e il castello non si attraversano
  assert.equal(napoliCell(L['Fontana del Sebeto'].x,L['Fontana del Sebeto'].y),false,'vasca della fontana');
+});
+
+test('Mergellina: una posizione salvata dentro un edificio viene bloccata e lo spawn resta sicuro',()=>{
+ if(!NAPOLI.data)setNapoli(JSON.parse(readFileSync('client/assets/world/napoli/map/mergellina.json','utf8')));
+ const x=-348.6800956102528,y=1186.2918433043699,D=NAPOLI.data;
+ const inside=(px,py,P)=>{let c=false;for(let i=0,j=P.length-1;i<P.length;j=i++){const a=P[i],b=P[j];if(((a[1]>py)!==(b[1]>py))&&px<(b[0]-a[0])*(py-a[1])/(b[1]-a[1])+a[0])c=!c;}return c;};
+ assert.ok(D.buildings.some(b=>!b.tn&&inside(x,y,b.p)),'il punto riproduce un edificio della mappa');
+ assert.equal(napoliCell(x,y),true,'la vecchia griglia marca erroneamente la cella come calpestabile');
+ assert.equal(napoliStand(x,y,0),false);assert.equal(canStand('mergellina',x,y,0),false);
+ const spawn=napoliSpawn();assert.ok(napoliStand(spawn.x,spawn.y,.4),'lo spawn deve restare libero');
+ assert.ok(!D.buildings.some(b=>!b.tn&&inside(spawn.x,spawn.y,b.p)),'lo spawn non deve cadere dentro un edificio');
 });
 
 test('Mergellina: due giocatori si vedono e si muovono insieme',async t=>{

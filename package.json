@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "node --env-file-if-exists=.env scripts/play-3d.mjs",
-    "test": "node --test tests/*.test.js",
+    "test": "node --test --test-concurrency=1 tests/*.test.js",
     "dev": "node --env-file-if-exists=.env --watch scripts/play-3d.mjs",
     "bot": "node --env-file-if-exists=.env scripts/telegram-bot.mjs",
     "apk": "node scripts/apk-3d.mjs",
@@ -19,16 +19,20 @@
     "start:production": "node --env-file-if-exists=.env scripts/play-3d.mjs",
     "confronto": "node scripts/confronto-mappa.mjs",
     "audit:mergellina": "node scripts/audit-mergellina.mjs",
-    "controlla-sito": "node scripts/controlla-sito.mjs"
+    "controlla-sito": "node scripts/controlla-sito.mjs",
+    "qa:perf": "node scripts/qa-performance-live.mjs",
+    "qa:mobile": "node scripts/qa-mobile-live.mjs",
+    "qa:mobile:fixture": "node scripts/qa-mobile.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.2",
     "@capacitor/core": "^8.5.2",
+    "qrcode": "^1.5.4",
     "ws": "8.18.3"
   },
   "devDependencies": {
     "@capacitor/cli": "^8.5.2",
     "@napi-rs/canvas": "^1.0.9",
-    "qrcode": "^1.5.4"
+    "@playwright/test": "^1.64.0"
   }
 }

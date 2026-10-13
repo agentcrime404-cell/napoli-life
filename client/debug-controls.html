@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b1825">
+  <title>Napoli Life · AI Game Tester</title>
+  <link rel="stylesheet" href="/ui/debug-controls.css">
+</head>
+<body>
+  <main class="qa-app">
+    <header class="qa-topbar">
+      <div><span class="eyebrow">STRUMENTI DI SVILUPPO</span><h1>AI Game Tester</h1><p>Anteprima reale dell’HUD e diagnostica locale, senza interventi su mappa o mondo.</p></div>
+      <a class="back-link" href="/">← Torna al gioco</a>
+    </header>
+    <div class="qa-layout">
+      <section class="preview-panel" aria-label="Anteprima mobile del gioco">
+        <div class="panel-head"><div><h2>Viewport e HUD veicolo</h2><small>Il riquadro usa la dimensione CSS scelta, indipendente dal monitor.</small></div><span id="connection-state" class="badge pending">In avvio</span></div>
+        <nav class="viewport-list" aria-label="Dimensione schermo">
+          <button type="button" data-profile="portrait" aria-pressed="true">Verticale · 390 × 844</button>
+          <button type="button" data-profile="small" aria-pressed="false">Compatto · 360 × 800</button>
+          <button type="button" data-profile="mini" aria-pressed="false">Piccolo · 320 × 640</button>
+          <button type="button" data-profile="landscape" aria-pressed="false">Orizzontale · 844 × 390</button>
+          <button type="button" data-profile="landscape-small" aria-pressed="false">Orizzontale · 740 × 360</button>
+        </nav>
+        <div class="device-stage" id="device-stage">
+          <div class="device-shell" id="device-shell">
+            <iframe id="game-frame" title="Napoli Life in viewport mobile" src="/?3d=1&amp;qa=1&amp;qaVehicle=1" loading="eager" allow="autoplay"></iframe>
+          </div>
+        </div>
+        <div class="preview-footer"><span id="viewport-label">390 × 844 · verticale</span><button type="button" id="preview-mode">Prova a piedi</button><button type="button" id="touch-toggle" aria-pressed="false">Mostra aree touch</button><button type="button" id="walk-test">Test input a piedi</button><button type="button" id="multitouch-test">Test multitouch</button><button type="button" id="refresh-frame">Ricarica anteprima</button></div>
+        <p class="preview-note">Anteprima veicolo: volante, acceleratore e freno raccolgono input di prova; non inviano comandi di guida al personaggio.</p>
+      </section>
+      <aside class="qa-sidebar">
+        <section class="panel">
+          <div class="panel-head"><div><h2>Prestazioni live</h2><small>Campionamento nella pagina di gioco</small></div><span id="sample-state" class="live-dot">●</span></div>
+          <div class="metric-grid">
+            <article><span>FPS</span><b id="metric-fps">—</b><small id="metric-frame">frame — ms</small></article>
+            <article><span>Frame p95</span><b id="metric-p95">—</b><small>ms</small></article>
+            <article><span>Heap JS</span><b id="metric-heap">—</b><small>MB · se disponibile</small></article>
+            <article><span>Draw calls</span><b id="metric-draw">—</b><small id="metric-geometry">geometrie — · texture —</small></article>
+          </div>
+          <dl class="state-list">
+            <div><dt>Giocatore / area</dt><dd id="state-player">In attesa del gioco…</dd></div>
+            <div><dt>Posizione / velocità</dt><dd id="state-motion">—</dd></div>
+            <div><dt>Veicolo / camera</dt><dd id="state-camera">—</dd></div>
+            <div><dt>Input attivi</dt><dd id="state-input">Nessuno</dd></div>
+          </dl>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Aree touch e sovrapposizioni</h2><small id="control-count">In attesa dei controlli…</small></div><span id="overlap-count" class="badge">—</span></div>
+          <ul id="control-list" class="control-list"><li>Caricamento interfaccia…</li></ul>
+        </section>
+        <section class="panel">
+          <div class="panel-head"><div><h2>Sessione e regressioni</h2><small id="session-time">Sessione avviata —</small></div><button type="button" id="export-report">Esporta rapporto</button></div>
+          <div class="test-status"><span id="test-status-mark">●</span><b id="test-status-label">In corso</b><span id="test-summary">Test HUD in attesa del browser</span></div>
+          <div class="test-counts"><span>Viewport controllati <b id="viewport-count">0</b></span><span>Check input superati <b id="input-count">0</b></span><span>Anomalie aperte <b id="bug-open-count">0</b></span><span>Errori JS <b id="error-count">0</b></span></div>
+          <h3>Log recente</h3><ol id="error-list" class="error-list"><li>Nessun errore raccolto.</li></ol>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <script type="module" src="/ui/debug-controls.js"></script>
+</body>
+</html>
