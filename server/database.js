@@ -34,5 +34,14 @@ export function database(path){
  if(!db.prepare('SELECT 1 FROM migrations WHERE version=5').get())db.exec(`BEGIN IMMEDIATE;
  CREATE TABLE IF NOT EXISTS map_edits(id INTEGER PRIMARY KEY CHECK(id=1),doc TEXT NOT NULL,updated INTEGER NOT NULL);
  INSERT INTO migrations VALUES(5);COMMIT;`);
+ if(!db.prepare('SELECT 1 FROM migrations WHERE version=6').get())db.exec(`BEGIN IMMEDIATE;
+ CREATE TABLE social_groups(id TEXT PRIMARY KEY,leader_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,created INTEGER NOT NULL);
+ CREATE TABLE social_group_members(group_id TEXT NOT NULL REFERENCES social_groups(id) ON DELETE CASCADE,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,joined INTEGER NOT NULL,PRIMARY KEY(group_id,user_id),UNIQUE(user_id));
+ CREATE TABLE social_group_invites(id TEXT PRIMARY KEY,group_id TEXT NOT NULL REFERENCES social_groups(id) ON DELETE CASCADE,sender_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,target_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,created INTEGER NOT NULL,expires INTEGER NOT NULL,UNIQUE(group_id,target_id));
+ CREATE INDEX social_group_invites_target ON social_group_invites(target_id,expires);
+ INSERT INTO migrations VALUES(6);COMMIT;`);
+ if(!db.prepare('SELECT 1 FROM migrations WHERE version=7').get())db.exec(`BEGIN IMMEDIATE;
+ ALTER TABLE social_groups ADD COLUMN meetup TEXT;
+ INSERT INTO migrations VALUES(7);COMMIT;`);
  return db;
 }

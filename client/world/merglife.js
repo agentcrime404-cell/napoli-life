@@ -127,7 +127,9 @@ export class MergLife extends CityLife{
  // oggetti in mano: canna da pesca ai pescatori, pacco ai fattorini (si accendono secondo chi usa quel personaggio)
  props(){for(const a of this.agents){const r=a.rig;if(!r?.o||r.type!=='gen')continue;if(!r.pp){r.pp=true;const root=r.o.root,hand=root.getObjectByName('Bip01_R_Hand'),sp=root.getObjectByName('Bip01_Spine1');
    if(hand){const g=new THREE.Group(),m=new THREE.Mesh(new THREE.CylinderGeometry(.5,.9,190,5).rotateZ(Math.PI/2),new THREE.MeshStandardMaterial({color:'#2b2b2b'}));m.position.set(60,0,0);g.add(m);g.rotation.z=.9;g.visible=false;hand.add(g);r.rod=g;}
-   if(sp){const bx=new THREE.Mesh(new THREE.BoxGeometry(34,30,38),new THREE.MeshStandardMaterial({color:'#b8793a'}));bx.position.set(-2,22,0);bx.visible=false;sp.add(bx);r.box=bx;}}
+   if(sp){const bx=new THREE.Mesh(new THREE.BoxGeometry(34,30,38),new THREE.MeshStandardMaterial({color:'#b8793a'}));bx.position.set(-2,22,0);bx.visible=false;sp.add(bx);r.box=bx;}
+   // The optional hand props must use the same already-warmed mobile shaders.
+   this.w.toonify(root);}
   if(r.rod)r.rod.visible=a.kind==='fisher';if(r.box)r.box.visible=a.kind==='courier';}}
  activeKinds(){return this.agents.filter(a=>a.on).length;}
  hide(){this.group.visible=false;}

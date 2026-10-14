@@ -32,3 +32,12 @@ test('Batch: materiali diversi e oggetti da mantenere non vengono mescolati',()=
  assert.equal(bakeStatic(root),2);assert.equal(kept.parent,root);assert.equal(root.children.length,3);
  assert.deepEqual(new Set(root.children.filter(o=>o.userData.baked).map(o=>o.material)),new Set([a,b]));
 });
+
+test('Batch mobile: unisce solo materiali opachi equivalenti mantenendo le differenze visive',()=>{
+ const root=new THREE.Group(),geometry=new THREE.BoxGeometry(),a=new THREE.MeshLambertMaterial({color:'#b5a585'}),b=new THREE.MeshLambertMaterial({color:'#b5a585'}),c=new THREE.MeshLambertMaterial({color:'#b5a585',side:THREE.DoubleSide});
+ root.add(new THREE.Mesh(geometry,a),new THREE.Mesh(geometry,b),new THREE.Mesh(geometry,c));
+ assert.equal(bakeStatic(root,{mobile:true,spatial:true}),1);
+ const batch=root.children.find(object=>object.userData.baked),unmerged=root.children.find(object=>object.material===c);
+ assert.ok(batch);assert.equal(batch.material,a);assert.equal(batch.geometry.attributes.position.count,72);
+ assert.equal(unmerged.material,c);assert.equal(unmerged.geometry.attributes.position.count,24);
+});

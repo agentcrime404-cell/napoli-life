@@ -10,13 +10,15 @@ const hourNow=w=>((w.r2d.seconds()%2400)/2400*24);
 // ---- suoni sintetizzati (nessun file): partono dopo il primo tocco, volume basso, spenti da localStorage humana-ambient=off ----
 class Sound{
  constructor(){this.ctx=null;this.on=true;try{this.on=localStorage.getItem('humana-ambient')!=='off';}catch{}
-  const start=()=>{if(this.ctx||!this.on)return;try{const C=window.AudioContext||window.webkitAudioContext;this.ctx=new C();this.master=this.ctx.createGain();this.master.gain.value=.5;this.master.connect(this.ctx.destination);this.sea();}catch{}};
+  this.ensureContext=()=>{if(this.ctx||!this.on)return this.ctx;try{const C=window.AudioContext||window.webkitAudioContext;this.ctx=new C();this.master=this.ctx.createGain();this.master.gain.value=.5;this.master.connect(this.ctx.destination);}catch{}return this.ctx;};
+  const start=()=>{const ctx=this.ensureContext();if(!ctx)return;if(ctx.state==='suspended')ctx.resume().catch(()=>{});if(this.seaG||this.seaScheduled)return;this.seaScheduled=true;setTimeout(()=>{this.seaScheduled=false;if(this.ctx===ctx&&this.ok()&&!this.seaG)this.sea();},0);};
+  if(this.on)setTimeout(()=>this.ensureContext(),0);
   addEventListener('pointerdown',start,{once:false,passive:true});addEventListener('keydown',start,{passive:true});}
  noise(sec=2){const c=this.ctx,b=c.createBuffer(1,c.sampleRate*sec,c.sampleRate),d=b.getChannelData(0);let l=0;for(let i=0;i<d.length;i++){l=(l+.02*(RNG()*2-1))/1.02;d[i]=l*3.5;}return b;}
+ noiseAsync(sec,ready){const c=this.ctx;if(!c||!this.on||c.state==='closed')return;const b=c.createBuffer(1,c.sampleRate*sec,c.sampleRate),d=b.getChannelData(0);let i=0,l=0;const fill=()=>{if(this.ctx!==c||!this.on||c.state==='closed')return;const end=Math.min(d.length,i+4096);for(;i<end;i++){l=(l+.02*(RNG()*2-1))/1.02;d[i]=l*3.5;}if(i<d.length){setTimeout(fill,0);return;}ready(b);};setTimeout(fill,0);}
  // mare: rumore morbido con onde lente
- sea(){const c=this.ctx,src=c.createBufferSource();src.buffer=this.noise(4);src.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=700;const g=c.createGain();g.gain.value=.05;const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.11;lg.gain.value=.035;lfo.connect(lg);lg.connect(g.gain);src.connect(f);f.connect(g);g.connect(this.master);src.start();lfo.start();this.seaG=g;}
+ sea(){const c=this.ctx;this.noiseAsync(4,buffer=>{if(this.ctx!==c||!this.on||c.state==='closed')return;const src=c.createBufferSource();src.buffer=buffer;src.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=700;const g=c.createGain();g.gain.value=.05;const lfo=c.createOscillator(),lg=c.createGain();lfo.frequency.value=.11;lg.gain.value=.035;lfo.connect(lg);lg.connect(g.gain);src.connect(f);f.connect(g);g.connect(this.master);src.start();lfo.start();this.seaG=g;});}
  ok(){return this.ctx&&this.ctx.state!=='closed'&&this.on;}
- resume(){if(this.ctx&&this.ctx.state==='suspended')this.ctx.resume().catch(()=>{});}
  tone(freq,dur,vol=.05,type='square',when=0,to=null){if(!this.ok())return;const c=this.ctx,t=c.currentTime+when,o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(freq,t);if(to)o.frequency.linearRampToValueAtTime(to,t+dur);g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.02);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g);g.connect(this.master);o.start(t);o.stop(t+dur+.05);return g;}
  // clacson da auto: due note (circa 400 e 500 Hz) con onde dense filtrate, attacco secco e leggera stonatura; a volte doppio colpetto
  horn(vol=.05){if(!this.ok())return;const c=this.ctx,t=c.currentTime+.02,len=.3+RNG()*.14,hits=RNG()<.4?2:1,det=1+(RNG()-.5)*.03;
@@ -35,13 +37,13 @@ class Sound{
  // portiera che si chiude: colpo sordo breve
  door(v=1){if(!this.ok()||v<=0)return;const c=this.ctx,src=c.createBufferSource();src.buffer=this.noise(.3);const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=420;const g=c.createGain(),t=c.currentTime;g.gain.setValueAtTime(.5*v,t);g.gain.exponentialRampToValueAtTime(.001,t+.22);src.connect(f);f.connect(g);g.connect(this.master);src.start(t);this.tone(95,.14,.09*v,'sine');}
  // rombo del traffico lontano, più forte quando ci sono tante auto vicine
- rumble(level){if(!this.ok())return;const c=this.ctx;if(!this.rum){const src=c.createBufferSource();src.buffer=this.noise(4);src.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=220;const g=c.createGain();g.gain.value=0;src.connect(f);f.connect(g);g.connect(this.master);src.start();this.rum=g;}this.rum.gain.setTargetAtTime(Math.max(0,Math.min(1,level))*.07,c.currentTime,.8);}
+ rumble(level){if(!this.ok())return;const c=this.ctx;if(!this.rum&&!this.rumPending){this.rumPending=true;this.noiseAsync(4,buffer=>{this.rumPending=false;if(this.ctx!==c||!this.on||c.state==='closed')return;const src=c.createBufferSource();src.buffer=buffer;src.loop=true;const f=c.createBiquadFilter();f.type='lowpass';f.frequency.value=220;const g=c.createGain();g.gain.value=0;src.connect(f);f.connect(g);g.connect(this.master);src.start();this.rum=g;});}if(this.rum)this.rum.gain.setTargetAtTime(Math.max(0,Math.min(1,level))*.07,c.currentTime,.8);}
  note(f,vol=.04){this.tone(f,.5,vol,'triangle');}
  rain(on){if(!this.ok())return;if(on&&!this.rainG){const c=this.ctx,src=c.createBufferSource();src.buffer=this.noise(2);src.loop=true;const f=c.createBiquadFilter();f.type='highpass';f.frequency.value=1500;const g=c.createGain();g.gain.value=0;g.gain.linearRampToValueAtTime(.05,c.currentTime+4);src.connect(f);f.connect(g);g.connect(this.master);src.start();this.rainG=g;this.rainS=src;}
   else if(!on&&this.rainG){const g=this.rainG,s=this.rainS;g.gain.linearRampToValueAtTime(0,this.ctx.currentTime+4);setTimeout(()=>{try{s.stop();}catch{}},4500);this.rainG=null;}}
 }
 export class Ambient{
- constructor(w){this.w=w;this.snd=new Sound();this.t=0;this.next=rnd(40,90);this.ev=null;this.gulls=[];this.boats=[];this.fx=new THREE.Group();w.scene.add(this.fx);this.fx.visible=false;this.sk=0;this.cool={horn:rnd(10,30),gull:rnd(6,16),voice:rnd(8,20)};this.weather=1;}
+ constructor(w){this.w=w;this.snd=new Sound();this.hornAction=()=>this.snd.horn(.08);if(window.humanaHorn!==this.hornAction)window.humanaHorn=this.hornAction;this.t=0;this.next=rnd(40,90);this.ev=null;this.gulls=[];this.boats=[];this.fx=new THREE.Group();w.scene.add(this.fx);this.fx.visible=false;this.sk=0;this.cool={horn:rnd(10,30),gull:rnd(6,16),voice:rnd(8,20)};this.weather=1;}
  // ---- gabbiani e barche ----
  build(){const w=this.w,m=new THREE.MeshBasicMaterial({color:'#f8f8f4',side:THREE.DoubleSide}),n=w.mobile?3:6;
   for(let i=0;i<n;i++){const g=new THREE.Group(),wing=()=>{const q=new THREE.Mesh(new THREE.PlaneGeometry(.55,.14),m);q.geometry.translate(.28,0,0);return q;};const a=wing(),b=wing();b.rotation.y=Math.PI;g.add(a,b,new THREE.Mesh(new THREE.SphereGeometry(.09,6,5),m));g.scale.setScalar(1.3);this.fx.add(g);this.gulls.push({g,a,b,r:rnd(9,24),h:rnd(7,15),sp:rnd(.25,.45)*(i%2?1:-1),ph:rnd(0,6.28),w:rnd(6,9)});}
@@ -50,13 +52,12 @@ export class Ambient{
  sway(dt){const w=this.w,L=w.sway;if(!L||!L.length)return;const t=w.clock,px=w.target.x,pz=w.target.z;for(let i=L.length-1;i>=0;i--){const s=L[i];if(!s.o.parent){L.splice(i,1);continue;}if(Math.abs(s.o.position.x-px)+Math.abs(s.o.position.z-pz)>70)continue;const a=.018+.008*Math.sin(s.ph);s.o.rotation.z=Math.sin(t*.9+s.ph)*a;s.o.rotation.x=Math.cos(t*.7+s.ph*1.3)*a*.7;}}
  // ---- ciclo principale ----
  update(dt,list){const w=this.w;if(!this.ready){try{this.build();}catch(e){console.warn('ambiente',e);this.ready=true;}}
-  this.fx.visible=true;const px=w.target.x,pz=w.target.z,h=hourNow(w);this.t+=dt;this.sway(dt);this.snd.resume();
+  this.fx.visible=true;const px=w.target.x,pz=w.target.z,h=hourNow(w);this.t+=dt;this.sway(dt);
   // gabbiani: girano sopra il lungomare vicino a chi guarda; barche: scorrono piano al largo
   for(const q of this.gulls){q.ph+=q.sp*dt;const cx=px-q.w*.9,cz=pz-q.w*.9;q.g.position.set(cx+Math.cos(q.ph)*q.r,q.h+Math.sin(q.ph*2.3)*.8,cz+Math.sin(q.ph)*q.r);q.g.rotation.y=-q.ph+(q.sp>0?0:Math.PI);const f=Math.sin(w.clock*9+q.w)*.6;q.a.rotation.z=f;q.b.rotation.z=f;q.g.visible=h>5.5&&h<21;}
   for(const b of this.boats){if(w.room!=='lungomare'){b.o.visible=false;continue;}b.t=(b.t+dt*.0035)%1;const c=SHORE-34-b.k*26,x=-20+b.t*210,y=c-x;b.o.position.set(x,0,y);b.o.rotation.y=Math.PI/4+(b.k%2?Math.PI:0)*0;b.o.visible=Math.abs(x-px)+Math.abs(y-pz)<190;b.o.rotation.z=Math.sin(w.clock*.8+b.k)*.03;}
   // rumori
-  window.humanaHorn=()=>this.snd.horn(.08);
-  const c=this.cool;for(const k of Object.keys(c))c[k]-=dt;
+  const c=this.cool;c.horn-=dt;c.gull-=dt;c.voice-=dt;
   if(c.gull<=0){c.gull=rnd(12,30);if(h>5.5&&h<21)this.snd.gull();}
   if(c.voice<=0){c.voice=rnd(14,40);if(h>8&&h<24)this.snd.voices();}
   if(c.horn<=0){c.horn=rnd(18,50)*(h>7&&h<20?1:2.5);this.snd.horn();}
@@ -71,7 +72,7 @@ export class Ambient{
   if(motor&&!me.seat){const sp=Math.abs(me.vel||0)/14,acc=((me.vel||0)-(this.pv||0))/Math.max(dt,.001);this.pv=me.vel||0;sn.engine(sp,Math.max(0,Math.min(1,acc/4))*(me.fuel===0?0:1),base==='scooter'||base==='moto'?'moto':'auto');if(me.fuel===0)sn.engineOff();}else{sn.engineOff();this.pv=0;}
   let n=0;if(w.room==='mergellina'&&w.mlife){for(const c of w.mlife.cars)if(c.on&&Math.abs(c.x-w.target.x)+Math.abs(c.y-w.target.z)<45)n++;}else if(tr)for(const c of tr.cars){if(c.off)continue;const q=c.path.pointAt(c.s);if(Math.abs(q.x-w.target.x)+Math.abs(q.y-w.target.z)<45)n++;}sn.rumble(Math.min(1,n/5)*(h>6&&h<24?1:.5)*(this.weather<1?1.2:1));
   this.seenH??={};for(const p of list){if(!p.hornAt||this.seenH[p.id]===p.hornAt)continue;this.seenH[p.id]=p.hornAt;if(me&&p.id===me.id)continue;const d=Math.hypot(p.x-w.target.x,p.y-w.target.z);if(d<70&&Date.now()-p.hornAt<1500)sn.horn(.07*Math.max(0,1-d/70));}}
- life(h){for(const L of [this.w.life,this.w.mlife])if(L)L.weather=this.weather;}
+ life(h){const city=this.w.life,merg=this.w.mlife;if(city)city.weather=this.weather;if(merg)merg.weather=this.weather;}
  hide(){this.fx.visible=false;if(this.ev){this.stop();this.next=Math.max(this.next,60);}try{this.snd.engineOff();this.snd.rumble(0);if(this.snd.seaG)this.snd.seaG.gain.value=.012;}catch{}}
  // ---- eventi ----
  // Gli eventi (pioggia, fuochi, ambulanze...) seguono un calendario deciso dall'orologio del server: tutti i giocatori li vedono insieme.

@@ -112,7 +112,7 @@ export function installPhone(ctx){
   if(recent.length){box.append(el('small','yt-label','Recenti'));const grid=el('div','yt-recent');for(const id of recent){const b=el('button','yt-thumb');const im=document.createElement('img');im.src='https://i.ytimg.com/vi/'+id+'/mqdefault.jpg';im.alt='';b.append(im);b.onclick=()=>{ytNow=id;render();};grid.append(b);}box.append(grid);}
   screen.append(box);}
  function callScreen(){const c=el('div','calling');c.append(el('span','avatar big',calls.peer.name[0].toUpperCase()),el('h2',null,calls.peer.name));
-  const status=calls.state==='ringing'?'Chiamata '+(window.HUMANA_3D?'Napoli life':'HUMANA')+' in arrivo…':calls.state==='calling'?'Squilla…':'';const st=el('p','call-time',status);c.append(st);
+  const status=calls.state==='ringing'?'Chiamata Napoli Life in arrivo…':calls.state==='calling'?'Squilla…':'';const st=el('p','call-time',status);c.append(st);
   const row=el('div','call-actions');
   const round=(cls,icon,label,fn)=>{const w=el('div','act');const b=el('button',cls);b.append(svg(icon,true));b.setAttribute('aria-label',label);b.onclick=()=>Promise.resolve().then(fn).catch(e=>notify(e.message));w.append(b,el('small',null,label));return w;};
   if(calls.state==='ringing')row.append(round('decline','hang','Rifiuta',()=>calls.reject()),round('accept','phone','Rispondi',()=>calls.accept()));

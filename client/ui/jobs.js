@@ -13,7 +13,7 @@ export function installJobs({api,net,notify,modal,button,getMe,renderer}){
  net.addEventListener('jobDone',e=>{const m=e.detail;notify('✅ Consegna a '+m.place+' completata: +'+m.coins+' 🪙'+(m.fast?' (bonus veloce!)':''));document.dispatchEvent(new CustomEvent('humana:wallet'));});
  net.addEventListener('levelUp',e=>{notify('⭐ Livello '+e.detail.level+'! Premio: +'+e.detail.coins+' 🪙');document.dispatchEvent(new CustomEvent('humana:wallet'));});
  async function open(){const box=modal('💼 Lavoro e missioni');box.append(mk('p','muted','Caricamento…'));let v;try{v=await api('/jobs');}catch(e){box.replaceChildren(mk('p',null,e.message));return;}paint(box,v);}
- function paint(box,v){box.replaceChildren();box.append(rpCard({api,notify,button,net}));box.append(bizCard({api,notify,button}));box.append(gangCard({api,notify,button}));
+ function paint(box,v){box.replaceChildren();box.append(rpCard({api,notify,button,net}));box.append(bizCard({api,notify,button}));
   const job=mk('section','job-card');job.append(mk('h3',null,'🛵 Rider · consegne'));
   if(v.job){job.append(mk('p',null,'In corso: porta il pacco a '+v.job.name+'. Segui la freccia in alto.'));job.append(button('Annulla consegna',async()=>paint(box,await api('/jobs/cancel','POST',{}))));}
   else{job.append(mk('p','muted','Ritira un pacco e consegnalo in città. Più arrivi in fretta, più guadagni: usa monopattino, scooter o auto!'));job.append(button('📦 Prendi una consegna',async()=>{try{const r=await api('/jobs/start','POST',{});notify('📦 Consegna a '+r.job.name+' · '+r.job.reward+' 🪙');paint(box,r);}catch(e){notify(e.message);}}));}
@@ -22,6 +22,8 @@ export function installJobs({api,net,notify,modal,button,getMe,renderer}){
    row.append(mk('b',null,m.name),track,mk('small',null,m.progress+' / '+m.goal+' · premio '+m.reward+' 🪙'));
    if(m.claimed)row.append(mk('small','ok','✔ Riscosso'));else if(m.done)row.append(button('Riscuoti '+m.reward+' 🪙',async()=>{try{paint(box,await api('/jobs/claim/'+m.id,'POST',{}));document.dispatchEvent(new CustomEvent('humana:wallet'));notify('🎉 +'+m.reward+' 🪙');}catch(e){notify(e.message);}}));
    ms.append(row);}
-  box.append(job,ms,mk('p','muted','Ogni nuovo livello ti regala 50 🪙. Le missioni si rinnovano a mezzanotte.'));}
+  const optional=mk('details','optional-rp'),summary=mk('summary',null,'Sistemi RP opzionali'),content=mk('div','optional-rp-content');
+  let gangMounted=false;optional.append(summary,content);optional.addEventListener('toggle',()=>{if(optional.open&&!gangMounted){gangMounted=true;content.append(gangCard({api,notify,button}));}});
+  box.append(job,ms,mk('p','muted','Ogni nuovo livello ti regala 50 🪙. Le missioni si rinnovano a mezzanotte.'),optional);}
  return {open};
 }

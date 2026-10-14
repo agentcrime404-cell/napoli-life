@@ -31,7 +31,9 @@ export function installHUD(ctx){
  if(window.HUMANA_3D){
   const socialBar=document.querySelector('.social'),actions=document.querySelector('.actions');
   for(const id of ['voice','friends','settings']){const b=$(id);b.setAttribute('aria-label',b.getAttribute('aria-label')||b.textContent.trim());socialBar.append(b);}
-  actions.prepend($('chat-toggle'));
+  // La chat resta nella barra sociale: nel gruppo delle azioni invade il salto
+  // e può intercettare il pollice durante il movimento.
+  socialBar.append($('chat-toggle'));
   $('chat-toggle').setAttribute('aria-label','Apri o chiudi chat');
   for(const [id,label] of [['profile','Profilo'],['friends','Amici'],['voice','Microfono'],['interact','Interagisci'],['inventory','Inventario'],['phone','Telefono']])$(id).setAttribute('aria-label',label);
   $('minimap').width=240;$('minimap').height=240;

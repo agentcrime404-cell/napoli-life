@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {WebSocket} from 'ws';
 import {readFileSync} from 'node:fs';
 import {createApp} from '../server/index.js';
-import {NAPOLI,napoliPlaces,napoliStand,napoliCell,napoliSpawn,setNapoli} from '../shared/napoli.js';
+import {NAPOLI,napoliPlaces,napoliStand,napoliCell,napoliSpawn,napoliParkedVehicles,setNapoli} from '../shared/napoli.js';
 import {canStand} from '../shared/world.js';
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 
@@ -22,6 +22,25 @@ test('Mergellina: scala 1:1, locali ben distanziati, tutti calpestabili e raggiu
  assert.equal(bad.length,0,'zone senza locali: '+bad.join(' '));
  // la fontana e il castello non si attraversano
  assert.equal(napoliCell(L['Fontana del Sebeto'].x,L['Fontana del Sebeto'].y),false,'vasca della fontana');
+});
+
+test('Mergellina: la generazione accelerata dei parcheggi conserva veicoli, posizioni e identità',()=>{
+ if(!NAPOLI.data)setNapoli(JSON.parse(readFileSync('client/assets/world/napoli/map/mergellina.json','utf8')));
+ const vehicles=napoliParkedVehicles(),ids=vehicles.map(vehicle=>vehicle.id);
+ assert.ok(vehicles.length>=190,'veicoli stradali: '+vehicles.length);
+ assert.equal(new Set(ids).size,vehicles.length,'identità dei veicoli duplicate');
+ assert.ok(vehicles.some(vehicle=>vehicle.id==='ciro-africa-9'&&vehicle.v==='m-enduro'),'la moto dello Chalet resta interagibile');
+ assert.ok(vehicles.every(vehicle=>Number.isFinite(vehicle.x)&&Number.isFinite(vehicle.y)),'le coordinate di tutti i veicoli sono finite');
+ assert.ok(napoliCell(vehicles.find(vehicle=>vehicle.id==='ciro-africa-9').x,vehicles.find(vehicle=>vehicle.id==='ciro-africa-9').y),'la moto dello Chalet resta sul terreno calpestabile');
+ const car=vehicles.find(vehicle=>vehicle.id==='merg-car-53');let nearest=null;
+ for(const road of NAPOLI.data.roads||[])if(!['footway','steps','path','cycleway','pedestrian'].includes(road.k))for(let i=1;i<road.p.length;i++){
+  const a=road.p[i-1],b=road.p[i],dx=b[0]-a[0],dy=b[1]-a[1],length2=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((car.x-a[0])*dx+(car.y-a[1])*dy)/length2)),x=a[0]+dx*t,y=a[1]+dy*t,distance=Math.hypot(car.x-x,car.y-y);
+  if(!nearest||distance<nearest.distance)nearest={dx,dy,distance};
+ }
+ const roadHeading=Math.atan2(nearest.dy,nearest.dx),angle=Math.abs(Math.atan2(Math.sin(car.rot-roadHeading),Math.cos(car.rot-roadHeading))),axisError=Math.min(angle,Math.abs(Math.PI-angle));
+ assert.ok(axisError<.12,'auto parcheggiata parallela alla carreggiata: errore '+axisError.toFixed(3)+' rad');
+ assert.ok(napoliStand(car.x+Math.cos(car.rot)*2,car.y+Math.sin(car.rot)*2,1.05),'la corsia davanti alla vettura deve essere libera');
+ assert.deepEqual(napoliParkedVehicles(),vehicles,'il risultato resta deterministico e riutilizzabile');
 });
 
 test('Mergellina: una posizione salvata dentro un edificio viene bloccata e lo spawn resta sicuro',()=>{

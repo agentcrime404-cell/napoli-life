@@ -21,6 +21,8 @@
     "audit:mergellina": "node scripts/audit-mergellina.mjs",
     "controlla-sito": "node scripts/controlla-sito.mjs",
     "qa:perf": "node scripts/qa-performance-live.mjs",
+    "qa:multiplayer:live": "node scripts/qa-multiplayer-live.mjs",
+    "qa:social:live": "node scripts/qa-social-checkin-live.mjs",
     "qa:mobile": "node scripts/qa-mobile-live.mjs",
     "qa:mobile:fixture": "node scripts/qa-mobile.mjs"
   },

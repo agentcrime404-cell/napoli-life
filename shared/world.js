@@ -2,6 +2,7 @@ import {turnToward} from './lanes.js';import {NAPOLI,napoliStand,napoliSpawn,nap
 import {ART_K,artName} from './art.js';import {MODE,F,frontBuildings,frontProps,FRONT_SPAWN,isRail,isStair,ROWS} from './front.js';export {MODE,F,isStair,ROWS};import {VEHICLE} from './catalog.js';export {VEHICLE,artName};
 // Coordinate logiche in metri; rendering isometrico indipendente dalla fisica.
 export const CHUNK_SIZE=8;
+export const VEHICLE_INTERACTION_RANGE=5;
 const iso=(x,y)=>({x:(x-y)*38,y:(x+y)*19}),world=(sx,sy)=>({x:(sx/38+sy/19)/2,y:(sy/19-sx/38)/2});
 // Base al suolo di ogni sprite (pixel della cella dell'atlas): angolo sinistro, frontale, destro, posteriore.
 // Misurata sul profilo inferiore degli sprite: collisioni e disegno coincidono.

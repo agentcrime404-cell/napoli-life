@@ -106,13 +106,22 @@ export function napoliParkedVehicles(){
  if(NAPOLI.parkedVehicles)return NAPOLI.parkedVehicles;
  const D=NAPOLI.data;if(!D)return [];
  const walkOnly=new Set(['footway','steps','path','cycleway','pedestrian']);
- const roads=(D.roads||[]).filter(r=>!walkOnly.has(r.k));
- const roadAt=(x,y)=>roads.some(r=>{const w=Number(r.w)||5,rr=w/2+.35;for(let i=1;i<r.p.length;i++){const a=r.p[i-1],b=r.p[i],dx=b[0]-a[0],dy=b[1]-a[1],l=dx*dx+dy*dy||1,t=Math.max(0,Math.min(1,((x-a[0])*dx+(y-a[1])*dy)/l));if(Math.hypot(x-(a[0]+dx*t),y-(a[1]+dy*t))<=rr)return true;}return false;});
+ const roads=(D.roads||[]).filter(r=>!walkOnly.has(r.k)),roadCells=new Map(),cellSize=48;
+ // This list is first requested by the live scene. A full scan of all 10k OSM
+ // road segments for every candidate parking spot used to freeze the first
+ // playable frame for over a second. Index each segment into the nearby 48 m
+ // cells once, then preserve the same exact distance test on the small subset.
+ for(const road of roads){const rr=(Number(road.w)||5)/2+.35,rr2=rr*rr,points=road.p||[];
+  for(let i=1;i<points.length;i++){const a=points[i-1],b=points[i],dx=b[0]-a[0],dy=b[1]-a[1],segment={ax:a[0],ay:a[1],dx,dy,l2:dx*dx+dy*dy||1,rr,rr2,minX:Math.min(a[0],b[0])-rr,maxX:Math.max(a[0],b[0])+rr,minY:Math.min(a[1],b[1])-rr,maxY:Math.max(a[1],b[1])+rr};
+   for(let cx=Math.floor(segment.minX/cellSize);cx<=Math.floor(segment.maxX/cellSize);cx++)for(let cy=Math.floor(segment.minY/cellSize);cy<=Math.floor(segment.maxY/cellSize);cy++){const key=cx+','+cy;let list=roadCells.get(key);if(!list)roadCells.set(key,list=[]);list.push(segment);}
+  }
+ }
+ const roadAt=(x,y)=>{const candidates=roadCells.get(Math.floor(x/cellSize)+','+Math.floor(y/cellSize))||[];for(const s of candidates){if(x<s.minX||x>s.maxX||y<s.minY||y>s.maxY)continue;const t=Math.max(0,Math.min(1,((x-s.ax)*s.dx+(y-s.ay)*s.dy)/s.l2)),dx=x-(s.ax+s.dx*t),dy=y-(s.ay+s.dy*t);if(dx*dx+dy*dy<=s.rr2)return true;}return false;};
  const main=r=>['primary','secondary','tertiary','trunk'].includes(r.k),out=[];let k=0;
  // Stesse berline parcheggiate che world3d costruisce lungo le strade secondarie.
  for(const r of roads){if(main(r)||(Number(r.w)||5)<5.5)continue;let acc=12;
   for(let i=1;i<r.p.length;i++){const a=r.p[i-1],b=r.p[i],L=Math.hypot(b[0]-a[0],b[1]-a[1]);if(L<1)continue;const tx=(b[0]-a[0])/L,ty=(b[1]-a[1])/L;
-   for(;acc<L;acc+=28){const sd=k%2?1:-1,x=a[0]+tx*acc-ty*((Number(r.w)||5)/2-1.15)*sd,y=a[1]+ty*acc+tx*((Number(r.w)||5)/2-1.15)*sd;if(k<160&&roadAt(x,y))out.push({id:'merg-car-'+out.length,kind:'parked',v:'auto',x,y,rot:Math.atan2(tx,ty)+(sd>0?0:Math.PI),r:.95});k++;}
+   for(;acc<L;acc+=28){const sd=k%2?1:-1,x=a[0]+tx*acc-ty*((Number(r.w)||5)/2-1.15)*sd,y=a[1]+ty*acc+tx*((Number(r.w)||5)/2-1.15)*sd;if(k<160&&roadAt(x,y))out.push({id:'merg-car-'+out.length,kind:'parked',v:'auto',x,y,rot:Math.atan2(ty,tx)+(sd>0?0:Math.PI),r:.95});k++;}
    acc-=L;
   }
  }

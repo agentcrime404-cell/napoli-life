@@ -6,11 +6,9 @@ import {qaDevices} from '../playwright.config.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const profileButtons={
- 'android-portrait':'portrait',
- 'android-small-portrait':'small',
- 'android-compact':'mini',
  'android-landscape':'landscape',
- 'android-landscape-small':'landscape-small'
+ 'android-landscape-wide':'landscape-wide',
+ 'android-landscape-xl':'landscape-xl'
 };
 function getPlaywright(){
  try{return createRequire(import.meta.url)('playwright');}
@@ -25,10 +23,12 @@ async function readLiveState(page){
    return {
     viewport:{width:win.innerWidth,height:win.innerHeight,dpr:win.devicePixelRatio},
     state:snapshot?.state||null,performance:snapshot?.performance||null,
+    walkInput:snapshot?.walkInput||null,vehicleInput:snapshot?.vehicleInput||null,input:snapshot?.input||null,
     errors:snapshot?.errors||[],interactions:snapshot?.interactions||[],
     hud:{overlap:document.querySelector('#overlap-count')?.textContent||'—',
      controls:document.querySelector('#control-count')?.textContent||'—',
-     connection:document.querySelector('#connection-state')?.textContent||'—'}
+     connection:document.querySelector('#connection-state')?.textContent||'—',
+     layout:document.defaultView.__NAPOLI_HUD_QA__?.()||null}
    };
   }catch(error){return {accessError:String(error)};}
  });
@@ -43,6 +43,64 @@ function recordInputChecks(summary,profile,testName,steps){
 async function clickDashboard(page,id){
  await page.evaluate(buttonId=>document.getElementById(buttonId)?.click(),id);
  await page.waitForTimeout(350);
+}
+async function realTouchProbe(page){
+ const game=page.frameLocator('#game-frame'),joystick=await game.locator('#joystick').boundingBox(),camera=await game.locator('#world').boundingBox(),jump=await game.locator('#jump').boundingBox();
+ if(!joystick||!camera||!jump)throw new Error('Area touch non visibili nella scena landscape.');
+ const before=await readLiveState(page),cdp=await page.context().newCDPSession(page),j={id:81,x:joystick.x+joystick.width/2,y:joystick.y+joystick.height/2},c={id:82,x:camera.x+camera.width*.53,y:camera.y+camera.height*.69},a={id:83,x:jump.x+jump.width/2,y:jump.y+jump.height/2};
+ const send=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
+ try{
+  await send('touchStart',[j]);await send('touchStart',[j,c]);await send('touchStart',[j,c,a]);
+  await new Promise(resolve=>setTimeout(resolve,90));
+  await send('touchMove',[{...j,y:j.y-30},{...c,x:c.x+36},a]);
+  let held=await readLiveState(page),p0=before?.state?.player,p1=held?.state?.player;
+  const directions=[{x:32,y:0},{x:0,y:30},{x:-32,y:0}];
+  for(const direction of directions){
+   if(p0&&p1&&Math.hypot(p1.x-p0.x,p1.y-p0.y)>.03)break;
+   await send('touchMove',[{...j,x:j.x+direction.x,y:j.y+direction.y},{...c,x:c.x+36},a]);
+   await new Promise(resolve=>setTimeout(resolve,360));held=await readLiveState(page);p1=held?.state?.player;
+  }
+  await send('touchEnd',[]);
+  return {before:before?.state||null,held:held?.state||null,walkInput:held?.walkInput||null,checks:{joystick:held?.walkInput?.pointer!==null&&held?.walkInput?.pointer!==undefined&&Math.hypot(held.walkInput.vector?.x||0,held.walkInput.vector?.y||0)>.1,camera:Math.abs((held?.state?.camera?.yaw||0)-(before?.state?.camera?.yaw||0))>.005,movement:!!p0&&!!p1&&Math.hypot(p1.x-p0.x,p1.y-p0.y)>.03,jump:Number(p1?.jumpAt||0)>Number(p0?.jumpAt||0)},coordinates:{joystick:j,camera:c,action:a}};
+ }finally{await cdp.detach().catch(()=>{});}
+}
+async function orientationProbe(page,outputDir){
+ const before=await readLiveState(page);
+ const landscapeWidth=before?.viewport?.width||844,landscapeHeight=before?.viewport?.height||390;
+ await page.evaluate(()=>{
+  const shell=document.querySelector('#device-shell'),frame=document.querySelector('#game-frame');
+  window.__qaOrientationRestore={shell:shell?.getAttribute('style'),frame:frame?.getAttribute('style')};
+  if(shell)Object.assign(shell.style,{position:'fixed',left:'0',top:'0',transform:'none',width:'390px',height:'844px',zIndex:'999'});
+  if(frame)Object.assign(frame.style,{width:'390px',height:'844px'});
+ });
+ try{
+  await page.waitForFunction(()=>{const frame=document.querySelector('#game-frame'),win=frame?.contentWindow,overlay=frame?.contentDocument?.querySelector('#rotate-device');return win?.innerWidth===390&&win?.innerHeight===844&&overlay&&win.getComputedStyle(overlay).display!=='none';},undefined,{timeout:15000});
+  const portrait=await page.evaluate(()=>{const frame=document.querySelector('#game-frame'),win=frame.contentWindow,s=win.__NAPOLI_QA__?.snapshot?.();return {viewport:[win.innerWidth,win.innerHeight],overlayDisplay:win.getComputedStyle(frame.contentDocument.querySelector('#rotate-device')).display,player:s?.state?.player||null,worldLoaded:!!s?.state?.world?.loaded};});
+  await page.screenshot({path:join(outputDir,'game-portrait-rotate-device.png'),clip:{x:0,y:0,width:390,height:844},animations:'disabled',timeout:20000});
+  await page.evaluate(()=>{const restore=window.__qaOrientationRestore||{},shell=document.querySelector('#device-shell'),frame=document.querySelector('#game-frame');if(shell){if(restore.shell===null)shell.removeAttribute('style');else shell.setAttribute('style',restore.shell);}if(frame){if(restore.frame===null)frame.removeAttribute('style');else frame.setAttribute('style',restore.frame);}});
+  await page.waitForFunction(({width,height})=>{const frame=document.querySelector('#game-frame'),win=frame?.contentWindow,overlay=frame?.contentDocument?.querySelector('#rotate-device');return win?.innerWidth===width&&win?.innerHeight===height&&overlay&&win.getComputedStyle(overlay).display==='none';},{width:landscapeWidth,height:landscapeHeight},{timeout:15000});
+  await page.waitForTimeout(350);
+  const landscape=await readLiveState(page),portraitPlayer=portrait.player,landscapePlayer=landscape?.state?.player,preserved=!!portraitPlayer&&!!landscapePlayer&&portraitPlayer.id===landscapePlayer.id&&Math.hypot((landscapePlayer.x||0)-(portraitPlayer.x||0),(landscapePlayer.y||0)-(portraitPlayer.y||0))<.03&&landscape?.state?.world?.loaded;
+  const box=await page.locator('#game-frame').boundingBox();if(box)await page.screenshot({path:join(outputDir,'game-landscape-after-rotation.png'),clip:box,animations:'disabled',timeout:20000});
+  return {portrait:{viewport:portrait.viewport,overlayDisplay:portrait.overlayDisplay,worldLoaded:portrait.worldLoaded},landscape:{viewport:landscape?.viewport,overlayDisplay:'none'},statePreserved:preserved,screenshots:['game-portrait-rotate-device.png','game-landscape-after-rotation.png']};
+ }finally{
+  await page.evaluate(()=>{const restore=window.__qaOrientationRestore||{},shell=document.querySelector('#device-shell'),frame=document.querySelector('#game-frame');if(shell){if(restore.shell===null)shell.removeAttribute('style');else shell.setAttribute('style',restore.shell);}if(frame){if(restore.frame===null)frame.removeAttribute('style');else frame.setAttribute('style',restore.frame);}delete window.__qaOrientationRestore;}).catch(()=>{});
+ }
+}
+async function ensurePreviewMode(page,vehicle){
+ const button=page.locator('#preview-mode'),action=vehicle?'Prova a piedi':'Prova veicolo';
+ if((await button.innerText()).trim()!==action)await clickDashboard(page,'preview-mode');
+ await page.waitForFunction(target=>{
+  try{const win=document.querySelector('#game-frame')?.contentWindow;return !!win?.__NAPOLI_QA__&&new URL(win.location.href).searchParams.get('qaVehicle')===(target?'1':'0');}
+  catch{return false;}
+ },vehicle,{timeout:30000});
+}
+async function enterPlayableMode(page){
+ const frame=page.frameLocator('#game-frame');
+ const play=frame.locator('#pg-go');
+ await play.waitFor({state:'visible',timeout:60000});
+ await play.click({timeout:15000,force:true});
+ await page.waitForFunction(()=>{try{const doc=document.querySelector('#game-frame')?.contentDocument,s=doc?.defaultView?.__NAPOLI_QA__?.snapshot?.();return !!(s?.state?.player&&s?.state?.world?.loaded&&!doc?.querySelector('#pg-go'));}catch{return false;}},undefined,{timeout:60000});
 }
 async function saveScreenshot(page,path){
  try{await page.screenshot({path,fullPage:true,animations:'disabled',timeout:20000});return true;}
@@ -67,9 +125,9 @@ export async function run({playwright=null,executablePath=process.env.PLAYWRIGHT
   context=await browser.newContext({viewport:{width:1440,height:1000},isMobile:true,hasTouch:true,deviceScaleFactor:1,recordVideo:{dir:videos}});
   page=await context.newPage();
   const consoleErrors=[],pageErrors=[];
-  page.on('console',message=>{if(message.type()==='error')consoleErrors.push(message.text());});
+  page.on('console',message=>{if(message.type()==='error')consoleErrors.push({text:message.text(),...message.location()});});
   page.on('pageerror',error=>pageErrors.push(error.message));
-  page.on('requestfailed',request=>summary.knownLimits.push('Richiesta fallita: '+request.url()+' '+(request.failure()?.errorText||'')));
+  page.on('requestfailed',request=>{const reason=request.failure()?.errorText||'';if(!/ERR_ABORTED|NS_BINDING_ABORTED/.test(reason))summary.knownLimits.push('Richiesta fallita: '+request.url()+' '+reason);});
   video=page.video();
   if(qaGuest){
    const response=await context.request.post(new URL('/api/auth/guest',baseURL).href,{data:{look:0},timeout:15000});
@@ -97,12 +155,8 @@ export async function run({playwright=null,executablePath=process.env.PLAYWRIGHT
   }
   // The multitouch probe requires the separate vehicle controls to be visible.
   // Enable the dashboard's vehicle preview before entering the QA session.
-  await clickDashboard(page,'preview-mode');
   try{
-   await page.waitForFunction(()=>{
-    try{const win=document.querySelector('#game-frame')?.contentWindow;return !!win?.__NAPOLI_QA__&&new URL(win.location.href).searchParams.get('qaVehicle')==='1';}
-    catch{return false;}
-   },undefined,{timeout:30000});
+   await ensurePreviewMode(page,true);
    summary.checks.push({test:'modalità veicolo QA attiva',pass:true});
   }catch(error){
    summary.checks.push({test:'modalità veicolo QA attiva',pass:false,details:error.message});
@@ -171,21 +225,24 @@ export async function run({playwright=null,executablePath=process.env.PLAYWRIGHT
     screenshotResult,live:data,consoleErrors:[...consoleErrors],pageErrors:[...pageErrors]});
    console.log(device.name+': HUD '+(overlapClean?'senza sovrapposizioni':'anomalia')+', screenshot '+screenshot+'.');
   }
-  if(devices.some(device=>device.name==='android-portrait')){
-   await clickDashboard(page,'preview-mode');
+  if(devices.length){
    try{
-    await page.waitForFunction(()=>{
-     try{const win=document.querySelector('#game-frame')?.contentWindow;return !!win?.__NAPOLI_QA__&&new URL(win.location.href).searchParams.get('qaVehicle')==='0';}
-     catch{return false;}
-    },undefined,{timeout:30000});
+    await ensurePreviewMode(page,false);
    }catch{summary.knownLimits.push('Il gioco non ha confermato il passaggio alla modalità a piedi.');}
-   await page.waitForTimeout(1000);
+   try{await enterPlayableMode(page);}catch(error){summary.knownLimits.push('La sessione a piedi non è entrata in città: '+error.message);}
+   await page.waitForTimeout(350);
    await clickDashboard(page,'walk-test');
    const data=await readLiveState(page);
+   summary.walkHud=data?.hud?.layout||null;
    const walkEvent=[...(data?.interactions||[])].reverse().find(event=>event.kind==='qa-walk-test');
-   recordInputChecks(summary,'android-portrait','camminata/corsa',walkEvent?.detail?.steps);
-   summary.walkScreenshot=await saveScreenshot(page,join(outputDir,'hud-android-portrait-walk.png'));
-   console.log('Test a piedi completato.');
+   const profile=devices[0].name;
+   recordInputChecks(summary,profile,'camminata/corsa',walkEvent?.detail?.steps);
+   summary.walkScreenshot=await saveScreenshot(page,join(outputDir,'hud-'+profile+'-walk.png'));
+   try{const probe=await realTouchProbe(page);summary.realTouchProbe=probe;for(const [name,pass]of Object.entries(probe.checks))summary.checks.push({profile,test:'multitouch reale · '+name,pass,details:name==='camera'?{yawBefore:probe.before?.camera?.yaw,yawDuring:probe.held?.camera?.yaw}:name==='movement'?{before:probe.before?.player,after:probe.held?.player,joystick:probe.walkInput}:name==='jump'?{jumpAt:probe.held?.player?.jumpAt}:probe.coordinates});}
+   catch(error){summary.checks.push({profile,test:'multitouch reale tramite CDP',pass:false,details:String(error?.message||error)});}
+   try{summary.orientationProbe=await orientationProbe(page,outputDir);summary.checks.push({profile,test:'portrait mostra ruota dispositivo',pass:summary.orientationProbe.portrait.overlayDisplay!=='none'&&summary.orientationProbe.portrait.worldLoaded,details:summary.orientationProbe.portrait});summary.checks.push({profile,test:'ritorno landscape preserva partita',pass:summary.orientationProbe.landscape.overlayDisplay==='none'&&summary.orientationProbe.statePreserved,details:summary.orientationProbe.landscape});}
+   catch(error){summary.checks.push({profile,test:'rotazione portrait/landscape',pass:false,details:String(error?.message||error)});}
+   console.log('Test a piedi completato in landscape.');
   }
   summary.browserErrors={console:consoleErrors,page:pageErrors};
  }catch(error){
@@ -208,6 +265,6 @@ if(process.argv[1]===fileURLToPath(import.meta.url)){
  const summary=await run({baseURL:urlArg?.slice('--base-url='.length)||process.env.QA_BASE_URL||null,
   qaGuest:process.argv.includes('--qa-guest'),devices:process.argv.includes('--smoke')?[qaDevices[0]]:qaDevices,
   outputDir:process.env.QA_OUTPUT||join(root,'artifacts','qa-live')});
- console.log('QA mobile live: '+summary.passed+' pass, '+summary.failed+' fail; report: '+join(root,'artifacts','qa-live','report.json'));
+ console.log('QA mobile live: '+summary.passed+' pass, '+summary.failed+' fail; report: '+join(process.env.QA_OUTPUT||join(root,'artifacts','qa-live'),'report.json'));
  if(summary.failed)process.exitCode=1;
 }

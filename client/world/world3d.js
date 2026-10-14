@@ -1,6 +1,7 @@
 // Mondo 3D (prova): stessa città, stessi giocatori e stesso server, ma visti in 3D con la telecamera che gira a 360°.
 // Coordinate: il mondo di gioco (x, y) in metri diventa (X = x, Z = y) in three.js, con Y verso l'alto.
 const FIG=1.3/83; // metri per punto della figura 2D
+import {napoliParkedVehicles} from '/shared/napoli.js';
 import * as THREE from '../vendor/three/three.module.min.js';
 import {finishInterior,homeDining} from './interior-finish.js';
 import {finishSea} from './sea-appearance.js';
@@ -10,6 +11,8 @@ import {SpatialVisibility} from './spatial-visibility.js';
 import {chunkStaticGeometry} from './geometry-chunks.js';
 import {AdaptiveResolution} from './adaptive-resolution.js';
 import {CollisionGrid} from './collision-grid.js';
+import {TerrainSampler} from './terrain-sampler.js';
+import {forEachSetGridCell} from './grid-cells.js';
 import {treeResources,sharedResources,disposeDetached,forgetDisposed} from './resource-lifetime.js';
 import {prepareWithLimit,programsSince,brokenPrograms,brokenReport} from './shader-prep.js';
 import {GLTFLoader} from '../vendor/three/GLTFLoader.js';
@@ -23,7 +26,7 @@ const CHARS=['male-a','male-b','male-c','male-d','male-e','male-f','female-a','f
 const CARS={auto:['car/sedan.glb',4.2],furgone:['car/van.glb',4.8],cabrio:['car/sedan-sports.glb',4.3],scooter:['car/kart-oobi.glb',1.9],bici:['car/kart-oodi.glb',1.7],monopattino:['car/kart-ooli.glb',1.5]};
 const hash=s=>{let h=0;for(const ch of String(s))h=(h*31+ch.charCodeAt(0))|0;return Math.abs(h);};
 const heading=d=>Math.PI/2-d;
-const readGraphicsSettings=mobile=>{const get=(key,fallback)=>{try{return localStorage.getItem(key)??fallback;}catch{return fallback;}};const distance=Number(get('humana-distance',''));return {fps:Math.max(30,Math.min(60,Number(get('humana-fps-limit','60'))||60)),adaptive:get('humana-adaptive-graphics','on')!=='off',shadows:get('humana-shadows','auto'),shadowQuality:get('humana-shadow-quality','high'),ao:get('humana-ao','on')!=='off',detail:get('humana-detail','high'),effects:get('humana-effects','on')!=='off',distance:Number.isFinite(distance)&&distance>0?Math.max(180,Math.min(900,distance)):(mobile?260:420)};};
+const readGraphicsSettings=mobile=>{const get=(key,fallback)=>{try{return localStorage.getItem(key)??fallback;}catch{return fallback;}};const distance=Number(get('humana-distance',''));return {fps:Math.max(30,Math.min(60,Number(get('humana-fps-limit','60'))||60)),adaptive:get('humana-adaptive-graphics','on')!=='off',shadows:get('humana-shadows','auto'),shadowQuality:get('humana-shadow-quality','high'),ao:get('humana-ao','on')!=='off',detail:get('humana-detail',mobile?'medium':'high'),effects:get('humana-effects','on')!=='off',distance:Number.isFinite(distance)&&distance>0?Math.max(180,Math.min(900,distance)):(mobile?260:420)};};
 // Proprietà del mondo che sono solo elenchi di riferimenti, non cache: luci notturne (glow), pozze di luce (poolM) e conversioni dei
 // materiali (realMats, toonMats) contengono anche materiali dei locali tolti, quindi non li tengono in vita quando un locale viene liberato.
 // Chi aggiunge un registro simile lo mette qui; tutte le altre proprietà restano cache condivise da conservare.
@@ -33,7 +36,10 @@ export class World3D{
  constructor(base2d){
   this.r2d=base2d;this.toon=false;this.gfx=(()=>{let g=null;try{g=localStorage.getItem('humana-gfx');}catch{}if(g==='toon')g='min';if(['min','med','high','ultra'].includes(g))return g;if(matchMedia('(pointer:coarse)').matches)return 'med';
    // PC con grafica integrata debole (es. Intel UHD dei mini PC Celeron): si parte da media (lì 30 FPS in città, in alta 18).
-   try{const c=document.createElement('canvas').getContext('webgl'),e=c&&c.getExtension('WEBGL_debug_renderer_info'),r=e?c.getParameter(e.UNMASKED_RENDERER_WEBGL):'';c?.getExtension('WEBGL_lose_context')?.loseContext();if(/Intel.*(UHD|HD) Graphics|SwiftShader|llvmpipe|Basic Render/i.test(r))return 'med';}catch{}return 'high';})();this.lite=this.gfx==='min';document.body.classList.add('is3d');if(this.lite)this.scale=.72;this.yaw=0;this.pitch=0;this.walkMode=(()=>{try{const v=localStorage.getItem('humana-cam');return ['25d','third','first'].includes(v)?v:'third';}catch{return 'third';}})();this.carMode='car-chase';this.camEye=new THREE.Vector3(0,30,30);this.camLook=new THREE.Vector3();this.solid=[];this.ray=new THREE.Raycaster();this.snap=true;this.autoYaw=true;this.players=new Map();this.sig='';this.hit=[];this.target=new THREE.Vector3();this.ready=false;
+   try{const c=document.createElement('canvas').getContext('webgl'),e=c&&c.getExtension('WEBGL_debug_renderer_info'),r=e?c.getParameter(e.UNMASKED_RENDERER_WEBGL):'';c?.getExtension('WEBGL_lose_context')?.loseContext();if(/Intel.*(UHD|HD) Graphics|SwiftShader|llvmpipe|Basic Render/i.test(r))return 'med';}catch{}return 'high';})();this.lite=this.gfx==='min';document.body.classList.add('is3d');if(this.lite)this.scale=.72;this.yaw=0;this.pitch=0;this.walkMode=(()=>{try{const v=localStorage.getItem('humana-cam');return ['25d','third','first'].includes(v)?v:'third';}catch{return 'third';}})();this.carMode='car-chase';this.camEye=new THREE.Vector3(0,30,30);this.camLook=new THREE.Vector3();this.solid=[];this.ray=new THREE.Raycaster();this.snap=true;this.autoYaw=true;this.players=new Map();this.sig='';this.hit=[];this.target=new THREE.Vector3();
+  // Riusa i temporanei del frame loop: proiezione giocatori e camera collision
+  // venivano allocati ogni frame, creando pressione GC senza cambiare la scena.
+  this.drawSeen=new Set();this.drawPoint=new THREE.Vector3();this.drawTarget=new THREE.Vector3();this.drawEye=new THREE.Vector3();this.drawLook=new THREE.Vector3();this.cameraFrom=new THREE.Vector3();this.cameraDir=new THREE.Vector3();this.cameraCandidates=[];this.cameraSeenRects=new Set();this.cameraHits=[];this.cameraRaycastDiagnostics={candidates:0,total:0};this.ready=false;
   const canvas=this.canvas=document.createElement('canvas');canvas.id='world3d';canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%;display:none;z-index:0';canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();setTimeout(()=>location.reload(),900);},{passive:false});
   document.getElementById('world').before(canvas);
   // Grafica minima: come su un telefono lento (niente ombre vere, materiali semplici, meno oggetti, risoluzione più bassa).
@@ -56,6 +62,8 @@ export class World3D{
   this.outline=new OutlineEffect(this.gl,{defaultThickness:.0045,defaultColor:[.08,.06,.05]});this.toonMats=new Map();
   if(this.toon)this.gl.toneMapping=THREE.NoToneMapping;this.scene.background=this.outBg=new THREE.Color('#cfe9fb');this.scene.fog.color.set('#cfe9fb');
   this.static=new THREE.Group();this.scene.add(this.static);this.dynamic=new THREE.Group();this.scene.add(this.dynamic);this.zones=new Map();this.glow=new Set();this.poolM=[];this.sunDir=new THREE.Vector3(40,70,25).normalize();this.tint=new THREE.Color('#ffffff');this.skyInit();this.preload().then(()=>{const z=this.zones.get('lungomare');if(z){z.sig=null;if(this.cur===z)this.sig=null;}});
+  // Veicoli stradali statici in streaming: stessi mezzi e coordinate del server.
+  this.parkedStreetLayer=new THREE.Group();this.parkedStreetLayer.name='mergellina-parked-street-vehicles';this.scene.add(this.parkedStreetLayer);this.parkedStreetObjects=new Map();this.parkedStreetStates=new Map();this.parkedStreetRefresh={at:0,x:NaN,y:NaN};
   // Solo in locale: maniglia per le prove dal browser.
   if(/^(localhost|127\.0\.0\.1)$/.test(location.hostname))window.__w3=this;
   this.loader=new GLTFLoader();this.cache=new Map();this.clock=0;
@@ -129,7 +137,14 @@ export class World3D{
  drawMotoSpeed(kmh){const c=this.motoSpeedCtx;if(!c)return;const w=256,h=128;c.clearRect(0,0,w,h);c.fillStyle='#0a1922';c.fillRect(0,0,w,h);c.strokeStyle='#2c778d';c.lineWidth=3;c.strokeRect(2,2,w-4,h-4);c.fillStyle='#69d6e8';c.font='600 19px system-ui';c.fillText('VELOCITÀ',14,25);c.fillStyle='#f6fbff';c.font='700 68px system-ui';c.textAlign='right';c.fillText(String(Math.max(0,Math.round(kmh))),190,93);c.textAlign='left';c.fillStyle='#9fc1cf';c.font='600 20px system-ui';c.fillText('km/h',196,89);c.fillStyle='#59d7aa';c.beginPath();c.arc(227,22,6,0,Math.PI*2);c.fill();this.motoSpeedTexture.needsUpdate=true;}
  updateMotoCockpit(me,mode,dt){const on=mode==='moto-cockpit';let root=this.motoCock;if(on&&!root)root=this.makeMotoCockpit();if(root)root.visible=on;document.body.classList.toggle('in-moto-cockpit',on);if(!on){this.motoLastHeading=null;return;}const h=Number.isFinite(me.heading)?me.heading:Number(me.direction)||0,now=performance.now();if(this.motoLastHeading!==null&&this.motoLastHeading!==undefined){let d=h-this.motoLastHeading;d=Math.atan2(Math.sin(d),Math.cos(d));const target=Number.isFinite(me.steer)?THREE.MathUtils.clamp(me.steer*.34,-.34,.34):THREE.MathUtils.clamp(d/Math.max(.016,dt)*.075,-.34,.34),k=1-Math.exp(-15*dt);this.motoBar.rotation.y+=(target-this.motoBar.rotation.y)*k;}this.motoLastHeading=h;let speed;if(Number.isFinite(me.vel))speed=Math.abs(me.vel)*3.6;else{const p=this.motoPosLast,elapsed=p?(now-p.t)/1000:0;speed=p&&elapsed>.04?Math.hypot(me.x-p.x,me.y-p.y)/elapsed*3.6:0;}this.motoPosLast={x:me.x,y:me.y,t:now};if(now-(this.motoSpeedAt||0)>100){this.motoSpeedAt=now;this.drawMotoSpeed(speed);}}
  cycle(){const W=['25d','third','first'],isMoto=this.inCar&&['scooter','bici','monopattino'].includes(VEHICLE[this._me?.vehicle]?.base||this._me?.vehicle),C=isMoto?['moto-chase','moto-orbit','moto-cockpit']:['car-chase','car-orbit','car-hood','car-cockpit'],N={'25d':'2.5D','third':'Terza persona','first':'Prima persona','car-chase':'Dietro l’auto','car-orbit':'Esterna auto','car-hood':'Cofano','car-cockpit':'Abitacolo auto','moto-chase':'Dietro la moto','moto-orbit':'Esterna moto','moto-cockpit':'Prima persona moto'};
-  if(this.inCar){if(!C.includes(this.carMode))this.carMode=C[0];this.carMode=C[(C.indexOf(this.carMode)+1)%C.length];}else{this.walkMode=W[(W.indexOf(this.walkMode)+1)%W.length];try{localStorage.setItem('humana-cam',this.walkMode);}catch{}}this.autoYaw=true;const m=this.inCar?this.carMode:this.walkMode;this.camLabel.textContent=N[m];clearTimeout(this.lt);this.lt=setTimeout(()=>this.camLabel.textContent='',1800);}
+  if(this.inCar){if(!C.includes(this.carMode))this.carMode=C[0];this.carMode=C[(C.indexOf(this.carMode)+1)%C.length];}else{this.walkMode=W[(W.indexOf(this.walkMode)+1)%W.length];try{localStorage.setItem('humana-cam',this.walkMode);}catch{}}
+  const m=this.inCar?this.carMode:this.walkMode;
+  // Enter first person aligned with the avatar's actual facing direction. In
+  // idle, autoYaw intentionally does not track movement, so inheriting the
+  // previous third-person orbit could leave the first-person camera facing a
+  // nearby wall even though the character is looking down the street.
+  if(!this.inCar&&m==='first'&&Number.isFinite(this._me?.direction))this.yaw=Math.atan2(-Math.cos(this._me.direction),-Math.sin(this._me.direction));
+  this.autoYaw=true;this.snap=false;this.camLabel.textContent=N[m];clearTimeout(this.lt);this.lt=setTimeout(()=>this.camLabel.textContent='',1800);}
  // Joystick/tastiera: "su" va sempre avanti rispetto alla telecamera.
  worldInput(input){const sx=(input.x-input.y)/Math.SQRT2,sy=(input.x+input.y)/Math.SQRT2,c=Math.cos(this.yaw),s=Math.sin(this.yaw);return {...input,x:c*sx+s*sy,y:-s*sx+c*sy};}
  screenToWorld(X,Y){const v=new THREE.Vector3((X/this.w)*2-1,-(Y/this.h)*2+1,.5).unproject(this.camera),o=this.camera.position,dir=v.sub(o).normalize();if(Math.abs(dir.y)<1e-4)return {x:o.x,y:o.z};const t=-o.y/dir.y;if(t<0||t>600)return {x:this.target.x,y:this.target.z};return {x:o.x+dir.x*t,y:o.z+dir.z*t};}
@@ -142,10 +157,10 @@ export class World3D{
  async preload(){if(this.pre)return this.pre;return this.pre=Promise.all(['yellow_plaster','red_plaster_weathered','painted_plaster_wall','white_plaster_rough_01','worn_plaster_wall','volcanic_rock_tiles'].map(async id=>[id,await this.img(id)])).then(async l=>{this.imgs=Object.fromEntries(l);const fc=await Promise.all([0,1,2,3,4,5,6,7].map(n=>new Promise(ok=>{const i=new Image();i.onload=()=>ok(i);i.onerror=()=>ok(null);i.src=this.url('sky/').replace('lighting/sky/','buildings/facciate/'+(n<4?'partenope-':'caracciolo-')+n%4+'.jpg');})));this.fac=fc.every(Boolean)?fc:null;});}
  // Ogni zona (Lungomare, Mergellina, ogni locale) si costruisce una volta sola e poi viene solo mostrata o nascosta:
  // entrare e uscire da un locale non ricostruisce più la città (niente scatti e niente memoria sprecata).
- swap(){const ZK=['solid','groundY','onRoad','boats','fx','center','roadGrid','foam','col','collisionIndex','lod','groundTiles','visibility'],old=this.cur;if(old){for(const k of ZK)old[k]=this[k];old.g.visible=false;}
+ swap(){const ZK=['solid','groundY','onRoad','boats','fx','center','roadGrid','foam','col','collisionIndex','cameraSolidsByRect','lod','groundTiles','visibility'],old=this.cur;if(old){for(const k of ZK)old[k]=this[k];old.g.visible=false;}
   let z=this.zones.get(this.room);if(z&&z.sig!==this.sig){z.dead=true;this.scene.remove(z.g);this.zones.delete(this.room);if(this.indoor(z.room))this.releaseGraphics(z.g);z=null;}
   if(z){this.cur=z;this.static=z.g;for(const k of ZK)this[k]=z[k];z.g.visible=true;}
-  else{z=this.cur={g:new THREE.Group(),sig:this.sig,room:this.room,solid:[]};this.zones.set(this.room,z);this.scene.add(z.g);this.static=z.g;this.solid=z.solid;this.groundY=0;this.onRoad=null;this.fx=null;this.foam=null;this.boats=[];this.col={c:[],r:[]};this.collisionIndex=new CollisionGrid(this.col);this.lod=null;this.visibility=null;const build=this.rebuildNow(z);if(build?.then){z.loading=true;z.stage='costruzione';build.then(async()=>{if(z.dead||this.cur!==z)return;z.phase='Preparazione degli oggetti vicini…';if(await chunkStaticGeometry(z.g,{cancelled:()=>z.dead||this.cur!==z})===false){z.sig=null;return;}const detail={low:.65,medium:.82,high:1}[this.graphicsPrefs.detail]||1,visibility=new SpatialVisibility(z.g,{range:this.graphicsPrefs.distance*detail});if(!await visibility.prepare(()=>z.dead||this.cur!==z)){z.sig=null;return;}this.visibility=z.visibility=visibility;visibility.update(this._me?.x||0,this._me?.y||0);return true;}).then(ready=>{if(ready)return this.zonePrep(z);z.loading=false;},error=>{z.loading=false;this.zoneFailed(z,error);});}this.fpsT=-8;this.fpsN=0;
+  else{z=this.cur={g:new THREE.Group(),sig:this.sig,room:this.room,solid:[],cameraSolidsByRect:new Map()};this.zones.set(this.room,z);this.scene.add(z.g);this.static=z.g;this.solid=z.solid;this.cameraSolidsByRect=z.cameraSolidsByRect;this.groundY=0;this.onRoad=null;this.fx=null;this.foam=null;this.boats=[];this.col={c:[],r:[]};this.collisionIndex=new CollisionGrid(this.col);this.lod=null;this.visibility=null;const build=this.rebuildNow(z);if(build?.then){z.loading=true;z.stage='costruzione';build.then(async()=>{if(z.dead||this.cur!==z)return;z.phase='Preparazione degli oggetti vicini…';if(await chunkStaticGeometry(z.g,{cancelled:()=>z.dead||this.cur!==z})===false){z.sig=null;return;}const detail={low:.65,medium:.82,high:1}[this.graphicsPrefs.detail]||1,visibility=new SpatialVisibility(z.g,{range:this.graphicsPrefs.distance*detail});if(!await visibility.prepare(()=>z.dead||this.cur!==z)){z.sig=null;return;}this.visibility=z.visibility=visibility;visibility.update(this._me?.x||0,this._me?.y||0);return true;}).then(ready=>{if(ready)return this.zonePrep(z);z.loading=false;},error=>{z.loading=false;this.zoneFailed(z,error);});}this.fpsT=-8;this.fpsN=0;
    // Al massimo 6 locali in memoria: i più vecchi vengono liberati.
    const ins=[...this.zones.values()].filter(q=>q!==z&&this.indoor(q.room));while(ins.length>6){const q=ins.shift();q.dead=true;this.scene.remove(q.g);this.zones.delete(q.room);this.releaseGraphics(q.g);}}
   this.env();}
@@ -162,15 +177,53 @@ export class World3D{
  // Grafica di una zona. Oltre i 10 s si continua ad aspettare (nessun disegno) e la schermata lo dice, con Riprova; se finisce dopo il limite il gioco riparte da solo.
  // Ogni tentativo ha il suo segno (z.prep): l'esito di un tentativo sostituito da Riprova non tocca più la zona.
  zonePrep(z){const run=z.prep={};Object.assign(z,{stage:'grafica',phase:'Preparazione della grafica…',error:null,slow:false,loading:true});
-  return this.prepareShaders(this.zoneName(z.room),{onLate:()=>{if(z.prep===run)z.slow=true;}}).then(()=>{if(z.prep===run){if(z.room==='mergellina')this.cacheStaticTransforms(z.g);z.loading=z.slow=false;}},error=>{if(z.prep!==run)return;z.loading=z.slow=false;this.zoneFailed(z,error);});}
+  // Build the nearby parked-vehicle objects while the loading cover is still
+  // active. The first refresh used to create them on the first drivable frame.
+  if(z.room==='mergellina'){z.phase='Preparazione dei veicoli vicini…';this.loadingStatus(z);if(this._me)this.updateStreetVehicles(this._me,this.latestPlayers||[]);z.parkedVehicleWarmup={available:napoliParkedVehicles().length,visible:this.parkedStreetLayer.children.length};}
+  return this.prepareShaders(this.zoneName(z.room),{onLate:()=>{if(z.prep===run)z.slow=true;}}).then(async()=>{if(z.prep===run){if(z.room==='mergellina'){z.phase='Preparazione dei veicoli vicini…';this.loadingStatus(z);await nextTask();if(z.prep!==run)return;z.parkedVehicleWarmup={...z.parkedVehicleWarmup,vehicles:napoliParkedVehicles().length};await this.prewarmVisibleTextures(z);if(z.prep!==run)return;await this.prewarmMergellinaCharacters(z);if(z.prep!==run)return;this.cacheStaticTransforms(z.g);}z.loading=z.slow=false;}},error=>{if(z.prep!==run)return;z.loading=z.slow=false;this.zoneFailed(z,error);});}
+ // TextureLoader decodes images asynchronously, but the GPU upload normally
+ // happens on the first draw that sees each image. Spread nearby uploads over
+ // the existing loading screen so camera turns do not pay that one-frame cost.
+ async prewarmVisibleTextures(zone){if(!this.mobile||!this.gl.initTexture||!this.visibility)return{uploaded:0};
+  const textures=new Set(),materials=new Set(),near=this._me||{x:this.target.x,y:this.target.z},range=150,entries=this.visibility.entries||[];
+  for(const entry of entries){const sphere=entry.sphere;if(!entry.always&&Math.hypot(sphere.center.x-near.x,sphere.center.z-near.y)>range+sphere.radius)continue;entry.object.traverse(object=>{if(!object.isMesh)return;for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});}
+  this.parkedStreetLayer?.traverse(object=>{if(!object.isMesh)return;for(const material of Array.isArray(object.material)?object.material:[object.material])if(material)materials.add(material);});
+  for(const material of materials)for(const key of ['map','alphaMap','aoMap','lightMap','emissiveMap','bumpMap','normalMap','displacementMap','roughnessMap','metalnessMap','gradientMap','matcap','envMap']){const texture=material[key],image=texture?.image||texture?.source?.data;if(!texture?.isTexture||!image||image.complete===false||image.complete===true&&'naturalWidth'in image&&!image.naturalWidth)continue;textures.add(texture);}
+  const list=[...textures];let uploaded=0;for(let i=0;i<list.length;i+=2){if(zone.dead||this.cur!==zone)break;zone.phase=`Preparazione texture vicine… ${Math.min(i+2,list.length)}/${list.length}`;this.loadingStatus(zone);for(const texture of list.slice(i,i+2)){try{this.gl.initTexture(texture);uploaded++;}catch(error){console.debug('Texture vicina rinviata al renderer',error?.message||error);}}if(i+2<list.length)await nextTask();}
+  zone.textureWarmup={textures:list.length,uploaded};return zone.textureWarmup;}
+ // The first three Mergellina pedestrians and the local avatar use pooled GLB
+ // resources. Their first visible frame caused mobile renderer hitches while
+ // Three.js uploaded geometry and textures. Warm the same deterministic NPC
+ // models and current avatar under the existing loading screen, then release
+ // the temporary skeletons; runtime rigs reuse the loader's cached resources.
+ async prewarmMergellinaCharacters(zone){if(!this.mobile||!this.gl?.render||zone.characterWarmup)return zone.characterWarmup||{skipped:true};
+  const warmups=['cl57','cl107','cl157'].map(id=>({id,load:()=>this.realPerson(null,id)})),me=this._me,kind=this.avatarKind();if(me?.id&&kind==='real')warmups.push({id:'avatar:'+me.id,load:()=>this.realPerson(me.avatar?.look,me.id,me.avatar)});else if(me?.id&&kind==='q3d')warmups.push({id:'avatar:'+me.id,load:()=>this.person(me.avatar?.look,me.id,me.avatar)});
+  const result=zone.characterWarmup={models:0,failed:0,ids:warmups.map(item=>item.id)},scratch=new THREE.Scene(),camera=new THREE.PerspectiveCamera(48,1,.1,40),target=new THREE.WebGLRenderTarget(16,16,{depthBuffer:true,stencilBuffer:false}),restore=this.gl.getRenderTarget();
+  scratch.environment=this.scene.environment;scratch.fog=this.scene.fog?.clone?.()||null;
+  if(this.hemi)scratch.add(this.hemi.clone());if(this.sun){const sun=this.sun.clone();sun.castShadow=false;scratch.add(sun);if(sun.target)scratch.add(sun.target);}
+  try{for(let i=0;i<warmups.length;i++){if(zone.dead||this.cur!==zone)break;zone.phase=`Preparazione personaggi vicini… ${i+1}/${warmups.length}`;this.loadingStatus(zone);let actor=null;
+    try{actor=await warmups[i].load();if(!actor?.root)continue;const root=actor.root;root.visible=true;this.toonify(root);root.updateMatrixWorld(true);const bounds=new THREE.Box3().setFromObject(root),size=bounds.getSize(new THREE.Vector3()),center=bounds.getCenter(new THREE.Vector3()),distance=Math.max(2.7,size.y*1.8);camera.position.set(center.x,center.y+size.y*.08,center.z+distance);camera.lookAt(center);scratch.add(root);
+     if(this.gl.compileAsync)await this.gl.compileAsync(scratch,camera);
+     if(zone.dead||this.cur!==zone)break;this.gl.setRenderTarget(target);this.gl.clear();this.gl.render(scratch,camera);this.gl.setRenderTarget(restore);scratch.remove(root);actor.mixer?.stopAllAction();actor.mixer?.uncacheRoot(root);this.releaseGraphics(root);actor=null;result.models++;
+    }catch(error){this.gl.setRenderTarget(restore);if(actor?.root){scratch.remove(actor.root);actor.mixer?.stopAllAction();actor.mixer?.uncacheRoot(actor.root);this.releaseGraphics(actor.root);}result.failed++;console.debug('Preparazione del modello pedone rinviata',error?.message||error);}}
+  }finally{this.gl.setRenderTarget(restore);target.dispose();}
+  return result;}
  // La città non cambia trasformazione a ogni frame. Calcoliamo le matrici una
- // volta e lasciamo aggiornabili solo gli oggetti animati; Three.js salta così
- // composizioni e moltiplicazioni per migliaia di elementi statici.
+  // volta e lasciamo aggiornabili solo gli oggetti animati. Evitiamo anche di
+  // visitare ogni edificio a ogni frame: Three.js continua a disegnare la zona,
+  // ma questa radice aggiorna solo i rami che si muovono davvero.
  cacheStaticTransforms(root){if(!root||root.userData.staticMatricesCached)return;root.updateWorldMatrix(true,true);
-  const animated=new Set([this.foam,...(this.boats||[]),...(this.sway||[]).map(s=>s.o)].filter(Boolean));
-  root.traverse(o=>{if(o.userData?.ride||o.userData?.animatedTransform||o.isSkinnedMesh||o.isBone)animated.add(o);});
+   const animated=new Set([this.foam,...(this.boats||[]),...(this.sway||[]).map(s=>s.o)].filter(Boolean)),updateRoots=new Set();
+   const isAnimated=o=>!!(o.userData?.ride||o.userData?.animatedTransform||o.isSkinnedMesh||o.isBone);
+   root.traverse(o=>{if(isAnimated(o))animated.add(o);});
+   const schedule=o=>{let branch=o;while(branch.parent&&branch.parent!==root&&animated.has(branch.parent))branch=branch.parent;if(!updateRoots.has(branch)){updateRoots.add(branch);root.userData.matrixUpdateRoots=[...updateRoots];}};
+   for(const o of animated)schedule(o);
   const freeze=(o,insideAnimated=false)=>{const moving=insideAnimated||animated.has(o);if(!moving){o.matrixAutoUpdate=false;o.matrixWorldAutoUpdate=false;o.matrixWorldNeedsUpdate=false;}for(const child of o.children)freeze(child,moving);};
-  freeze(root);root.userData.staticMatricesCached=true;}
+   freeze(root);root.userData.matrixUpdateRoots=[...updateRoots];
+   const watchAdds=o=>{if(o.userData.__matrixAddObserver)return;o.userData.__matrixAddObserver=true;const add=o.add.bind(o);o.add=function(...objects){add(...objects);let parentAnimated=false;for(let p=this;p&&p!==root;p=p.parent)if(animated.has(p)){parentAnimated=true;break;}for(const object of objects){object.updateWorldMatrix(false,true);object.traverse(child=>{if(isAnimated(child)){animated.add(child);schedule(child);}});freeze(object,parentAnimated);watchAdds(object);}return this;};for(const child of o.children)watchAdds(child);};
+   watchAdds(root);
+   root.updateMatrixWorld=function(force){if(this.matrixAutoUpdate)this.updateMatrix();if(this.matrixWorldNeedsUpdate||force){if(this.matrixWorldAutoUpdate){if(this.parent===null)this.matrixWorld.copy(this.matrix);else this.matrixWorld.multiplyMatrices(this.parent.matrixWorld,this.matrix);}this.matrixWorldNeedsUpdate=false;force=true;}for(const object of updateRoots)if(object.parent)object.updateMatrixWorld(true);};
+   root.userData.staticMatricesCached=true;}
  zoneName(room){return room==='mergellina'?'Mergellina':MAPS[room]?.name||'la zona';}
  // Zona non caricata: resta la schermata con il messaggio e il bottone, l'errore va in console.
  zoneFailed(z,error){z.error=error instanceof Error?error:new Error(String(error||'errore sconosciuto'));console.error('Caricamento di '+this.zoneName(z.room)+' non riuscito ('+(z.stage||'costruzione')+')',error);}
@@ -253,7 +306,7 @@ export class World3D{
  share(o){o.traverse(c=>{const m=c.material;if(c.isMesh&&m&&!Array.isArray(m)&&(m.isMeshStandardMaterial||m.isMeshLambertMaterial)&&!m.map&&!m.transparent&&!m.vertexColors&&m.side===THREE.FrontSide&&!m.userData.merge&&!(m.emissive&&m.emissive.getHex()))c.material=this.sm('#'+m.color.getHexString());});}
  // Unisce tutti i pezzi fermi con lo stesso materiale (lampioni, panchine, balconi, cornici, tetti…) in poche mesh:
  // centinaia di chiamate di disegno in meno, quindi più FPS sui PC lenti.
- bake(g){return bakeStatic(g,{mobile:this.mobile,spatial:this.room==='mergellina'||this.room==='lungomare'});}
+  bake(g){return bakeStatic(g,{mobile:this.mobile,spatial:this.room==='mergellina'||this.room==='lungomare'});}
  saleMat(){if(this.saleM)return this.saleM;const c=document.createElement('canvas');c.width=128;c.height=64;const g=c.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,128,64);g.strokeStyle='#c8432f';g.lineWidth=6;g.strokeRect(3,3,122,58);g.fillStyle='#c8432f';g.font='bold 20px system-ui';g.textAlign='center';g.fillText('VENDESI',64,27);g.fillText('AFFITTASI',64,50);
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const m=new THREE.MeshBasicMaterial({map:t});m.userData.merge=true;return this.saleM=m;}
  // ---- Mezzi: carrozzerie disegnate dal codice. Il profilo laterale viene "estruso" e smussato: linee morbide, da auto di lusso. ----
@@ -312,7 +365,7 @@ export class World3D{
    if(drive){const S={sedan:[.36,1.4,.05,.93,.62],fiat500:[.34,1.52,0,.84,.64],panda:[.34,1.58,0,.84,.66],city:[.36,1.55,0,.85,.66],coupe:[.36,1.2,-.25,.99,.56],wedge:[.36,1.12,-.35,1.02,.54],gt:[.36,1.3,-.5,.97,.6],suv:[.4,1.67,-.1,.99,.74],van:[.42,1.9,1.02,.99,.9],super:[.4,1.36,-.32,.98,.56]}[type]||[.36,1.4,.05,.93,.62];
     g.userData.seat={x:S[0],y:S[1]-.06-1.74,z:S[2],hw:S[3]};const piv=new THREE.Group(),dp=new THREE.Mesh(new THREE.BoxGeometry(.03,type==='van'?.8:.5,.96),b.material);dp.position.set(0,0,-.48);piv.add(dp);piv.position.set(S[3]-.02,S[4],S[2]+.55);g.add(piv);g.userData.door=piv;const pv2=new THREE.Group(),dp2=new THREE.Mesh(new THREE.BoxGeometry(.03,type==='van'?.8:.5,.96),b.material);dp2.position.set(0,0,-.48);pv2.add(dp2);pv2.position.set(-(S[3]-.02),S[4],S[2]+.55);pv2.visible=false;g.add(pv2);g.userData.door2=pv2;}
   if(beam){if(!this.beamM){this.beamM=new THREE.MeshBasicMaterial({map:this.poolTexture(),transparent:true,opacity:.6*(this.night||0),depthWrite:false,blending:THREE.AdditiveBlending});this.beamM.visible=(this.night||0)>.02;this.beamM.userData.outlineParameters={visible:false};this.poolM.push(this.beamM);}
-   const q=new THREE.Mesh(this.beamG??=new THREE.PlaneGeometry(3.4,7).rotateX(-Math.PI/2),this.beamM);q.position.set(0,.06,5.4);q.userData.toon=true;g.add(q);}
+   const q=new THREE.Mesh(this.beamG??=new THREE.PlaneGeometry(3.4,7).rotateX(-Math.PI/2),this.beamM);q.position.set(0,.06,5.4);q.userData.toon=true;if(drive){q.visible=false;g.userData.headlightBeam=q;}g.add(q);}
   return g;}
  paint(col){(this.paints??=new Map());let m=this.paints.get(col);if(!m){m=new THREE.MeshStandardMaterial({color:col,metalness:.6,roughness:.28});m.userData.merge=true;this.paints.set(col,m);}return m;}
  // Piano terra di un locale: il palazzo sopra resta pieno, sotto c'è una stanza vera profonda 3 m dietro il vetro,
@@ -426,7 +479,7 @@ export class World3D{
   const lamps=new THREE.InstancedMesh(this.bulbG??=new THREE.SphereGeometry(1,6,4),this.bulbM??=Object.assign(new THREE.MeshBasicMaterial({color:'#fff2b8'}),{userData:{outlineParameters:{visible:false}}}),9),M=new THREE.Matrix4();for(let i=0;i<9;i++){M.compose(new THREE.Vector3(-1.35+i*.34,2.6,1.3),new THREE.Quaternion(),new THREE.Vector3(.07,.07,.07));lamps.setMatrixAt(i,M);}lamps.userData.keep=true;lamps.frustumCulled=false;g.add(lamps);
   g.traverse(o=>{if(o.isMesh&&!o.isInstancedMesh)o.castShadow=!this.mobile;});g.position.set(B.x,y0,B.y);g.rotation.y=-Math.PI/2;this.share(g);id.g.add(g);
   id.g.add(this.label('🎟️ BIGLIETTI · GIOSTRE',B.x,y0+3.4,B.y,'#fff8e8','#7a1f2b',.9));this.col.c.push([B.x,B.y,1.5]);
-  if(!this.toon)this.realPerson(null,'giostraio').then(o=>{if(!o||id.dead)return;o.root.position.set(0,0,-.05);o.actions.Idle?.play();g.add(o.root);(this.extraMix??=[]).push(o.mixer);}).catch(()=>{});}
+   if(!this.toon)this.realPerson(null,'giostraio').then(o=>{if(!o||id.dead)return;o.root.userData.animatedTransform=true;o.root.position.set(0,0,-.05);o.actions.Idle?.play();g.add(o.root);(this.extraMix??=[]).push(o.mixer);}).catch(()=>{});}
  // ---- Arena paintball: campo recintato, ostacoli gonfiabili, chiosco-armeria, effetti dei colpi ----
  // Misure e ostacoli vengono da ARENA in shared/catalog.js (le stesse che usa il server per fermare passi e colpi).
  arenaBuild(id){const A=ARENA,cx=(A.x0+A.x1)/2,cy=(A.y0+A.y1)/2,W=A.x1-A.x0,H=A.y1-A.y0,g=new THREE.Group(),y0=this.lev(cx,cy);g.position.set(0,y0,0);
@@ -456,7 +509,7 @@ export class World3D{
   const gun=(x,len,col)=>{this.bx(g,.1,.12,len,x,1.2,.55,col);this.bx(g,.08,.2,.1,x,1.1,.55-len*.3,'#111827');this.bx(g,.16,.14,.16,x,1.3,.55-len*.1,'#e5e7eb');};gun(-.9,.34,'#e63946');gun(0,.9,'#3a86ff');gun(.9,.55,'#f59e0b');
   g.traverse(o=>{if(o.isMesh)o.castShadow=!this.mobile;});g.position.set(B.x,y0,B.y);g.rotation.y=-Math.PI/2;this.share(g);id.g.add(g);
   id.g.add(this.label('🎯 ARENA PAINTBALL · ARMERIA',B.x,y0+3.4,B.y,'#e8f0ff','#12306b',.9));this.col.c.push([B.x,B.y,1.6]);
-  if(!this.toon)this.realPerson(null,'arbitro').then(o=>{if(!o||id.dead)return;o.root.position.set(0,0,-.05);o.actions.Idle?.play();g.add(o.root);(this.extraMix??=[]).push(o.mixer);}).catch(()=>{});}
+   if(!this.toon)this.realPerson(null,'arbitro').then(o=>{if(!o||id.dead)return;o.root.userData.animatedTransform=true;o.root.position.set(0,0,-.05);o.actions.Idle?.play();g.add(o.root);(this.extraMix??=[]).push(o.mixer);}).catch(()=>{});}
  // Colpo di vernice: scia colorata per un attimo e macchia dove arriva. ev = {team,x,y,ex,ey} mandato dal server.
  shot(ev){if(!this.scene||!ev)return;const T=ev.team==='red'?'#ff3b3b':'#3b82ff',dx=ev.ex-ev.x,dy=ev.ey-ev.y,L=Math.hypot(dx,dy);if(L<.3)return;const fx=this.paintFx??=[],y=this.lev(ev.x,ev.y)+1.15;
   const m=new THREE.Mesh(this.shotG??=new THREE.CylinderGeometry(.04,.04,1,5).rotateX(Math.PI/2),(this.shotM??={})[T]??=new THREE.MeshBasicMaterial({color:T}));m.position.set(ev.x+dx/2,y,ev.y+dy/2);m.scale.set(1,1,L);m.lookAt(ev.ex,y,ev.ey);m.userData.life=.13;this.scene.add(m);fx.push(m);
@@ -511,7 +564,7 @@ export class World3D{
   else if(kind==='chef'){add(head,new THREE.CylinderGeometry(9,10,10,16).rotateZ(-Math.PI/2),M('#fbfaf6'),19,0,0);add(head,new THREE.SphereGeometry(11,14,8).rotateZ(-Math.PI/2),M('#fbfaf6'),26,0,0);add(sp,new THREE.BoxGeometry(34,1.2,24),M('#f6f2ea'),-3,11.8,0);}}
  swapAct(rec,name){if(rec.cur===name)return;const n=rec.actions?.[name];if(!n)return;const old=rec.actions[rec.cur];n.reset().fadeIn(.25).play();if(old)old.fadeOut(.25);rec.cur=name;}
  // Persona-comparsa (agente, benzinaio, personale): modello realistico + uniforme; ritorna la scheda con radice, mixer e azioni.
- npcPerson(seed,uni,parent,pos,yaw){const rec={root:null,mixer:null,actions:null,cur:'',pos:{...pos},yaw};if(this.toon)return rec;this.realPerson(null,seed).then(o=>{if(!o||parent.userData.dead)return;rec.root=o.root;rec.mixer=o.mixer;rec.actions=o.actions;this.uniform(o.root,uni);o.root.position.set(pos.x,0,pos.z);o.root.rotation.y=yaw;parent.add(o.root);this.swapAct(rec,'Idle');(this.lifeMix??=[]).push({mixer:o.mixer,rec,parent});}).catch(()=>{});return rec;}
+  npcPerson(seed,uni,parent,pos,yaw){const rec={root:null,mixer:null,actions:null,cur:'',pos:{...pos},yaw};if(this.toon)return rec;this.realPerson(null,seed).then(o=>{if(!o||parent.userData.dead)return;rec.root=o.root;rec.mixer=o.mixer;rec.actions=o.actions;o.root.userData.animatedTransform=true;this.uniform(o.root,uni);o.root.position.set(pos.x,0,pos.z);o.root.rotation.y=yaw;parent.add(o.root);this.swapAct(rec,'Idle');(this.lifeMix??=[]).push({mixer:o.mixer,rec,parent});}).catch(()=>{});return rec;}
  // Distributore: asfalto, tettoia con pompe, negozio con insegna e il benzinaio, che va ad aiutare chi fa il pieno.
  gasBuild(id){for(const g of GAS){const G=gasGeom(g),y0=this.lev(G.cx,G.island.y),grp=new THREE.Group();grp.position.y=y0;
    this.bx(grp,g.w,.06,g.h,g.x+g.w/2,.04,g.y+g.h/2,'#464b53');this.bx(grp,g.w,.07,.15,g.x+g.w/2,.06,g.y+(G.s>0?g.h:0),'#f4f1ea');
@@ -535,8 +588,29 @@ export class World3D{
  // Agenti che girano per le strade: ognuno percorre a piedi un anello attorno a un isolato, sul marciapiede (scelto dove si può camminare).
  copsInit(id){if(this.cops)return;this.cops=[];const rects=BLOCKS,n=this.mobile?3:5;rects.slice(0,n).forEach((r,i)=>{let best=null;for(let ins=2.6;ins<=7;ins+=.4){const x0=r[0]+ins,y0=r[1]+ins,x1=r[2]-ins,y1=r[3]-ins;if(x1-x0<3||y1-y0<3)break;const pts=[];const step=1.2;for(let x=x0;x<x1;x+=step)pts.push([x,y0]);for(let y=y0;y<y1;y+=step)pts.push([x1,y]);for(let x=x1;x>x0;x-=step)pts.push([x,y1]);for(let y=y1;y>y0;y-=step)pts.push([x0,y]);const okc=pts.filter(q=>canStand('lungomare',q[0],q[1],.35)).length/pts.length;if(okc>=.985){best=pts;break;}}
    if(!best)return;const rec=this.npcPerson('pattuglia'+i,'police',id.g,{x:best[0][0],z:best[0][1]},0);this.cops.push({rec,pts:best,s:Math.floor(best.length*(i*.37%1)),acc:0,dir:i%2?1:-1,x:best[0][0],z:best[0][1],wait:0});});}
+ // I mezzi generati dal server erano già selezionabili, ma non comparivano nella
+ // scena 3D. Li carichiamo vicino al giocatore, riusando i modelli già caricati
+ // e mantenendo un piccolo LRU per evitare di creare 196 veicoli in una volta.
+ updateStreetVehicles(me,players=[]){
+  const layer=this.parkedStreetLayer;if(!layer)return;const active=this.room==='mergellina';layer.visible=active;if(!active)return;
+  const cache=this.parkedStreetObjects??=new Map(),last=this.parkedStreetRefresh??={at:0,x:NaN,y:NaN};
+  if(this.clock<last.at&&Math.hypot(me.x-last.x,me.y-last.y)<8)return;
+  last.at=this.clock+.45;last.x=me.x;last.y=me.y;
+  // Dodici sagome vicine bastano a mantenere la strada credibile: oltre questa
+  // distanza restano selezionabili dal server ma non consumano draw call mobili.
+  const max=this.mobile?12:20,radius=this.mobile?105:175,r2=radius*radius,palette=['#24272c','#c7ccd4','#7a0c14','#0d2a5c','#f5f5f4','#3c7651','#b7772e'],occupied=new Set(players.filter(player=>player.room==='mergellina'&&player.vehicle&&player.vehicleSource==='street'&&player.streetVehicleId).map(player=>player.streetVehicleId));
+  const desired=new Map();for(const parked of napoliParkedVehicles()){const state=this.parkedStreetStates.get(parked.id);if(occupied.has(parked.id)||state?.occupied)continue;const vehicle=state?{...parked,...state}:parked,dx=vehicle.x-me.x,dy=vehicle.y-me.y,d2=dx*dx+dy*dy;if(d2<=r2&&VEHICLE[vehicle.v])desired.set(vehicle.id,{vehicle,d2});}
+  const nearest=[...desired].sort((a,b)=>a[1].d2-b[1].d2).slice(0,max),keep=new Set(nearest.map(([id])=>id));
+  let created=0,attached=0,detached=0;for(const [id,item] of cache){if(keep.has(id))continue;if(item.object.parent===layer){layer.remove(item.object);detached++;}item.last=this.clock;}
+  for(const [id,{vehicle}] of nearest){let item=cache.get(id);if(!item){const object=this.ride(vehicle.v,palette[hash(id)%palette.length]);if(!object)continue;object.name='parked-street-'+id;object.traverse(part=>{if(part.isMesh){part.castShadow=false;part.receiveShadow=true;}});item={object,last:this.clock};cache.set(id,item);created++;}
+   const object=item.object;if(object.parent!==layer){layer.add(object);attached++;}object.position.set(vehicle.x,this.lev(vehicle.x,vehicle.y),vehicle.y);object.rotation.y=heading(vehicle.rot||0);item.last=this.clock;}
+  this.streetVehicleRefreshDiagnostics={at:this.clock,created,attached,detached,candidates:desired.size,visible:layer.children.length,cached:cache.size};
+  const limit=max+24;if(cache.size>limit){const stale=[...cache].filter(([id,item])=>!keep.has(id)&&!item.object.parent).sort((a,b)=>a[1].last-b[1].last);while(cache.size>limit&&stale.length){const [id,item]=stale.shift();cache.delete(id);this.releaseGraphics(item.object);}}
+ }
+ setStreetVehicleUpdates(updates=[]){for(const vehicle of updates||[])if(vehicle&&typeof vehicle.id==='string'&&vehicle.room==='mergellina'&&Number.isFinite(vehicle.x)&&Number.isFinite(vehicle.y)&&Number.isFinite(vehicle.rot))this.parkedStreetStates.set(vehicle.id,vehicle);}
  // Aggiorna agenti, benzinai, personale, sirene (chiamato a ogni fotogramma).
  updateLife(list,dt){
+  this.updateStreetVehicles(this._me,list);
   // Aggiornamento LOD delle animazioni NPC: vicino al giocatore resta a ogni
   // frame; a media/lunga distanza riduciamo il costo dei mixer mantenendo il
   // tempo di animazione corretto. I modelli continuano a essere cullati dalla
@@ -844,8 +918,17 @@ export class World3D{
  blockedStatic(x,z,r=.3){const C=this.col;if(!C)return false;const index=this.collisionIndex?.source===C?this.collisionIndex:(this.collisionIndex=new CollisionGrid(C));return index.blocked(x,z,r);}
  blocked(x,z,r=.3){const C=this.col;if(!C)return false;const index=this.collisionIndex?.source===C?this.collisionIndex:(this.collisionIndex=new CollisionGrid(C));if(index.blocked(x,z,r))return true;
   if(this.room==='lungomare'&&this.cityG?.visible){for(const o of this.traf||[])if(Math.hypot(x-o.position.x,z-o.position.z)<1.7+r)return true;const b=this.busO;if(b){const a=b.rotation.y,fx=Math.sin(a),fz=Math.cos(a);for(const k of [-3,0,3])if(Math.hypot(x-b.position.x-fx*k,z-b.position.z-fz*k)<1.9+r)return true;}}return false;}
- // Movimento a piedi: se il prossimo passo finisce dentro un ostacolo ci si ferma (o si scivola di lato). "step" è la stessa regola di movimento del server.
- guard(me,input,step){if(this.blocked(me.x,me.y,.05))return input;const ok=i=>{const q={...me};try{step(q,i,.28);}catch{return true;}return !this.blocked(q.x,q.y);};if(ok(input))return input;for(const alt of [{...input,y:0},{...input,x:0}])if((alt.x||alt.y)&&ok(alt))return alt;return {...input,x:0,y:0};}
+  // Movimento a piedi: la previsione usa le stesse regole del server, ma riusa
+  // lo stato temporaneo e gli input laterali invece di clonare il player a ogni
+  // frame. Nei controlli touch questo percorso viene eseguito circa 30 volte/s.
+  guardProbe(me,input,step,q){q.room=me.room;q.seat=me.seat;q.x=me.x;q.y=me.y;q.vehicle=me.vehicle;q.needs=me.needs;q.fuel=me.fuel;q.direction=me.direction;q.heading=me.heading;q.vel=me.vel;q.slide=me.slide;q.steer=me.steer;q.moving=me.moving;q.running=me.running;
+   try{step(q,input,.28);}catch{return true;}return this.blocked(q.x,q.y);}
+  guard(me,input,step){if(this.blocked(me.x,me.y,.05))return input;const q=this.guardPlayer??=(Object.create(null)),alt=this.guardAlternative??=(Object.create(null));
+   if(!this.guardProbe(me,input,step,q))return input;
+   Object.assign(alt,input);alt.x=input.x;alt.y=0;alt.run=input.run;alt.rev=input.rev;alt.drive=input.drive;alt.steer=input.steer;alt.throttle=input.throttle;alt.brake=input.brake;
+   if(alt.x&&!this.guardProbe(me,alt,step,q))return alt;
+   alt.x=0;alt.y=input.y;if(alt.y&&!this.guardProbe(me,alt,step,q))return alt;
+   alt.x=0;alt.y=0;return alt;}
  // Castel dell'Ovo: isolotto di roccia, bastione di tufo con merli, mastio, torri e ponte verso la riva. Misure vere (circa 150 m), poi scalato.
  vesuvio(R,H,seg,o={}){const SX=o.sx??78,SZ=o.sz??-30,SH=o.sh??1,HZ=o.haze??.42;const geo=new THREE.PlaneGeometry(R*2,R*2,seg,seg);geo.rotateX(-Math.PI/2);const p=geo.attributes.position,col=[],cc=new THREE.Color(),haze=new THREE.Color(this.toon?'#a9c4e6':'#9fb4cb'),k=R/260;
   for(let i=0;i<p.count;i++){const x=p.getX(i)/k,z=p.getZ(i)/k,r=Math.hypot(x,z),a=Math.atan2(z,x),base=Math.pow(Math.max(0,1-r/260),1.7)*.62,cono=Math.pow(Math.max(0,1-r/95),1.15)*.5,rs=Math.hypot(x+SX,z+SZ),somma=(Math.pow(Math.max(0,1-rs/200),1.6)*.5+Math.pow(Math.max(0,1-rs/70),1.2)*.2)*SH;
@@ -959,11 +1042,34 @@ export class World3D{
    const v=new THREE.Vector3(lx,0,lz).applyAxisAngle(new THREE.Vector3(0,1,0),hill.rotation.y);
    if(i%3){const h=new THREE.Mesh(new THREE.BoxGeometry(5,4,4),this.sm(cols[i%cols.length]));h.position.set(hp.x+v.x,yy+1.5,hp.y+v.z);h.rotation.y=a;this.static.add(h);}
    else{const p=new THREE.Mesh(new THREE.SphereGeometry(2.6,8,6),pine);p.scale.y=.55;p.position.set(hp.x+v.x,yy+4,hp.y+v.z);this.static.add(p);}}}
- // Minimappa di Mergellina: immagine della mappa fatta una volta sola, poi solo ritagliata attorno al giocatore.
- minimap(cv,players,me,size){if(!NAPOLI.grid)return;if(!this.miniImg){const {w,h,grid}=NAPOLI,c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d'),im=x.createImageData(w,h);for(let i=0;i<w*h;i++){const on=grid[i>>3]&(1<<(i&7)),k=i*4;im.data[k]=on?236:52;im.data[k+1]=on?224:132;im.data[k+2]=on?196:201;im.data[k+3]=255;}x.putImageData(im,0,0);
-   x.strokeStyle='#8a8f9c';x.lineCap='round';for(const r of NAPOLI.data.roads){if(['footway','steps','path'].includes(r.k))continue;x.lineWidth=Math.max(2,r.w*.8);x.beginPath();r.p.forEach((q,i)=>{const X=q[0]-NAPOLI.x0,Y=q[1]-NAPOLI.y0;if(i)x.lineTo(X,Y);else x.moveTo(X,Y);});x.stroke();}this.miniImg=c;}
-  const g=cv.getContext('2d'),W=cv.width,H=cv.height,view=(size?600:260)/(size?1:(this.r2d.miniZoom||1)),k=W/view;g.setTransform(1,0,0,1,0,0);g.fillStyle='#3484c9';g.fillRect(0,0,W,H);
-  g.drawImage(this.miniImg,(me.x-NAPOLI.x0)-view/2,(me.y-NAPOLI.y0)-view*H/W/2,view,view*H/W,0,0,W,H);
+ // La prima bitmap a piena risoluzione copre oltre sei milioni di celle: prepararla
+ // nel frame d'ingresso bloccava la partita per più di un secondo. Mostriamo subito
+ // una preview leggera e completiamo la mappa a blocchi, lasciando respirare il frame.
+ miniMapPreview(){
+  const {w,h,grid}=NAPOLI,step=6,c=document.createElement('canvas');c.width=Math.ceil(w/step);c.height=Math.ceil(h/step);
+  const ctx=c.getContext('2d'),im=ctx.createImageData(c.width,c.height),data=im.data;
+  for(let y=0;y<c.height;y++){const sy=Math.min(h-1,Math.floor((y+.5)*h/c.height));for(let x=0;x<c.width;x++){const sx=Math.min(w-1,Math.floor((x+.5)*w/c.width)),on=grid[(sy*w+sx)>>3]&(1<<((sy*w+sx)&7)),k=(y*c.width+x)*4;data[k]=on?236:52;data[k+1]=on?224:132;data[k+2]=on?196:201;data[k+3]=255;}}
+  ctx.putImageData(im,0,0);this.drawMiniMapRoads(ctx,c.width/w,c.height/h,true);return c;
+ }
+ drawMiniMapRoads(ctx,sx=1,sy=1){
+  const roads=NAPOLI.data?.roads||[];ctx.save();ctx.scale(sx,sy);ctx.strokeStyle='#8a8f9c';ctx.lineCap='round';
+  for(const r of roads){if(!['primary','secondary','tertiary','trunk'].includes(r.k))continue;ctx.lineWidth=Math.max(2,r.w*.8);ctx.beginPath();r.p.forEach((q,i)=>{const X=q[0]-NAPOLI.x0,Y=q[1]-NAPOLI.y0;if(i)ctx.lineTo(X,Y);else ctx.moveTo(X,Y);});ctx.stroke();}
+  ctx.restore();
+ }
+ async drawMiniMapRoadsProgressive(ctx){
+  const roads=NAPOLI.data?.roads||[];ctx.save();ctx.strokeStyle='#8a8f9c';ctx.lineCap='round';let count=0;
+  for(const r of roads){if(['footway','steps','path'].includes(r.k))continue;ctx.lineWidth=Math.max(2,r.w*.8);ctx.beginPath();r.p.forEach((q,i)=>{const X=q[0]-NAPOLI.x0,Y=q[1]-NAPOLI.y0;if(i)ctx.lineTo(X,Y);else ctx.moveTo(X,Y);});ctx.stroke();if(++count%96===0)await nextTask();}
+  ctx.restore();
+ }
+ async buildMiniMap(){
+  const {w,h,grid}=NAPOLI,c=document.createElement('canvas');c.width=w;c.height=h;const ctx=c.getContext('2d'),im=ctx.createImageData(w,h),data=im.data,rowsPerChunk=12;
+  for(let y0=0;y0<h;y0+=rowsPerChunk){const endY=Math.min(h,y0+rowsPerChunk);for(let y=y0;y<endY;y++)for(let i=y*w,end=(y+1)*w;i<end;i++){const on=grid[i>>3]&(1<<(i&7)),k=i*4;data[k]=on?236:52;data[k+1]=on?224:132;data[k+2]=on?196:201;data[k+3]=255;}await nextTask();}
+  ctx.putImageData(im,0,0);await this.drawMiniMapRoadsProgressive(ctx);this.miniImg=c;
+ }
+ // Minimappa di Mergellina: preview all'ingresso, bitmap precisa quando pronta, sempre solo ritagliata.
+ minimap(cv,players,me,size){if(!NAPOLI.grid)return;if(!this.miniMapPromise){try{this.miniImg=this.miniMapPreview();this.miniMapPromise=this.buildMiniMap().catch(error=>console.warn('minimappa Mergellina',error));}catch(error){console.warn('preview minimappa Mergellina',error);return;}}
+  const g=cv.getContext('2d'),W=cv.width,H=cv.height,view=(size?600:260)/(size?1:(this.r2d.miniZoom||1)),k=W/view,scaleX=this.miniImg.width/NAPOLI.w,scaleY=this.miniImg.height/NAPOLI.h;g.setTransform(1,0,0,1,0,0);g.fillStyle='#3484c9';g.fillRect(0,0,W,H);
+  g.drawImage(this.miniImg,((me.x-NAPOLI.x0)-view/2)*scaleX,((me.y-NAPOLI.y0)-view*H/W/2)*scaleY,view*scaleX,view*H/W*scaleY,0,0,W,H);
   for(const p of players){if(p.room!=='mergellina'||p.id===me.id)continue;g.fillStyle=p.id===me.id?'#1e90ff':'#ffd23f';g.beginPath();g.arc(W/2+(p.x-me.x)*k,H/2+(p.y-me.y)*k,p.id===me.id?5:4,0,7);g.fill();g.strokeStyle='#fff';g.lineWidth=2;g.stroke();}
   g.save();g.translate(W/2,H/2);g.rotate((me.direction||0)+Math.PI/2);g.beginPath();g.moveTo(0,-13);g.lineTo(9,10);g.lineTo(0,6);g.lineTo(-9,10);g.closePath();g.fillStyle='#27a9ef';g.strokeStyle='#fff';g.lineWidth=2.5;g.fill();g.stroke();g.restore();}
  // Copie identiche (palme, lampioni, tavolini) in un'unica InstancedMesh per pezzo: una sola chiamata di disegno per tipo.
@@ -978,13 +1084,12 @@ export class World3D{
   // Panorama vero da Posillipo a Castel dell'Ovo (fuori dalla zona dove si cammina): terraferma ricavata dalla linea di costa vera,
   // colline di Posillipo e del Vomero, città sullo sfondo con i tetti di cotto, alberi della Villa Comunale, scogliera lungo la riva.
   {const CO=D.coast[0],cut=CO.findIndex(q=>q[0]>3000),cs=(cut>0?CO.slice(0,cut):CO).filter((_,i)=>i%2===0),poly=[...cs,[3000,-3600],[-4600,-3600],[-4600,cs[0][1]]];
-   this.landFn=(x,y)=>land(x,y);const land=(x,y)=>{let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const p=poly[i],q=poly[j];if((p[1]>y)!==(q[1]>y)&&x<(q[0]-p[0])*(y-p[1])/(q[1]-p[1])+p[0])c=!c;}return c;};
-   const dco=(x,y)=>{let d=1e12;for(const q of cs){const e=(q[0]-x)**2+(q[1]-y)**2;if(e<d)d=e;}return Math.sqrt(d);};
+   const terrainSampler=new TerrainSampler(poly,cs),land=(x,y)=>terrainSampler.contains(x,y),dco=(x,y)=>terrainSampler.coastDistance(x,y);this.landFn=land;
    const hillH=(x,y)=>{if(!land(x,y))return -1;const n=Math.max(0,(y0-40)-y),wst=Math.max(0,(x0-40)-x),k=1+.18*Math.sin(x*.004+y*.007)+.12*Math.sin(x*.011-y*.009);return Math.max(Math.min(175,n*.32),Math.min(150,wst*.3))*k*Math.min(1,dco(x,y)/350);};
    {const sg=new THREE.ShapeGeometry(new THREE.Shape(poly.map(q=>new THREE.Vector2(q[0],q[1]))));sg.rotateX(Math.PI/2);const m=new THREE.Mesh(sg,new THREE.MeshLambertMaterial({color:'#8e8a82',side:THREE.DoubleSide}));m.position.y=-.03;m.userData.toon=m.userData.real=true;m.material.userData.outlineParameters={visible:false};this.static.add(m);}
    const G=new THREE.PlaneGeometry(8000,8000,150,150);G.rotateX(-Math.PI/2);G.translate(x0+W/2,0,y0+H/2+400);const p=G.attributes.position,c=[],cc=new THREE.Color();
    for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getZ(i),h=hillH(x,y);p.setY(i,h>2?h:-3);const v=(Math.sin(x*.05)*Math.cos(y*.043)+1)/2;cc.set(h>120?'#7c8b69':'#708568').lerp(new THREE.Color('#929b7c'),v*.35);c.push(cc.r,cc.g,cc.b);}
-   G.setAttribute('color',new THREE.Float32BufferAttribute(c,3));G.computeVertexNormals();const hm=new THREE.Mesh(G,new THREE.MeshLambertMaterial({vertexColors:true}));hm.userData.toon=hm.userData.real=true;hm.material.userData.outlineParameters={visible:false};this.static.add(hm);
+   G.setAttribute('color',new THREE.Float32BufferAttribute(c,3));G.computeVertexNormals();const hm=new THREE.Mesh(G,new THREE.MeshLambertMaterial({vertexColors:true}));hm.userData.toon=hm.userData.real=true;hm.material.userData.outlineParameters={visible:false};this.static.add(hm);lap('terreno panorama');
    // Città di sfondo: palazzi color pastello con finestre e tetto di cotto (un solo disegno per tutti).
    const wc=document.createElement('canvas');wc.width=128;wc.height=160;{const g=wc.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,128,160);for(let j=0;j<5;j++)for(let i=0;i<4;i++){g.fillStyle='#e9e4da';g.fillRect(i*32+8,j*32+6,16,22);g.fillStyle=(i*3+j*5)%4?'#3c4c5c':'#2f6b4f';g.fillRect(i*32+10,j*32+8,12,18);}g.fillStyle='rgba(0,0,0,.12)';for(let j=1;j<5;j++)g.fillRect(0,j*32-1,128,2);}
    const wt2=new THREE.CanvasTexture(wc);wt2.colorSpace=THREE.SRGBColorSpace; // Finestre leggibili in lontananza: evitare la foto ripetuta 24 volte che diventa grigia nei mipmap.
@@ -999,21 +1104,21 @@ export class World3D{
      for(let d=64-acc;d<L;d+=64){const t=d/L,px=a[0]+(b[0]-a[0])*t,py=a[1]+(b[1]-a[1])*t;let nx=-(b[1]-a[1])/L,ny=(b[0]-a[0])/L;if(!land(px+nx*45,py+ny*45)){nx=-nx;ny=-ny;}if(!land(px+nx*45,py+ny*45)||!land(px+nx*75,py+ny*75))continue;if(px>x0-80&&px<x0+W+80&&py>y0-80&&py<y0+H+80)continue;
       const hh=hash('albergo'+n),w=54,dp=24,h=24+(hh%4)*3.3,box=new THREE.Mesh(new THREE.BoxGeometry(w,h,dp),mats[n%4]);box.position.set(px+nx*46,h/2-.5,py+ny*46);box.rotation.y=-Math.atan2(b[1]-a[1],b[0]-a[0]);box.castShadow=false;box.userData.toon=box.userData.real=true;this.static.add(box);n++;}
      acc=(acc+L)%64;}}catch(err){console.warn('alberghi',err);}
-   try{const spot=[[1180,-158],[1172,-160],[1186,-166],[1162,-166],[1150,-170]].find(([x,y])=>land(x,y)&&land(x+9,y)&&land(x-9,y)&&land(x,y+9)&&land(x,y-9));if(spot){const g=new THREE.Group(),K=(w,h,d,x,y,z,c)=>this.bx(g,w,h,d,x,y,z,c);K(16,.5,16,0,.25,0,'#cfc8b8');K(11,.6,11,0,.8,0,'#d8d1c1');K(7,1.4,7,0,1.8,0,'#e2dccd');K(3.6,13,3.2,0,9,-.6,'#e9e3d5');K(4.4,.5,4,0,15.7,-.6,'#d8d1c1');K(2.2,1.6,3.4,0,3.3,2.2,'#e2dccd');K(.8,1.5,2.2,0,4.9,2.3,'#4a5a4c');K(.7,1.3,.7,0,6.2,2.5,'#4a5a4c');const hd=new THREE.Mesh(new THREE.SphereGeometry(.36,10,8),this.sm('#4a5a4c'));hd.position.set(0,7.1,2.6);g.add(hd);this.mergeGroup(g);g.position.set(spot[0],0,spot[1]);g.traverse(o=>{if(o.isMesh)o.userData.toon=o.userData.real=true;});this.static.add(g);}}catch(err){console.warn('monumento',err);}
+   lap('palazzi panorama');try{const spot=[[1180,-158],[1172,-160],[1186,-166],[1162,-166],[1150,-170]].find(([x,y])=>land(x,y)&&land(x+9,y)&&land(x-9,y)&&land(x,y+9)&&land(x,y-9));if(spot){const g=new THREE.Group(),K=(w,h,d,x,y,z,c)=>this.bx(g,w,h,d,x,y,z,c);K(16,.5,16,0,.25,0,'#cfc8b8');K(11,.6,11,0,.8,0,'#d8d1c1');K(7,1.4,7,0,1.8,0,'#e2dccd');K(3.6,13,3.2,0,9,-.6,'#e9e3d5');K(4.4,.5,4,0,15.7,-.6,'#d8d1c1');K(2.2,1.6,3.4,0,3.3,2.2,'#e2dccd');K(.8,1.5,2.2,0,4.9,2.3,'#4a5a4c');K(.7,1.3,.7,0,6.2,2.5,'#4a5a4c');const hd=new THREE.Mesh(new THREE.SphereGeometry(.36,10,8),this.sm('#4a5a4c'));hd.position.set(0,7.1,2.6);g.add(hd);this.mergeGroup(g);g.position.set(spot[0],0,spot[1]);g.traverse(o=>{if(o.isMesh)o.userData.toon=o.userData.real=true;});this.static.add(g);}}catch(err){console.warn('monumento',err);}lap('monumento panorama');
    im.count=k;tm.count=kt;for(const o of [im,tm]){o.instanceMatrix.needsUpdate=true;if(o.instanceColor)o.instanceColor.needsUpdate=true;o.userData.toon=o.userData.real=true;o.frustumCulled=false;this.static.add(o);}im.material.userData.outlineParameters={visible:false};
    // Scogliera: massi lungo la riva, da Mergellina fino al castello.
    const rgq=new THREE.IcosahedronGeometry(1,0),NR=this.mobile?1000:2600,rk=new THREE.InstancedMesh(rgq,new THREE.MeshLambertMaterial(),NR);{const pp=rgq.attributes.position,nn=rgq.attributes.normal,v=new THREE.Vector3();for(let i=0;i<pp.count;i++){v.fromBufferAttribute(pp,i);nn.setXYZ(i,v.x,v.y,v.z);v.multiplyScalar(1+.22*Math.sin(v.x*4.1+v.y*2.7)+.16*Math.sin(v.z*5.3+v.x*1.9));pp.setXYZ(i,v.x,v.y,v.z);}}
    const open=(x,y,nx,ny)=>{for(let d=6;d<=160;d+=6)if(napoliCell(x+nx*d,y+ny*d))return false;return !land(x+nx*30,y+ny*30)&&!land(x+nx*110,y+ny*110);};let kr=0,acc=0;
-   for(let i=1;i<cs.length&&kr<NR;i++){const A=cs[i-1],B=cs[i];if(Math.max(A[0],B[0])<-1100||Math.min(A[0],B[0])>2950)continue;const L=Math.hypot(B[0]-A[0],B[1]-A[1]);if(L<.5)continue;let nx=-(B[1]-A[1])/L,ny=(B[0]-A[0])/L;const mx=(A[0]+B[0])/2,my=(A[1]+B[1])/2;if(land(mx+nx*8,my+ny*8)){nx=-nx;ny=-ny;}
+   lap('istanze panorama');for(let i=1;i<cs.length&&kr<NR;i++){const A=cs[i-1],B=cs[i];if(Math.max(A[0],B[0])<-1100||Math.min(A[0],B[0])>2950)continue;const L=Math.hypot(B[0]-A[0],B[1]-A[1]);if(L<.5)continue;let nx=-(B[1]-A[1])/L,ny=(B[0]-A[0])/L;const mx=(A[0]+B[0])/2,my=(A[1]+B[1])/2;if(land(mx+nx*8,my+ny*8)){nx=-nx;ny=-ny;}
     for(;acc<L&&kr<NR;acc+=this.mobile?4.5:2.6){const t=acc/L,hh=hash(i+':'+Math.round(acc*3)),o=.8+(hh%70)/10,x=A[0]+(B[0]-A[0])*t+nx*o,y=A[1]+(B[1]-A[1])*t+ny*o;if(napoliCell(x,y)||!open(x,y,nx,ny))continue;const sc=.55+(hh%12)/10;Q.setFromAxisAngle(Y,hh%6);M.compose(new THREE.Vector3(x,-.2+(hh%5)*.12,y),Q,new THREE.Vector3(sc*1.25,sc*.8,sc));rk.setMatrixAt(kr,M);rk.setColorAt(kr,cc.set(['#8d8a84','#7b7872','#9c988f','#6f6c67'][hh%4]));kr++;}acc-=L;}
-   {const NP=this.mobile?1400:3000,pwG=(()=>{const tint=(q,v)=>{const n=q.attributes.position.count,a=new Float32Array(n*3).fill(v);q.setAttribute('color',new THREE.BufferAttribute(a,3));return q;},b=tint(new THREE.BoxGeometry(.4,.84,2.08).translate(0,.42,0),.9),c=tint(new THREE.BoxGeometry(.54,.13,2.08).translate(0,.9,0),1.25),u=b.attributes.uv;for(let i=0;i<u.count;i++)u.setXY(i,u.getX(i)*.9,u.getY(i)*.4);return mergeGeometries([b,c]);})(),pwT=this.tex('large_sandstone_blocks','diff'),pw=new THREE.InstancedMesh(pwG,(m=>{m.color.setRGB(2.1,1.95,1.7);return m;})(new THREE.MeshLambertMaterial({map:pwT,vertexColors:true})),NP);let kp=0,ac=0;
+   lap('costa e scogliera');{const NP=this.mobile?1400:3000,pwG=(()=>{const tint=(q,v)=>{const n=q.attributes.position.count,a=new Float32Array(n*3).fill(v);q.setAttribute('color',new THREE.BufferAttribute(a,3));return q;},b=tint(new THREE.BoxGeometry(.4,.84,2.08).translate(0,.42,0),.9),c=tint(new THREE.BoxGeometry(.54,.13,2.08).translate(0,.9,0),1.25),u=b.attributes.uv;for(let i=0;i<u.count;i++)u.setXY(i,u.getX(i)*.9,u.getY(i)*.4);return mergeGeometries([b,c]);})(),pwT=this.tex('large_sandstone_blocks','diff'),pw=new THREE.InstancedMesh(pwG,(m=>{m.color.setRGB(2.1,1.95,1.7);return m;})(new THREE.MeshLambertMaterial({map:pwT,vertexColors:true})),NP);let kp=0,ac=0;
     for(let i=1;i<cs.length&&kp<NP;i++){const A=cs[i-1],B=cs[i];if(Math.max(A[0],B[0])<x0||Math.min(A[0],B[0])>x0+W)continue;const L=Math.hypot(B[0]-A[0],B[1]-A[1]);if(L<.5)continue;let nx=-(B[1]-A[1])/L,ny=(B[0]-A[0])/L;if(land((A[0]+B[0])/2+nx*8,(A[1]+B[1])/2+ny*8)){nx=-nx;ny=-ny;}
      for(;ac<L&&kp<NP;ac+=2){const t=ac/L,x=A[0]+(B[0]-A[0])*t-nx*.8,y=A[1]+(B[1]-A[1])*t-ny*.8;if(!napoliCell(x-nx*1.5,y-ny*1.5)||napoliCell(x+nx*4,y+ny*4))continue;Q.setFromAxisAngle(Y,Math.atan2(B[0]-A[0],B[1]-A[1]));M.compose(new THREE.Vector3(x,.12,y),Q,new THREE.Vector3(1,1,1));pw.setMatrixAt(kp++,M);}ac-=L;}
-    for(let cy=1;cy<H-1;cy++)for(let cx=1;cx<W-1;cx++){const x=x0+cx+.5,y=y0+cy+.5;if(!napoliCell(x,y))continue;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){if(napoliCell(x+dx,y+dy)||!open(x+dx*2,y+dy*2,dx,dy))continue;
+    forEachSetGridCell(NAPOLI.grid,W,H,(cx,cy)=>{const x=x0+cx+.5,y=y0+cy+.5;for(const [dx,dy] of [[1,0],[-1,0],[0,1],[0,-1]]){if(napoliCell(x+dx,y+dy)||!open(x+dx*2,y+dy*2,dx,dy))continue;
       if(kp<NP){Q.setFromAxisAngle(Y,dx?0:Math.PI/2);M.compose(new THREE.Vector3(x+dx*.25,.12,y+dy*.25),Q,new THREE.Vector3(1,1,.5));pw.setMatrixAt(kp++,M);}
       const hh=hash(cx+':'+cy);if(hh%5<3&&kr<NR){const o=1.6+(hh%40)/10,j=((hh>>4)%20)/10-1,sc=.6+(hh%13)/10;Q.setFromAxisAngle(Y,hh%6);M.compose(new THREE.Vector3(x+dx*o-dy*j,-.25+(hh%5)*.1,y+dy*o+dx*j),Q,new THREE.Vector3(sc*1.25,sc*.8,sc));rk.setMatrixAt(kr,M);rk.setColorAt(kr,cc.set(['#8d8a84','#7b7872','#9c988f','#6f6c67'][hh%4]));kr++;}
-      break;}}
-    pw.count=kp;pw.instanceMatrix.needsUpdate=true;pw.userData.toon=pw.userData.real=true;pw.frustumCulled=false;pw.castShadow=!this.mobile;this.static.add(pw);}
+      break;}});
+    lap('scogliera urbana');pw.count=kp;pw.instanceMatrix.needsUpdate=true;pw.userData.toon=pw.userData.real=true;pw.frustumCulled=false;pw.castShadow=!this.mobile;this.static.add(pw);}
    rk.count=kr;rk.instanceMatrix.needsUpdate=true;if(rk.instanceColor)rk.instanceColor.needsUpdate=true;rk.userData.toon=rk.userData.real=true;rk.frustumCulled=false;rk.material.userData.outlineParameters={visible:false};this.static.add(rk);}
   lap("panorama");id.phase='Caricamento del quartiere…';if(await yieldBuild())return;
   // Terreno: celle calpestabili color marciapiede, mare trasparente; sopra parchi e strade disegnati dalla mappa.
@@ -1524,7 +1629,7 @@ export class World3D{
   const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;const h=.7,m=new THREE.Mesh(new THREE.PlaneGeometry(h*w/96,h),new THREE.MeshBasicMaterial({map:t}));return m;}
  async building(b,id){const door=b.door||{x:b.fx+b.fw/2,y:b.fy+b.fh};
   const cx=b.fx+b.fw/2,cz=b.fy+b.fh/2,ang=Math.atan2(door.x-cx,door.y-cz),side=Math.abs(Math.sin(ang))>.7;
-  const w=side?b.fh:b.fw,d=side?b.fw:b.fh,o=this.palazzo(b,w,d,ang),gy=this.groundY;if(id.dead)return;o.position.set(cx,0,cz);o.userData.building=b.id;id.g.add(o);id.solid.push(o.userData.solidBox||o);this.col.r.push([b.fx,b.fy,b.fx+b.fw,b.fy+b.fh]);
+  const w=side?b.fh:b.fw,d=side?b.fw:b.fh,o=this.palazzo(b,w,d,ang),gy=this.groundY;if(id.dead)return;o.position.set(cx,0,cz);o.userData.building=b.id;id.g.add(o);const solid=o.userData.solidBox||o,rect=[b.fx,b.fy,b.fx+b.fw,b.fy+b.fh];id.solid.push(solid);(id.cameraSolidsByRect??=new Map()).set(rect,solid);this.col.r.push(rect);
   if(['bar','pizzeria','osteria','trattoria','vesuvio','panorama','burger'].includes(b.id)){const r=Math.round(ang/(Math.PI/2))*(Math.PI/2),fx=Math.sin(r),fz=Math.cos(r),sx=Math.cos(r),sz=-Math.sin(r);
    for(const k of [-1,1]){const t=this.table();t.position.set(door.x+fx*3.2+sx*k*3.4,gy,door.y+fz*3.2+sz*k*3.4);t.rotation.y=r;id.g.add(t);}
    if(b.id==='bar'){const cc=await this.model('ph/CoffeeCart_01/CoffeeCart_01.gltf',{length:2});if(cc&&!id.dead){cc.position.set(door.x+fx*2.2+sx*6.5,gy,door.y+fz*2.2+sz*6.5);cc.rotation.y=r;id.g.add(cc);}}}}
@@ -1887,7 +1992,7 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
  forgetObjects(root){const inside=o=>{for(let p=o;p;p=p.parent)if(p===root)return true;return false;};
   if(this.lifeMix)this.lifeMix=this.lifeMix.filter(L=>{if(!inside(L.parent)&&!inside(L.rec?.root))return true;L.mixer.stopAllAction();L.mixer.uncacheRoot(L.mixer.getRoot());return false;});
   if(this.staff)this.staff=this.staff.filter(S=>!inside(S.g)&&!inside(S.rec?.root));if(this.extraMix)this.extraMix=this.extraMix.filter(m=>!inside(m.getRoot()));}
- dropAvatar(id,e){this.dynamic.remove(e.root);this.unpark(e);e.mixer?.stopAllAction();if(e.mixer&&e.body)e.mixer.uncacheRoot(e.body);this.players.delete(id);this.releaseGraphics(e.root);}
+ dropAvatar(id,e){this.returnStreetVehicle(e);this.dynamic.remove(e.root);this.unpark(e);e.mixer?.stopAllAction();if(e.mixer&&e.body)e.mixer.uncacheRoot(e.body);this.players.delete(id);this.releaseGraphics(e.root);}
  // Auto lasciata parcheggiata dove il giocatore è sceso (resta per un minuto). Quando sparisce (tempo scaduto, giocatore uscito o cambio di avatar,
  // nuova auto parcheggiata, risalita in auto) viene tolta e liberata; modelli, vernici e pezzi condivisi restano (releaseGraphics).
  park(a,e,own){if(Date.now()-a.t>60000)return;const o=this.ride(a.v,null,true);if(!o)return;if(e){this.unpark(e);e.parkedObj=o;}o.position.set(a.x,this.lev(a.x,a.y),a.y);o.rotation.y=heading(a.h);this.dynamic.add(o);if(o.userData.door)(this.doorAnim??=[]).push({o,t:0,s:0});const to=setTimeout(()=>{if(e&&e.parkedObj===o)e.parkedObj=null;this.dropParked(o);},own?2800:60000-(Date.now()-a.t));if(e)e.parkedTO=to;}
@@ -1926,8 +2031,15 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
   mesh(B,new THREE.MeshBasicMaterial({map:stain,color:'#0c0d0f',transparent:true,opacity:.42,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}));
   mesh(C,new THREE.MeshLambertMaterial({map:grate,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));
   mesh(A,this.mobile?new THREE.MeshLambertMaterial({map:tomb,alphaTest:.5,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}):new THREE.MeshStandardMaterial({map:tomb,alphaTest:.5,roughness:.5,metalness:.55,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-4}));}
- play(e,name){if(!e.actions||e.anim===name)return;const ALIAS={idle:['Idle'],walk:['Walk'],sprint:['Run'],sit:['Idle_Neutral','Idle'],drive:['Idle_Neutral','Idle'],'emote-yes':['Wave'],'emote-dance':['Dance','Wave']};const a=e.actions[name]||(ALIAS[name]||[]).map(n=>e.actions[n]).find(Boolean)||e.actions.idle||e.actions.Idle;if(!a)return;const old=e.act;e.anim=name;if(old===a)return;a.reset().fadeIn(.2).play();if(old)old.fadeOut(.2);e.act=a;}
- vehicle(e,v){if(e.carId===v)return;e.carId=v;if(e.car){e.root.remove(e.car);e.car=null;}e.carT=0;const o=v&&this.ride(v,null,true);if(!o)return;o.traverse(m=>{if(m.isMesh)m.castShadow=false;});e.car=o;e.root.add(o);}
+ play(e,name){if(!e.actions||e.anim===name)return;const ALIAS={idle:['Idle'],walk:['Walk'],sprint:['Run'],sit:['Idle_Neutral','Idle'],drive:['Idle_Neutral','Idle'],jump:['Jump','Run'],'emote-yes':['Wave'],'emote-dance':['Dance','Wave']};const a=e.actions[name]||(ALIAS[name]||[]).map(n=>e.actions[n]).find(Boolean)||e.actions.idle||e.actions.Idle;if(!a)return;const old=e.act;e.anim=name;if(old===a)return;a.reset().fadeIn(.2).play();if(old)old.fadeOut(.2);e.act=a;}
+ returnStreetVehicle(e){const car=e?.car,id=car?.userData?.streetVehicleId,item=id&&this.parkedStreetObjects?.get(id);if(!e?.carSharedStreet||!car||item?.object!==car||!this.parkedStreetLayer)return false;car.removeFromParent();const state=this.parkedStreetStates.get(id),at=item.returnTransform;if(state&&!state.occupied){car.position.set(state.x,this.lev(state.x,state.y),state.y);car.rotation.y=heading(state.rot);if(at)car.scale.copy(at.scale);}else if(at){car.position.copy(at.position);car.rotation.copy(at.rotation);car.scale.copy(at.scale);}car.visible=true;if(car.userData.headlightBeam)car.userData.headlightBeam.visible=false;this.parkedStreetLayer.add(car);item.last=this.clock;return true;}
+ vehicle(e,v,player=null){const streetId=v&&player?.vehicleSource==='street'?player.streetVehicleId:null,key=v?(streetId?`${v}|street|${streetId}`:`${v}|owned`):null;if(e.carKey===key)return;e.carKey=key;e.carId=v;if(e.car){const restored=this.returnStreetVehicle(e);if(!restored){e.root.remove(e.car);const beam=e.car.userData.headlightBeam;if(beam){beam.visible=false;if(!e.carSharedStreet){if(beam.geometry&&beam.geometry!==this.beamG)beam.geometry.dispose();if(beam.material&&beam.material!==this.beamM)beam.material.dispose();}}}e.car=null;}e.carSharedStreet=false;e.carT=0;
+  // A parked street vehicle has already uploaded its geometry to WebGL. Reuse
+  // that exact mesh when a player takes it instead of rebuilding a second bike
+  // or car on the first driving frame (a measurable mobile hitch).
+  const parkedItem=streetId&&this.parkedStreetObjects?.get(streetId),parked=parkedItem?.object;let o=null;
+  if(parked){parkedItem.returnTransform={position:parked.position.clone(),rotation:parked.rotation.clone(),scale:parked.scale.clone()};o=parked;o.userData.streetVehicleId=streetId;o.removeFromParent();o.position.set(0,0,0);o.rotation.set(0,0,0);o.scale.set(1,1,1);o.visible=true;e.carSharedStreet=true;}
+  if(!o)o=v&&this.ride(v,null,true);if(!o)return;o.traverse(m=>{if(m.isMesh)m.castShadow=false;});if(!o.userData.headlightBeam){const kind=VEHICLE[v]?.base||v,twoWheeled=['scooter','bici','monopattino'].includes(kind),mat=new THREE.MeshBasicMaterial({map:this.poolTexture(),transparent:true,opacity:.45,depthWrite:false,blending:THREE.AdditiveBlending,side:THREE.DoubleSide}),beam=new THREE.Mesh(new THREE.PlaneGeometry(twoWheeled?1.25:3.4,twoWheeled?3.1:7).rotateX(-Math.PI/2),mat);beam.position.set(0,.065,twoWheeled?1.55:5.4);beam.userData.keep=true;beam.visible=false;o.add(beam);o.userData.headlightBeam=beam;}e.car=o;e.root.add(o);}
  // Shader preparati in parallelo (KHR_parallel_shader_compile) mentre resta la schermata di caricamento: sulle grafiche Intel
  // con Direct3D il primo disegno della città li compilava tutti di fila (3 s di pagina ferma, ora circa 2). Finché non sono pronti
  // la scena non viene disegnata. compileAsync prepara anche gli oggetti nascosti dalla distanza; le luci contano solo se visibili,
@@ -1945,7 +2057,7 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
      const bad=brokenPrograms(programsSince(job.before,this.gl.info.programs),this.checkedPrograms??=new WeakSet());if(bad.length){const {names,details}=brokenReport(bad);console.error('Grafica ('+why+'): '+names.length+' shader non collegati ('+names.join(', ')+'), il gioco continua senza',details);dispatchEvent(new CustomEvent('humana-notice',{detail:'⚠️ Grafica: '+(names.length>1?names.length+' shader non compilati':'uno shader non compilato')+', qualche oggetto può non vedersi'}));}
      for(const j of older)end(j,'ok','superseded');end(job,'ok',result);})
     .catch(error=>end(job,'no',error));});}
- draw(list,me,dt){this._me=me;if(!me)return;this.clock+=dt;this.r2d.time=(this.r2d.time||0)+dt;const inR=this.indoor(me.room);this.room=me.room==='mergellina'?'mergellina':inR?me.room:'lungomare';const roomKind=inR?this.theme(this.room).art:'street';if(document.body.dataset.roomKind!==roomKind)document.body.dataset.roomKind=roomKind;if(this.travelBtn)this.travelBtn.hidden=true;
+ draw(list,me,dt){this._me=me;this.latestPlayers=list||[];if(!me)return;this.clock+=dt;this.r2d.time=(this.r2d.time||0)+dt;const inR=this.indoor(me.room);this.room=me.room==='mergellina'?'mergellina':inR?me.room:'lungomare';const roomKind=inR?this.theme(this.room).art:'street';if(document.body.dataset.roomKind!==roomKind)document.body.dataset.roomKind=roomKind;if(this.travelBtn)this.travelBtn.hidden=true;
   if(this.fx){this.fx.beams?.forEach((b,i)=>{if(b.geometry.type==='ConeGeometry'){b.rotation.x=Math.sin(this.clock*1.3+i)*.55;b.rotation.z=Math.cos(this.clock*.9+i*1.7)*.55;}else b.rotation.y=(i-2.5)*.22+Math.sin(this.clock*.7+i)*.25;});this.fx.ball.rotation.y=this.clock*.8;this.fx.spots.forEach((s,i)=>s.position.set(3+i*3,.03,7+Math.sin(this.clock+i)*3));}
   // Entrando (o cambiando zona) la telecamera guarda verso la città, non verso il mare: così "avanti" porta subito tra le strade.
   // Nei locali guarda dal lato della porta verso il bancone.
@@ -1956,7 +2068,7 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
   this.animRides(list,dt);this.animFx(dt);try{this.updateLife(list,dt);}catch(e){if(!this.lifeErr){this.lifeErr=1;console.warn('vita',e);}}if(this.room==='lungomare')this.updateLights();try{this.magic(dt);}catch(e){if(!this.magicErr){this.magicErr=1;console.warn('magia',e);}}for(const m of this.extraMix||[])m.update(dt);
   for(const b of this.boats||[]){if(Math.abs(b.position.x-this.target.x)+Math.abs(b.position.z-this.target.z)>120)continue;const t=this.clock+b.userData.phase;b.position.y=Math.sin(t*1.3)*.08;b.rotation.z=Math.sin(t*.9)*.04;}
   if(this.lod&&this.room==='mergellina')this.lod(me.x,me.y);if(this.groundTiles&&this.room==='mergellina')this.groundTiles(this.target.x,this.target.z);
-  const seen=new Set();this.hit=[];
+  const seen=this.drawSeen;seen.clear();this.hit.length=0;
   for(const p of list){if(p.npc||p.room!==me.room)continue;seen.add(p.id);let e=this.players.get(p.id);if(e&&this.clock-(e.chk||0)>1){e.chk=this.clock;if(e.sig!==JSON.stringify(p.avatar||{})){this.dropAvatar(p.id,e);e=null;}}if(!e){this.avatar(p);e=this.players.get(p.id);}
    const onBoat=p.seat==='boat';if(onBoat&&!e.boatO){e.boatO=this.boat(7);e.boatO.scale.setScalar(1.25);e.boatO.position.set(0,-.5,2.6);e.root.add(e.boatO);
     if(!this.wakeM){const c=document.createElement('canvas');c.width=64;c.height=256;const q=c.getContext('2d'),gr=q.createLinearGradient(0,0,0,256);gr.addColorStop(0,'rgba(255,255,255,.85)');gr.addColorStop(.35,'rgba(255,255,255,.4)');gr.addColorStop(1,'rgba(255,255,255,0)');q.fillStyle=gr;q.beginPath();q.moveTo(26,0);q.lineTo(38,0);q.lineTo(64,256);q.lineTo(0,256);q.fill();for(let i=0;i<70;i++){q.fillStyle='rgba(255,255,255,'+(.5*(1-i/70))+')';q.beginPath();q.arc((i*37)%64,i*3.6,2.4,0,6.283);q.fill();}
@@ -1965,13 +2077,13 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
    if(e.boatO){e.boatO.rotation.x=Math.sin(this.clock*1.7)*.035-.03;e.boatO.rotation.z=Math.sin(this.clock*1.1)*.05;}
    const onBus=p.seat==='bus',pdst=p.seat==='car'?this.players.get(p.passenger)?.car?.userData.seat:null,hidden=p.seat==='car'&&!pdst;
    if(p.seat==='car'&&!e.inCarP){e.inCarP=p.passenger;const dE=this.players.get(p.passenger);if(dE)dE.door2T=0;}else if(p.seat!=='car'&&e.inCarP){const dE=this.players.get(e.inCarP);if(dE)dE.door2T=0;e.inCarP=null;}
-   if(e.door2T!==undefined&&e.car?.userData.door2){const d2=e.car.userData.door2,t=e.door2T+=dt;d2.visible=t<1.27;d2.rotation.y=1.15*(t<.35?t/.35:t<.9?1:Math.max(0,1-(t-.9)/.35));if(t>=1&&!e.d2snd){e.d2snd=1;this.sfx('door',e.root.position);}if(t>=1.27){e.door2T=undefined;e.d2snd=0;}}e.root.visible=!hidden&&!(p.arena&&p.arena.downUntil>Date.now());{const ar=p.arena;if(ar&&(!e.arenaFx||e.arenaFx.userData.team!==ar.team||e.arenaFx.userData.weapon!==ar.weapon)){if(e.arenaFx)e.root.remove(e.arenaFx);e.arenaFx=this.arenaFx(ar);e.root.add(e.arenaFx);}else if(!ar&&e.arenaFx){e.root.remove(e.arenaFx);e.arenaFx=null;}}if(onBus&&!e.busO){e.busO=this.bus();e.root.add(e.busO);}else if(!onBus&&e.busO){e.root.remove(e.busO);e.busO=null;}if(e.blob)e.blob.visible=!onBus&&!e.sprite;{const gy=onBoat?.42+Math.sin(this.clock*1.3)*.06:p.seat==='giostra'&&p.rideArt?this.lev(p.x,p.y)+this.rideOff(p.rideArt,p.rideA||0):this.lev(p.x,p.y);e.gy=e.gy===undefined?gy:e.gy+(gy-e.gy)*Math.min(1,dt*12);e.root.position.set(p.x,e.gy,p.y);}
-   const carId=p.vehicle&&!p.seat?p.vehicle:null,car=carId&&(VEHICLE[carId]?.base||carId);this.vehicle(e,carId);if(carId&&e.parkedObj)this.unpark(e);{const big=car&&['auto','furgone','cabrio'].includes(car);e.blob.scale.set(big?2.3:car?1.2:1,1,big?5.2:car?2.3:1);if(e.sprite)e.sprite.material.color.copy(this.tint);}
+   if(e.door2T!==undefined&&e.car?.userData.door2){const d2=e.car.userData.door2,t=e.door2T+=dt;d2.visible=t<1.27;d2.rotation.y=1.15*(t<.35?t/.35:t<.9?1:Math.max(0,1-(t-.9)/.35));if(t>=1&&!e.d2snd){e.d2snd=1;this.sfx('door',e.root.position);}if(t>=1.27){e.door2T=undefined;e.d2snd=0;}}e.root.visible=!hidden&&!(p.arena&&p.arena.downUntil>Date.now());{const ar=p.arena;if(ar&&(!e.arenaFx||e.arenaFx.userData.team!==ar.team||e.arenaFx.userData.weapon!==ar.weapon)){if(e.arenaFx)e.root.remove(e.arenaFx);e.arenaFx=this.arenaFx(ar);e.root.add(e.arenaFx);}else if(!ar&&e.arenaFx){e.root.remove(e.arenaFx);e.arenaFx=null;}}if(onBus&&!e.busO){e.busO=this.bus();e.root.add(e.busO);}else if(!onBus&&e.busO){e.root.remove(e.busO);e.busO=null;}if(e.blob)e.blob.visible=!onBus&&!e.sprite;{const gy=onBoat?.42+Math.sin(this.clock*1.3)*.06:p.seat==='giostra'&&p.rideArt?this.lev(p.x,p.y)+this.rideOff(p.rideArt,p.rideA||0):this.lev(p.x,p.y);e.gy=e.gy===undefined?gy:e.gy+(gy-e.gy)*Math.min(1,dt*12);const t=p.jumpAt?Math.max(0,Math.min(1,(Date.now()-p.jumpAt)/620)):1,jump=!p.vehicle&&!p.seat&&p.jumpUntil>Date.now()?Math.sin(Math.PI*t)*.62:0;e.root.position.set(p.x,e.gy+jump,p.y);}
+   const carId=p.vehicle&&!p.seat?p.vehicle:null,car=carId&&(VEHICLE[carId]?.base||carId);this.vehicle(e,carId,p);if(carId&&e.parkedObj)this.unpark(e);if(e.car?.userData.headlightBeam){const beam=e.car.userData.headlightBeam;beam.visible=!!p.lightsOn;if(beam.material!==this.beamM)beam.material.opacity=.38+.18*(this.night||0);} {const big=car&&['auto','furgone','cabrio'].includes(car);e.blob.scale.set(big?2.3:car?1.2:1,1,big?5.2:car?2.3:1);if(e.sprite)e.sprite.material.color.copy(this.tint);}
    const yaw=heading(p.direction||0);if(e.yaw===undefined||car)e.yaw=yaw;else{let dd=yaw-e.yaw;dd=Math.atan2(Math.sin(dd),Math.cos(dd));e.yaw+=dd*Math.min(1,12*dt);}e.root.rotation.y=e.yaw;if(e.car){const twoWheeled=car&&['scooter','bici','monopattino'].includes(car),ratio=Math.max(0,Math.min(1,Math.abs(Number(p.vel)||0)/13)),lean=twoWheeled&&!p.seat?-Math.max(-1,Math.min(1,Number(p.steer)||0))*Math.sqrt(ratio)*.3:0;e.car.rotation.z+=(lean-e.car.rotation.z)*(1-Math.exp(-7*dt));}
    if(p.parkedAt&&p.parkedAt.t!==e.parkedT&&!car){e.parkedT=p.parkedAt.t;this.park(p.parkedAt,e,(p.myCars||[]).some(c=>c.v===p.parkedAt.v));}
    if(e.mixer)e.mixer.timeScale=car?1:e.real?(p.moving&&!p.seat?Math.max(.7,Math.min(1.6,(p.running?4.4:2.5)/(e.real.meta.velocita?.[p.running?'Run':'Walk']||2))):1):p.running?1.15:1;
    if(e.body){const inCar=car&&['auto','furgone','cabrio'].includes(car);e.body.visible=(!inCar||car==='cabrio'||!!e.legs)&&!(onBus&&e.sprite);e.body.position.y=car?(inCar?.35:.45):0;
-    this.play(e,p.seat?'sit':car?'drive':p.moving?(p.running?'sprint':'walk'):p.action==='WAVE'?'emote-yes':p.action==='DANCE'?'emote-dance':'idle');e.mixer?.update(dt);e.body.position.x=e.body.position.z=0;if(car){e.carT=(e.carT||0)+dt;const st=e.car?.userData.seat,dr=e.car?.userData.door,t=e.carT,T0=st?.35:0,T1=st?.9:.55,k=Math.max(0,Math.min(1,(t-T0)/(T1-T0))),sk=k*k*(3-2*k);
+    this.play(e,p.jumpUntil>Date.now()&&!car?'jump':p.seat?'sit':car?'drive':p.moving?(p.running?'sprint':'walk'):p.action==='WAVE'?'emote-yes':p.action==='DANCE'?'emote-dance':'idle');e.mixer?.update(dt);e.body.position.x=e.body.position.z=0;if(car){e.carT=(e.carT||0)+dt;const st=e.car?.userData.seat,dr=e.car?.userData.door,t=e.carT,T0=st?.35:0,T1=st?.9:.55,k=Math.max(0,Math.min(1,(t-T0)/(T1-T0))),sk=k*k*(3-2*k);
       if(dr){dr.rotation.y=-1.15*(t<.35?t/.35:t<.9?1:Math.max(0,1-(t-.9)/.35));dr.visible=t<1.27;if(t<.2)e.doorSnd=0;if(t>=1&&!e.doorSnd){e.doorSnd=1;this.sfx('door',e.root.position);}}
       if(st&&e.legs){e.body.visible=!(p.id===me.id&&(this.carMode==='car-cockpit'||this.carMode==='car-hood'));e.body.position.set(st.x+(st.hw+.55-st.x)*(1-sk),st.y*sk,st.z);}else if(e.legs)e.body.position.set(.75*(1-sk),(e.body.position.y-(car==='monopattino'?0:.5))*sk,car==='scooter'?-.18*sk:0);
       if(e.legs&&car!=='monopattino')this.sitPose(e,st?'car':'moto',sk);}
@@ -1981,17 +2093,17 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
       if(e.legs&&p.seat==='car'&&pdst){e.body.position.set(-pdst.x,pdst.y,pdst.z);this.sitPose(e,'car',1);e.body.visible=!(p.id===me.id&&(this.carMode==='car-cockpit'||this.carMode==='car-hood'));}else if(e.legs&&p.seat&&p.seat!=='bus'){this.sitPose(e,'chair',1);e.body.position.y-=.36;}}if(p.consuming&&e.legs&&!car&&!p.seat)this.consumePose(e,p);else if(e.drinkT){this.dropHeld(e);e.drinkT=0;}this.drunkSway(e,p);{const gt=(p.username||'')+(p.gang?' · '+p.gang.name:'');if(e.tag&&e.tagText!==gt){if(!(e.tagText===undefined&&!p.gang)){const v=e.tag.visible;e.root.remove(e.tag);e.tag.material.map?.dispose();e.tag.material.dispose();e.tag=this.label(gt,0,2.15,0,p.gang?p.gang.color+'cc':'rgba(17,24,39,.6)','#fff',.42);e.tag.visible=v;e.root.add(e.tag);}e.tagText=gt;}}/* gang: nome e colore sotto il nome del giocatore */if(e.body){if(p.down){e.body.rotation.x=-Math.PI/2;e.body.position.y=.18;e.wasDown=true;}else if(e.wasDown){e.body.rotation.x=0;e.body.position.y=0;e.wasDown=false;}}/* feriti: a terra, distesi */e.hadCar=!!car;if(e.sprite){e.pt=(e.pt||0)+dt;if(e.pt>=1/15){e.pt=0;this.paint2d(e,p,me);}}
     if(e.av){if(onBus)e.body.visible=false;e.body.position.y=car?({cabrio:.2,scooter:.3,bici:.42,monopattino:.16}[car]??.3):0;poseAvatar(e.av,{moving:p.moving&&!car,running:p.running,sit:!!p.seat||!!car&&car!=='monopattino',drive:!!car,action:p.action,talking:p.talking},this.clock,dt);}}
    if(e.tag){e.tag.position.y=car?2.4:e.sprite?1.78:2.1;const td=Math.hypot(this.camera.position.x-p.x,this.camera.position.y-(e.gy||0)-e.tag.position.y,this.camera.position.z-p.y);if(p.id===me.id)e.tag.visible=td>2.4;}
-   const s=new THREE.Vector3(p.x,1.9,p.y).project(this.camera);if(s.z<1&&p.id!==me.id)this.hit.push({id:p.id,x:(s.x+1)/2*this.w,y:(1-s.y)/2*this.h});}
+   const s=this.drawPoint.set(p.x,1.9,p.y).project(this.camera);if(s.z<1&&p.id!==me.id)this.hit.push({id:p.id,x:(s.x+1)/2*this.w,y:(1-s.y)/2*this.h});}
   for(const [id,e] of this.players)if(!seen.has(id))this.dropAvatar(id,e);
   // Telecamere: a piedi 2.5D (bassa, vede cielo e palazzi), terza persona, prima persona;
   // in auto: dietro l'auto, esterna (orbita), cofano, abitacolo. Il passaggio tra una e l'altra è sfumato.
-  this.drunk=me.alcohol||0;this.target.lerp(new THREE.Vector3(me.x,me.seat==='giostra'&&me.rideArt?Math.max(0,this.rideOff(me.rideArt,me.rideA||0)-.4):0,me.y),1-Math.exp(-12*dt));
+  this.drunk=me.alcohol||0;this.drawTarget.set(me.x,me.seat==='giostra'&&me.rideArt?Math.max(0,this.rideOff(me.rideArt,me.rideA||0)-.4):0,me.y);this.target.lerp(this.drawTarget,1-Math.exp(-12*dt));
   if(this.spin)this.yaw+=this.spin*1.8*dt;
   const mode=this.mode(me),car=!!me.vehicle,dirYaw=Math.atan2(-Math.cos(me.direction||0),-Math.sin(me.direction||0));
   const follow=car?(mode!=='car-orbit'):(mode==='third'||mode==='first');
   if(follow&&this.autoYaw&&(me.moving||car)){let d=dirYaw-this.yaw;d=Math.atan2(Math.sin(d),Math.cos(d));this.yaw+=d*(1-Math.exp(-(car?(mode==='car-chase'||mode==='moto-chase'?3.8:8):mode==='first'?0:1.4)*dt));}
   if(car&&(mode==='car-hood'||mode==='car-cockpit'||mode==='moto-cockpit'))this.yaw=dirYaw;
-  const zoom=this.r2d.zoom||1,sy=Math.sin(this.yaw),cy=Math.cos(this.yaw),T=this.target,eye=new THREE.Vector3(),look=new THREE.Vector3();
+  const zoom=this.r2d.zoom||1,sy=Math.sin(this.yaw),cy=Math.cos(this.yaw),T=this.target,eye=this.drawEye,look=this.drawLook;
   const back=(dist,h,lookH)=>{eye.set(T.x+sy*dist,h,T.z+cy*dist);look.set(T.x-sy*4,lookH,T.z-cy*4);};
   if(mode==='25d'&&inR){const dist=10.5/zoom;eye.set(T.x+sy*dist,5.6/zoom+1.2,T.z+cy*dist);look.set(T.x-sy*3,1.6,T.z-cy*3);}
   else if(mode==='25d'){const dist=15/zoom;eye.set(T.x+sy*dist,6.5/zoom+1.5,T.z+cy*dist);look.set(T.x-sy*6,4,T.z-cy*6);}
@@ -2005,7 +2117,12 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
   else if(mode==='moto-cockpit'){eye.set(T.x-sy*.18,1.32,T.z-cy*.18);look.set(T.x-sy*18,1.28,T.z-cy*18);}
   else {eye.set(T.x+sy*.15,1.35,T.z+cy*.15);look.set(T.x-sy*20,-1.8,T.z-cy*20);}/* abitacolo: sguardo inclinato di ~9° verso il basso, l'orizzonte sale e la strada si vede sopra il cruscotto */
   // Collisione: se tra il personaggio e la telecamera c'è un palazzo, la telecamera si avvicina.
-  if(mode!=='first'&&mode!=='car-hood'&&mode!=='car-cockpit'&&this.solid.length){const from=new THREE.Vector3(T.x,1.6,T.z),dir=eye.clone().sub(from),len=dir.length();dir.normalize();this.ray.set(from,dir);this.ray.far=len;const hit=this.ray.intersectObjects(this.solid,true)[0];if(hit){const dd=Math.max(1.7,hit.distance-.45);eye.copy(from).addScaledVector(dir,dd);if(hit.distance<2.4)eye.y=Math.max(eye.y,2.6+(2.4-hit.distance)*1.2);}}
+  if(mode!=='first'&&mode!=='car-hood'&&mode!=='car-cockpit'&&this.solid.length){const from=this.cameraFrom.set(T.x,1.6,T.z),dir=this.cameraDir.copy(eye).sub(from),len=dir.length();dir.normalize();this.ray.set(from,dir);this.ray.far=len;let targets=this.solid;
+   // Mergellina has thousands of building colliders. Use its existing 16 m
+   // collision grid to narrow the camera segment to nearby footprints before
+   // Three.js performs the same exact ray/box intersection as before.
+   if(this.room==='mergellina'&&this.cameraSolidsByRect?.size&&this.collisionIndex){const endX=from.x+dir.x*len,endZ=from.z+dir.z*len,near=this.collisionIndex.queryRectInto(Math.min(from.x,endX),Math.min(from.z,endZ),Math.max(from.x,endX),Math.max(from.z,endZ),.5,this.cameraCandidates,this.cameraSeenRects);targets.length=0;for(const rect of near){const solid=this.cameraSolidsByRect.get(rect);if(solid)targets.push(solid);}}
+   this.cameraRaycastDiagnostics.candidates=targets.length;this.cameraRaycastDiagnostics.total=this.solid.length;this.cameraHits.length=0;const hits=this.ray.intersectObjects(targets,targets===this.solid,this.cameraHits),hit=hits[0];if(hit){const dd=Math.max(.38,hit.distance-.45);eye.copy(from).addScaledVector(dir,dd);}}
   const k=1-Math.exp(-9*dt);if(this.snap){this.camEye.copy(eye);this.camLook.copy(look);}else{this.camEye.lerp(eye,k);this.camLook.lerp(look,k);}this.snap=false;
   this.camera.position.copy(this.camEye);this.camera.lookAt(this.camLook);if(this.drunk>6)this.camera.rotateZ(Math.sin(this.clock*.85)*this.drunk/100*.15);
   // In prima persona e nell'abitacolo il proprio personaggio non si vede; nell'abitacolo si vede il cruscotto.
@@ -2026,11 +2143,19 @@ realPerson(look,id,av){const M=['Male_Adult_11','Male_Adult_02','Male_Adult_17',
   {this.shN=(this.shN||0)+1;const sT=this.shT??=new THREE.Vector3(1e9,0,0);if(this.shN%1500===0||sT.distanceTo(this.target)>(this.inCar?32:20)){sT.copy(this.target);this.sun.position.copy(sT).addScaledVector(this.sunDir,90);this.sun.target.position.copy(sT);this.gl.shadowMap.needsUpdate=true;}}this.skyG.position.copy(this.camera.position);this.dome.rotation.y=this.clock*.004;
   // Gli oggetti piccoli lontani non arrivano al renderer; terreno e grandi landmark restano visibili.
   this.cullClock=(this.cullClock??1)+dt;if(this.cullClock>.3){this.cullClock=0;this.visibility?.update(this.target.x,this.target.z);}
-  {this.toonClock=(this.toonClock||0)+dt;if(this.toonClock>.5){this.toonClock=0;this.toonify(this.static);this.toonify(this.dynamic);}}
-  if(this.preparing>0){}else if(this.toon&&this.lines!==false)this.outline.render(this.scene,this.camera);else this.present();
+  {this.toonClock=(this.toonClock||0)+dt;if(this.toonClock>.5){this.toonClock=0;
+   // La scena statica viene convertita una volta al termine della costruzione della zona.
+   // Ripercorrere qui i suoi oltre 9.000 mesh ogni mezzo secondo introduce lavoro inutile
+   // proprio durante il gioco; in stile toon manteniamo la scansione per gli oggetti aggiunti.
+   if(this.toon)this.toonify(this.static);this.toonify(this.dynamic);}}
+  let renderCost=0;if(this.preparing<=0){const renderStart=performance.now();if(this.toon&&this.lines!==false)this.outline.render(this.scene,this.camera);else this.present();renderCost=performance.now()-renderStart;}
+  // La media FPS nascondeva i frame costosi quando il mobile restava vicino a 30.
+  // Campioniamo il submit WebGL e lasciamo che la risoluzione adattiva reagisca al suo P95.
+  this.lastRenderMs=renderCost;const renderSamples=this.renderSamples??=new Float32Array(120),renderIndex=this.renderSampleIndex||0;renderSamples[renderIndex]=renderCost;this.renderSampleIndex=(renderIndex+1)%renderSamples.length;this.renderSampleCount=Math.min(renderSamples.length,(this.renderSampleCount||0)+1);
   // Qualità mobile: recupero graduale dopo più campioni stabili vicini al limite di 30 FPS.
   if(document.hidden){this.fpsT=-3;this.fpsN=0;}// con la finestra nascosta il browser rallenta apposta: non conta come PC lento
   const measuredNow=performance.now(),measuredDt=this.measureLast===undefined?dt:Math.min(5,(measuredNow-this.measureLast)/1000);this.measureLast=measuredNow;this.fpsT=(this.fpsT||0)+measuredDt;this.fpsN=this.fpsT<0?0:(this.fpsN||0)+1;if(this.fpsT>2){const fps=this.fpsN/this.fpsT;this.fpsT=this.fpsN=0;const base=Math.min(devicePixelRatio,this.mobile?1.25:2);this.scale??=1;// Prima si spengono le ombre (costano un secondo disegno della scena), poi cala la risoluzione.
+  const sampleCount=this.renderSampleCount||0,renderSorted=sampleCount?Array.from(renderSamples.subarray(0,sampleCount)).sort((a,b)=>a-b):[],renderP95=renderSorted.length?renderSorted[Math.min(renderSorted.length-1,Math.ceil(renderSorted.length*.95)-1)]:null;this.renderP95Ms=renderP95;
   if(this.adaptiveGraphics&&!this.mobile){// PC: se scende sotto i 15 FPS si spengono le ombre e poi cala la risoluzione (fino al 60%).
-   if(fps<15){if(this.graphicsPrefs.shadows==='auto'&&this.gl.shadowMap.enabled){this.gl.shadowMap.enabled=false;this.scene.traverse(o=>{if(o.material)for(const m of [].concat(o.material))m.needsUpdate=true;});this.prepareShaders('ombre spente',{onLate:()=>dispatchEvent(new CustomEvent('humana-notice',{detail:'⚠️ Grafica senza ombre più lenta del solito a prepararsi: l’immagine riparte da sola'}))}).catch(error=>this.graphicsWarning('ombre spente',error));/* oltre il limite solo un avviso: qui non c'è un bottone Riprova */}else if(this.scale>.6)this.scale=Math.max(.6,this.scale-.2);}else if(fps>45&&this.scale<1)this.scale=Math.min(1,this.scale+.1);}else if(this.adaptiveGraphics)this.scale=(this.resolutionControl??=new AdaptiveResolution({target:30,min:this.lite?.55:.6,step:.1})).sample(fps,this.scale);if(this.prK!==base*this.scale){this.prK=base*this.scale;this.gl.setPixelRatio(this.prK);}this.fps=Math.round(fps);}}
+   if(fps<15){if(this.graphicsPrefs.shadows==='auto'&&this.gl.shadowMap.enabled){this.gl.shadowMap.enabled=false;this.scene.traverse(o=>{if(o.material)for(const m of [].concat(o.material))m.needsUpdate=true;});this.prepareShaders('ombre spente',{onLate:()=>dispatchEvent(new CustomEvent('humana-notice',{detail:'⚠️ Grafica senza ombre più lenta del solito a prepararsi: l’immagine riparte da sola'}))}).catch(error=>this.graphicsWarning('ombre spente',error));/* oltre il limite solo un avviso: qui non c'è un bottone Riprova */}else if(this.scale>.6)this.scale=Math.max(.6,this.scale-.2);}else if(fps>45&&this.scale<1)this.scale=Math.min(1,this.scale+.1);}else if(this.adaptiveGraphics)this.scale=(this.resolutionControl??=new AdaptiveResolution({target:30,min:this.lite?.55:.6,step:.1})).sample(fps,this.scale,this.renderP95Ms);if(this.prK!==base*this.scale){this.prK=base*this.scale;this.gl.setPixelRatio(this.prK);}this.fps=Math.round(fps);}}
 }

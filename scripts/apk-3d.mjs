@@ -14,6 +14,6 @@ await writeFile(new URL('app/src/main/assets/capacitor.config.json',dst),JSON.st
 await mkdir(new URL('app/src/main/assets/public/',dst),{recursive:true});
 await writeFile(new URL('app/src/main/assets/public/index.html',dst),`<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><body style="font:18px sans-serif;background:#0b1622;color:#fff;padding:24px"><h2>${NAME}</h2><p>Il gioco non risponde a questo indirizzo:</p><p><a style="color:#8cc8f5" href="${url}">${url}</a></p><p>Controlla la connessione e riapri l'app.</p>`);
 const android=fileURLToPath(dst),r=spawnSync(process.platform==='win32'?`"${android}gradlew.bat"`:'./gradlew',['assembleDebug'],{cwd:android,stdio:'inherit',shell:process.platform==='win32'});if(r.status!==0)process.exit(r.status||1);
-await mkdir(new URL('dist/',root),{recursive:true});await copyFile(new URL('app/build/outputs/apk/debug/app-debug.apk',dst),new URL('dist/HUMANA-3D.apk',root));
-const dl=url+'scarica/HUMANA-life-3D.apk';await QRCode.toFile(fileURLToPath(new URL('dist/qr-scarica-3d.png',root)),dl,{width:640,margin:2});
-console.log('APK pronto: dist/HUMANA-3D.apk  (apre '+url+')\nQR per scaricarlo: dist/qr-scarica-3d.png  ->  '+dl);
+await mkdir(new URL('dist/',root),{recursive:true});await copyFile(new URL('app/build/outputs/apk/debug/app-debug.apk',dst),new URL('dist/Napoli-Life-3D.apk',root));
+const dl=url+'scarica/napoli-life-3d.apk';await QRCode.toFile(fileURLToPath(new URL('dist/qr-scarica-3d.png',root)),dl,{width:640,margin:2});
+console.log('APK pronto: dist/Napoli-Life-3D.apk  (apre '+url+')\nQR per scaricarlo: dist/qr-scarica-3d.png  ->  '+dl);

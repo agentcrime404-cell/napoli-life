@@ -141,6 +141,15 @@ body.pointer-mode #joystick{display:none}body.pointer-mode #world{cursor:pointer
 #modal-body button:first-of-type:not(.bp-sw):not(.atm-keys button):not(.atm-pad button):not(.atm-card){background:linear-gradient(90deg,var(--hl-gold),var(--hl-gold2));color:#1a1205;border-color:transparent}
 #modal-body h3{color:var(--hl-mint);font-size:15px;letter-spacing:.03em}
 #modal-body .muted{opacity:.72}
+.meetup-card{display:grid;gap:8px;margin:12px 0;padding:12px;border:1px solid #78cfc244;border-radius:14px;background:linear-gradient(135deg,#10394be8,#0b2738d9)}.meetup-card>strong{color:#8ce5d6}.meetup-card>span{font-weight:700}.meetup-card>small{color:#accaD0}.meetup-card select{width:100%;min-height:42px;padding:8px 10px;border-radius:10px;border:1px solid #7ab9c355;background:#0a2131;color:white;font:inherit}
+.meetup-rsvp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.meetup-rsvp button{min-width:0;min-height:40px;padding:6px 4px;font-size:.82em}.meetup-rsvp button.is-selected{border-color:#8ce5d6;background:#176055;color:#fff;box-shadow:0 0 0 1px #8ce5d655 inset}
+#modal-body .meetup-rsvp button:not(.bp-sw):not(.atm-keys button):not(.atm-pad button):not(.atm-card){min-width:0;min-height:40px;padding:6px 4px;font-size:.82em;background:rgba(255,255,255,.07);border-color:#ffffff28;color:#fff}
+#modal-body .meetup-rsvp button.is-selected:not(.bp-sw):not(.atm-keys button):not(.atm-pad button):not(.atm-card){border-color:#8ce5d6;background:#176055;color:#fff;box-shadow:0 0 0 1px #8ce5d655 inset}
+#modal-body .meetup-checkin{width:100%;min-height:44px;margin:0;padding:10px 14px;font-size:14px}
+#modal-body .meetup-checkin:disabled:not(.is-selected){background:rgba(255,255,255,.07)!important;border-color:#ffffff28!important;color:#a9bac6!important;box-shadow:none!important;cursor:not-allowed;opacity:.82}
+#modal-body .meetup-checkin.is-selected{background:linear-gradient(90deg,#b9f0db,#76d8b8);border-color:transparent;color:#0b2925}
+#modal-body button.meetup-checkin.is-selected:not(.bp-sw):not(.atm-keys button):not(.atm-pad button):not(.atm-card){background:linear-gradient(90deg,#b9f0db,#76d8b8);border-color:transparent;color:#0b2925}
+#modal:not(.atm-full) #modal-body{max-height:calc(100dvh - 118px);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
 #toast{background:linear-gradient(90deg,rgba(16,35,58,.96),rgba(11,22,34,.96));border:1px solid var(--hl-line);border-radius:16px;box-shadow:0 12px 34px #0009;font-weight:600;padding:11px 20px}
 .glass{background:var(--hl-panel);border-color:var(--hl-line);border-radius:var(--hl-radius)}
 .social button{background:var(--hl-panel);border:1px solid var(--hl-line);border-radius:16px;transition:transform .12s,border-color .15s}

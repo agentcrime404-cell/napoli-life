@@ -1,11 +1,14 @@
 import {restore,savePlayer,ensureState,state} from './storage.js';
-import {MAPS,doors,distance,step,canStand,parkedVehicleOf} from '../shared/world.js';
+import {MAPS,doors,distance,step,canStand,parkedVehicleOf,VEHICLE_INTERACTION_RANGE} from '../shared/world.js';
 import {napoliParkedVehicles} from '../shared/napoli.js';
 import {BUS_STOPS,ROUTE_LENGTH,routeDistance,routePoint} from '../shared/district.js';
 import {publicUser,resolve} from './auth.js';
 import {VEHICLE} from '../shared/catalog.js';
 export class Game{
- constructor(db){this.db=db;this.players=new Map();this.clock=setInterval(()=>this.tick(),50);this.frames=0;this.auth=new WeakMap();this.jukebox=new Map();}
+ constructor(db){this.db=db;this.players=new Map();this.clock=setInterval(()=>this.tick(),50);this.frames=0;this.auth=new WeakMap();this.jukebox=new Map();this.streetVehicleStates=new Map();}
+ streetVehicleState(id){return this.streetVehicleStates.get(id);}
+ parkStreetVehicle(p,occupied){const id=p?.streetVehicleId;if(!id)return null;const state={id,v:p.vehicle,x:p.x,y:p.y,rot:Number.isFinite(p.heading)?p.heading:p.direction||0,occupied:!!occupied,room:p.room};this.streetVehicleStates.set(id,state);return state;}
+ streetVehiclesFor(viewer){if(viewer?.room!=='mergellina'||!this.streetVehicleStates.size)return [];return [...this.streetVehicleStates.values()].filter(v=>v.room==='mergellina'&&(v.occupied||distance(v,viewer)<180)).map(v=>({...v}));}
  blocked(a,b){return !!this.db.prepare('SELECT 1 FROM blocks WHERE (owner=? AND target=?) OR (owner=? AND target=?)').get(a,b,b,a);}
  send(ws,m){if(ws.readyState===1&&ws.bufferedAmount<256000)ws.send(JSON.stringify(m));}
  connect(ws){
@@ -33,6 +36,8 @@ export class Game{
    if(m.type==='shoot'||m.type==='reload'){this.arena?.message(player,m);if(m.type==='shoot')this.firearms?.shoot(player,m);}
    if(m.type==='interact')this.interact(player);
    if(m.type==='horn'&&player.vehicle&&Date.now()-(player.hornAt||0)>450)player.hornAt=Date.now();
+   if(m.type==='jump'&&!player.vehicle&&!player.seat&&!player.down&&!player.jail&&!player.arena&&Date.now()-(player.jumpAt||0)>=850){player.jumpAt=Date.now();player.jumpUntil=player.jumpAt+620;}
+   if(m.type==='vehicleLights'&&player.vehicle&&!player.seat&&Date.now()-(player.lightsAt||0)>=180){const kind=VEHICLE[player.vehicle]?.base||player.vehicle;if(['auto','cabrio','furgone','scooter'].includes(kind)){player.lightsOn=!player.lightsOn;player.lightsAt=Date.now();}}
    if(m.type==='travel'&&!player.jail&&!player.wanted&&!player.down&&!player.arena&&MAPS.mergellina&&m.to==='mergellina'&&player.room==='mergellina'&&!player.seat){this.send(player.ws,{type:'notification',message:'📍 Sei già a Mergellina'});}
    // Autoradio: chi guida sceglie un video YouTube, lo sentono anche i passeggeri.
    if(m.type==='carMusic'&&player.vehicle){const id=typeof m.id==='string'&&/^[A-Za-z0-9_-]{11}$/.test(m.id)?m.id:null;player.music=id;player.musicAt=Date.now();player.musicTitle=id?String(m.title||'').slice(0,80):'';}
@@ -56,7 +61,7 @@ export class Game{
     if(m.candidate&&JSON.stringify(m.candidate).length<3000)this.send(to.ws,{type:'signal',from:player.id,candidate:m.candidate});
    }
   }catch{this.send(ws,{type:'error',message:'Richiesta non valida'});}});
-  ws.on('close',()=>{clearTimeout(timer);if(player&&this.players.get(player.id)===player){if(!this.stopping)savePlayer(this.db,player);this.hangup(player,'offline');this.players.delete(player.id);}});
+  ws.on('close',()=>{clearTimeout(timer);if(player&&this.players.get(player.id)===player){if(player.vehicleSource==='street')this.parkStreetVehicle(player,false);if(!this.stopping)savePlayer(this.db,player);this.hangup(player,'offline');this.players.delete(player.id);}});
  }
  // Chiamate dirette tra amici: il server inoltra solo segnalazione WebRTC, l'audio va da telefono a telefono.
  call(p,m){const peer=p.call&&this.players.get(p.call.peer);
@@ -77,6 +82,7 @@ export class Game{
  hangup(p,reason){const peer=p.call&&this.players.get(p.call.peer);p.call=null;if(peer&&peer.call?.peer===p.id){peer.call=null;this.send(peer.ws,{type:'call',action:'end',reason});}}
  interact(p){
   if(Date.now()-(p.interactedAt||0)<180)return;p.interactedAt=Date.now();
+  if(p.vehicle&&p.vehicleSource==='street'&&!p.seat){const h=Number.isFinite(p.heading)?p.heading:p.direction||0;this.parkStreetVehicle(p,false);for(const side of [-1,1]){const x=p.x+Math.cos(h+side*Math.PI/2)*1.3,y=p.y+Math.sin(h+side*Math.PI/2)*1.3;if(canStand(p.room,x,y)){p.x=x;p.y=y;break;}}p.vehicle=null;p.vehicleSource=null;p.streetVehicleId=null;p.vehicleOwner=null;p.vehicleLocked=false;p.vel=0;p.input={x:0,y:0,run:false};this.send(p.ws,{type:'notification',message:'Sei sceso dal veicolo'});return;}
   if(p.ride)return;if(p.seat==='car'){const d=this.players.get(p.passenger);p.seat=null;p.passenger=null;p.x+=.9;if(!canStand(p.room,p.x,p.y))p.x-=.9;if(d)this.send(d.ws,{type:'notification',message:'🚪 '+p.username+' è sceso'});return;}if(p.seat){p.seat=null;return;}
   // Dopo essere scesi, il veicolo personale resta parcheggiato: se il giocatore torna vicino può risalire.
   if(!p.vehicle){const v=this.living?.enterNearbyParked(p);if(v){this.send(p.ws,{type:'notification',message:'🚗 Sei risalito sul tuo veicolo'});return;}}
@@ -84,9 +90,10 @@ export class Game{
   if(!p.vehicle){
    // I veicoli possono arrivare sia dagli oggetti della mappa 2D sia dalla
    // lista di mezzi generata dalla scena reale di Mergellina.
-   const props=MAPS[p.room]?.props||[],generated=p.room==='mergellina'?napoliParkedVehicles():[];
-   const q=[...props,...generated].find(o=>parkedVehicleOf(o)&&distance(o,p)<3.6),v=q&&parkedVehicleOf(q);
-   if(v&&VEHICLE[v]){p.vehicle=v;p.vehicleOwner=p.id;p.vehicleLocked=false;p.heading=Number.isFinite(q.rot)?q.rot:p.direction||0;p.input={x:0,y:0};this.send(p.ws,{type:'notification',message:'🏍️ Hai preso il veicolo fermo'});return;}
+   const props=MAPS[p.room]?.props||[],generated=p.room==='mergellina'?napoliParkedVehicles().map(o=>({...o,...(this.streetVehicleState(o.id)||{})})):[];
+   const occupied=new Set([...this.players.values()].filter(player=>player!==p&&player.vehicle&&player.vehicleSource==='street'&&player.streetVehicleId).map(player=>player.streetVehicleId));
+   const q=[...props,...generated].find(o=>!occupied.has(o.id)&&!this.streetVehicleState(o.id)?.occupied&&parkedVehicleOf(o)&&distance(o,p)<VEHICLE_INTERACTION_RANGE),v=q&&parkedVehicleOf(q);
+   if(v&&VEHICLE[v]){p.vehicle=v;p.vehicleSource='street';p.streetVehicleId=q.id;p.vehicleOwner=null;p.vehicleLocked=false;p.heading=Number.isFinite(q.rot)?q.rot:p.direction||0;p.input={x:0,y:0};if(p.room==='mergellina')this.parkStreetVehicle(p,true);this.send(p.ws,{type:'notification',message:'🏍️ Hai preso il veicolo fermo'});return;}
   }
   // Passeggero: sali sul veicolo di un altro giocatore vicino (se c'è posto).
   if(!p.vehicle){const SEATS={auto:3,furgone:2,cabrio:1,scooter:1};const d=[...this.players.values()].find(d=>d!==p&&d.room===p.room&&d.vehicle&&SEATS[VEHICLE[d.vehicle]?.base||d.vehicle]&&distance(d,p)<2.6&&!this.blocked(d.id,p.id));
@@ -115,11 +122,11 @@ export class Game{
    else if(p.ride&&p.ride.pts){const R=p.ride,k=Math.min(1,(Date.now()-R.t0)/R.duration);let tot=0;const L=[];for(let i=1;i<R.pts.length;i++){L.push(Math.hypot(R.pts[i].x-R.pts[i-1].x,R.pts[i].y-R.pts[i-1].y));tot+=L[i-1];}let d=tot*k,i=0;while(i<L.length-1&&d>L[i]){d-=L[i];i++;}const a=R.pts[i],b=R.pts[i+1],t=L[i]?Math.min(1,d/L[i]):0;p.x=a.x+(b.x-a.x)*t;p.y=a.y+(b.y-a.y)*t;p.direction=Math.atan2(b.y-a.y,b.x-a.x);if(k>=1){const to=R.to;Object.assign(p,{x:to.x,y:to.y,seat:null,ride:null});this.send(p.ws,{type:'notification',message:'⛵ Giro finito: sei di nuovo sul molo'});}}
    else if(p.ride){const k=Math.min(1,(Date.now()-p.ride.t0)/p.ride.duration);Object.assign(p,routePoint(p.ride.s0+p.ride.dist*k));if(k>=1){const to=p.ride.to;Object.assign(p,{x:to.x,y:to.y,seat:null,ride:null});this.send(p.ws,{type:'notification',message:`🚌 Sei arrivato: ${to.name}`});}}
    if(p.passenger){const d=this.players.get(p.passenger);if(!d||!d.vehicle||d.room!==p.room){p.seat=null;p.passenger=null;}else{p.x=d.x;p.y=d.y;p.direction=d.direction;}}
-   if(Date.now()-p.lastInput>300)p.input=p.vehicle&&!p.seat?{x:0,y:0,run:false,drive:true,steer:0,throttle:0,brake:0}:{x:0,y:0,run:false};if(p.vehicle&&(p.room==='lungomare'||p.room==='mergellina')&&!p.seat)p.lastOut={x:p.x,y:p.y,h:Number.isFinite(p.heading)?p.heading:p.direction||0,room:p.room,v:p.vehicle};if(p.vehicle&&((p.room!=='lungomare'&&p.room!=='mergellina')||p.seat||(this.frames%50===0&&this.living&&!this.living.canUse(p.id,p.vehicle)))){if(p.lastOut&&p.lastOut.v===p.vehicle)this.living?.parkCar(p,p.lastOut.x,p.lastOut.y,p.lastOut.h,p.vehicle,p.lastOut.room);p.vehicle=null;}if(!p.vehicle&&p.music)p.music=null;const old={x:p.x,y:p.y};step(p,p.input,dt);this.needs?.tick(p,dt);if(this.jobs&&p.job&&this.frames%5===0)this.jobs.tick(p);const moved=distance(old,p);p.travel=(p.travel||0)+moved;this.fuel?.tick(p,moved);this.service?.tick(p,dt);this.police?.tick(p);this.rp?.tick(p);this.jobs?.service(p,dt);this.heist?.tick(p);this.biz?.tick(p);this.gangs?.tick(p);if(this.frames%100===0){if(this.jobs)this.jobs.level(p);savePlayer(this.db,p);}
-   if(Date.now()>p.emoteUntil){p.emote='';p.action='IDLE';}p.animation=p.seat?'SIT':p.moving?(p.running?'RUN':'WALK'):p.action||'IDLE';
+   if(Date.now()-p.lastInput>300)p.input=p.vehicle&&!p.seat?{x:0,y:0,run:false,drive:true,steer:0,throttle:0,brake:0}:{x:0,y:0,run:false};if(p.vehicle&&(p.room==='lungomare'||p.room==='mergellina')&&!p.seat)p.lastOut={x:p.x,y:p.y,h:Number.isFinite(p.heading)?p.heading:p.direction||0,room:p.room,v:p.vehicle};if(p.vehicle&&((p.room!=='lungomare'&&p.room!=='mergellina')||p.seat||(this.frames%50===0&&this.living&&p.vehicleSource!=='street'&&!this.living.canUse(p.id,p.vehicle)))){if(p.vehicleSource!=='street'&&p.lastOut&&p.lastOut.v===p.vehicle)this.living?.parkCar(p,p.lastOut.x,p.lastOut.y,p.lastOut.h,p.vehicle,p.lastOut.room);p.vehicle=null;p.vehicleSource=null;p.streetVehicleId=null;p.vehicleOwner=null;p.vehicleLocked=false;}if(!p.vehicle&&p.music)p.music=null;const old={x:p.x,y:p.y};step(p,p.input,dt);if(p.vehicleSource==='street'&&p.streetVehicleId)this.parkStreetVehicle(p,true);this.needs?.tick(p,dt);if(this.jobs&&p.job&&this.frames%5===0)this.jobs.tick(p);const moved=distance(old,p);p.travel=(p.travel||0)+moved;this.fuel?.tick(p,moved);this.service?.tick(p,dt);this.police?.tick(p);this.rp?.tick(p);this.jobs?.service(p,dt);this.heist?.tick(p);this.biz?.tick(p);this.gangs?.tick(p);if(this.frames%100===0){if(this.jobs)this.jobs.level(p);savePlayer(this.db,p);}
+   if(Date.now()>p.emoteUntil){p.emote='';p.action='IDLE';}if(!p.vehicle||p.seat)p.lightsOn=false;p.animation=p.jumpUntil>Date.now()?'JUMP':p.seat?'SIT':p.moving?(p.running?'RUN':'WALK'):p.action||'IDLE';
   }
   if(++this.frames%2)return;
-  for(const viewer of this.players.values())this.send(viewer.ws,{type:'state',now:Date.now(),jukebox:(j=>j&&j.until>Date.now()?{id:j.id,title:j.title,at:j.at,by:j.by}:null)(this.jukebox.get(viewer.room)),roomDefinition:viewer.room.startsWith('home:')?MAPS[viewer.room]:undefined,online:this.players.size,players:[...this.players.values()].filter(p=>p.room===viewer.room&&distance(p,viewer)<55&&!this.blocked(viewer.id,p.id)).map(({ws,input,lastInput,lastChat,emoteUntil,interactedAt,travel,call,slide,ride,...p})=>p)});
+  for(const viewer of this.players.values())this.send(viewer.ws,{type:'state',now:Date.now(),jukebox:(j=>j&&j.until>Date.now()?{id:j.id,title:j.title,at:j.at,by:j.by}:null)(this.jukebox.get(viewer.room)),roomDefinition:viewer.room.startsWith('home:')?MAPS[viewer.room]:undefined,streetVehicles:this.streetVehiclesFor(viewer),online:this.players.size,players:[...this.players.values()].filter(p=>p.room===viewer.room&&distance(p,viewer)<55&&!this.blocked(viewer.id,p.id)).map(({ws,input,lastInput,lastChat,emoteUntil,interactedAt,travel,call,slide,ride,...p})=>p)});
  }
  close(){this.stopping=true;clearInterval(this.clock);for(const p of this.players.values()){savePlayer(this.db,p);p.ws.close();}}
 }

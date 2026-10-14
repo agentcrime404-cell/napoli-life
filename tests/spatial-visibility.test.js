@@ -22,3 +22,14 @@ test('Visibilità: coordinate globali corrette sotto un genitore trasformato e c
  const visibility=new SpatialVisibility(root,{range:30});await visibility.prepare();visibility.update(300,400);assert.equal(object.visible,true);visibility.update(0,0);assert.equal(object.visible,false);
  const cancelled=new SpatialVisibility(root);assert.equal(await cancelled.prepare(()=>true),false);assert.equal(cancelled.entries.length,0);
 });
+
+test('Visibilità: l’indice spaziale limita i controlli agli oggetti vicini e aggiorna anche la distanza',async()=>{
+ const root=new THREE.Group(),near=box(2,12,0);root.add(near);
+ for(let i=0;i<400;i++)root.add(box(2,1000+i*96,(i%9)*96));
+ const visibility=new SpatialVisibility(root,{range:20});await visibility.prepare();visibility.update(0,0);
+ assert.equal(near.visible,true);assert.equal(root.children[1].visible,false);
+ assert.ok(visibility.lastCandidateCount<visibility.entries.length/20,'il culling deve esaminare una piccola parte della città');
+ const checked=visibility.lastCandidateCount;visibility.update(.2,0);assert.equal(visibility.lastCandidateCount,checked,'un movimento inferiore alla soglia riusa il risultato');
+ visibility.range=5;visibility.update(.2,0);assert.equal(near.visible,false,'una modifica alla distanza forza un aggiornamento anche da fermi');
+ visibility.update(1000,0);assert.equal(root.children[1].visible,true,'gli oggetti diventano visibili entrando nel raggio');
+});
