@@ -26,7 +26,7 @@ export function installPerformancePanel() {
  root.className = 'napoli-performance-panel';
  root.hidden = true;
  root.setAttribute('aria-label', 'Diagnostica prestazioni Napoli Life');
- root.innerHTML = '<header><strong>Diagnostica live</strong><span>locale</span></header><dl><div><dt>FPS reali</dt><dd data-metric="fps">—</dd></div><div><dt>Frame time P95</dt><dd data-metric="p95">—</dd></div><div><dt>Draw call</dt><dd data-metric="calls">—</dd></div><div><dt>Triangoli</dt><dd data-metric="triangles">—</dd></div><div><dt>Heap JS libera</dt><dd data-metric="heap">—</dd></div><div><dt>RAM dispositivo</dt><dd data-metric="ram">—</dd></div></dl><small data-metric="note">Valori del browser; la memoria RAM è una stima.</small>';
+ root.innerHTML = '<header><strong>Diagnostica live</strong><span>locale</span></header><dl><div><dt>FPS reali</dt><dd data-metric="fps">—</dd></div><div><dt>Frame time P95</dt><dd data-metric="p95">—</dd></div><div><dt>Frame time P99</dt><dd data-metric="p99">—</dd></div><div><dt>Picco frame time</dt><dd data-metric="peak">—</dd></div><div><dt>Draw call</dt><dd data-metric="calls">—</dd></div><div><dt>Triangoli</dt><dd data-metric="triangles">—</dd></div><div><dt>Heap JS libera</dt><dd data-metric="heap">—</dd></div><div><dt>RAM dispositivo</dt><dd data-metric="ram">—</dd></div></dl><small data-metric="note">P95/P99 e picco sugli ultimi 120 frame; la RAM è una stima.</small>';
  const toggle = document.createElement('button');
  toggle.id = 'napoli-performance-toggle';
  toggle.className = 'napoli-performance-toggle';
@@ -62,6 +62,8 @@ export function installPerformancePanel() {
    return {
     fps,
     frameTimeP95Ms: framePercentile(ordered),
+    frameTimeP99Ms: framePercentile(ordered, .99),
+    frameTimeMaxMs: ordered.length ? Math.round(Math.max(...ordered) * 10) / 10 : null,
     drawCalls: Number.isFinite(renderer?.info?.render?.calls) ? renderer.info.render.calls : null,
     triangles: Number.isFinite(renderer?.info?.render?.triangles) ? renderer.info.render.triangles : null,
     ...memory,
@@ -82,6 +84,8 @@ export function installPerformancePanel() {
    const state = api.snapshot(renderer), ram = state.deviceRamGbEstimate;
    cells.fps.textContent = fmt(state.fps);
    cells.p95.textContent = fmt(state.frameTimeP95Ms, ' ms');
+   cells.p99.textContent = fmt(state.frameTimeP99Ms, ' ms');
+   cells.peak.textContent = fmt(state.frameTimeMaxMs, ' ms');
    cells.calls.textContent = fmt(state.drawCalls);
    cells.triangles.textContent = Number.isFinite(state.triangles) ? state.triangles.toLocaleString('it-IT') : 'n/d';
    cells.heap.textContent = state.heapFreeMb === null ? 'n/d' : `${fmt(state.heapFreeMb, ' MB')} liberi`;

@@ -19,6 +19,16 @@ function world(fields={}){
 }
 function prepWorld(compileAsync){const programs=[],w=world();w.gl={info:{programs},compileAsync:(...a)=>compileAsync(w,...a),getContext:()=>({isContextLost:()=>false})};return w;}
 function program(name,{runnable=true}={}){return {name,checked:0,isReady:()=>true,getUniforms(){this.checked++;if(!runnable)this.diagnostics={runnable:false,programLog:'',vertexShader:{log:''},fragmentShader:{log:'ERROR: '+name}};return {};}};}
+
+test('Facade detail split by architectural bays preserves the exact geometry attributes',()=>{
+ const keys=['pl','bg','gl','sh','ir','dr','fl','ao'],make=()=>Object.fromEntries(keys.map(key=>[key,{p:[],u:[],c:[]} ]));
+ const w=world({groundY:0}),full=make(),sliced=make(),a=[0,0],b=[12,0],wall=[.78,.7,.62],floors=5,seed=137;
+ w.facadeDetail(full,a,b,0,1,floors,seed,wall,{noShops:true});
+ const bays=Math.max(1,Math.round(12/3.1));
+ for(let bay=0;bay<bays;bay++)w.facadeDetail(sliced,a,b,0,1,floors,seed,wall,{noShops:true,_bayStart:bay,_bayEnd:bay+1});
+ assert.deepEqual(sliced,full);
+});
+
 // Schermata di caricamento: bastano gli elementi che usa loadingStatus.
 function fakeDocument(t){
  const el=tag=>({tagName:tag,children:[],hidden:false,textContent:'',dataset:{},attrs:{},type:'',onclick:null,setAttribute(k,v){this.attrs[k]=String(v);},getAttribute(k){return this.attrs[k]??null;},append(...c){this.children.push(...c);}});

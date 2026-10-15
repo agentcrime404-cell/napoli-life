@@ -4,6 +4,7 @@ import {browserMemory,framePercentile} from '../client/ui/performance-panel.js';
 
 test('diagnostica: P95 frame time usa campioni validi e restituisce millisecondi',()=>{
  assert.equal(framePercentile([16.6,16.7,17,20,100],.95),100);
+ assert.equal(framePercentile([16.6,16.7,17,20,100],.99),100);
  assert.equal(framePercentile([16.6,16.7,17,20,100],.8),20);
  assert.equal(framePercentile([0,-1,NaN],.95),null);
 });
