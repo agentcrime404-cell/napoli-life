@@ -64,6 +64,19 @@ async function realTouchProbe(page){
   return {before:before?.state||null,held:held?.state||null,walkInput:held?.walkInput||null,checks:{joystick:held?.walkInput?.pointer!==null&&held?.walkInput?.pointer!==undefined&&Math.hypot(held.walkInput.vector?.x||0,held.walkInput.vector?.y||0)>.1,camera:Math.abs((held?.state?.camera?.yaw||0)-(before?.state?.camera?.yaw||0))>.005,movement:!!p0&&!!p1&&Math.hypot(p1.x-p0.x,p1.y-p0.y)>.03,jump:Number(p1?.jumpAt||0)>Number(p0?.jumpAt||0)},coordinates:{joystick:j,camera:c,action:a}};
  }finally{await cdp.detach().catch(()=>{});}
 }
+async function capturedInputResetProbe(page){
+ const game=page.frameLocator('#game-frame'),joystick=await game.locator('#joystick').boundingBox(),run=await game.locator('#run').boundingBox();
+ if(!joystick||!run)throw new Error('Joystick o corsa non visibili per il test di rilascio focus.');
+ const cdp=await page.context().newCDPSession(page),j={id:111,x:joystick.x+joystick.width/2,y:joystick.y+joystick.height/2},r={id:112,x:run.x+run.width/2,y:run.y+run.height/2};
+ const send=(type,points)=>cdp.send('Input.dispatchTouchEvent',{type,touchPoints:points});
+ try{
+  await send('touchStart',[j,r]);await page.waitForTimeout(80);const held=await readLiveState(page);
+  await page.evaluate(()=>document.querySelector('#game-frame')?.contentWindow?.dispatchEvent(new Event('blur')));await page.waitForTimeout(60);
+  const released=await readLiveState(page),capture=await page.evaluate(ids=>{const d=document.querySelector('#game-frame')?.contentDocument;return {joystick:d?.getElementById('joystick')?.hasPointerCapture(ids[0])||false,run:d?.getElementById('run')?.hasPointerCapture(ids[1])||false};},[111,112]);
+  const state=released?.walkInput;
+  return {held:held?.walkInput||null,released:state||null,capture,pass:held?.walkInput?.pointer!==null&&held?.walkInput?.runPointer!==null&&state?.pointer===null&&state?.runPointer===null&&!state?.running&&Math.hypot(state?.vector?.x||0,state?.vector?.y||0)<.01&&!capture.joystick&&!capture.run};
+ }finally{await send('touchEnd',[]).catch(()=>{});await cdp.detach().catch(()=>{});}
+}
 async function orientationProbe(page,outputDir){
  const before=await readLiveState(page);
  const landscapeWidth=before?.viewport?.width||844,landscapeHeight=before?.viewport?.height||390;
@@ -240,6 +253,8 @@ export async function run({playwright=null,executablePath=process.env.PLAYWRIGHT
    summary.walkScreenshot=await saveScreenshot(page,join(outputDir,'hud-'+profile+'-walk.png'));
    try{const probe=await realTouchProbe(page);summary.realTouchProbe=probe;for(const [name,pass]of Object.entries(probe.checks))summary.checks.push({profile,test:'multitouch reale · '+name,pass,details:name==='camera'?{yawBefore:probe.before?.camera?.yaw,yawDuring:probe.held?.camera?.yaw}:name==='movement'?{before:probe.before?.player,after:probe.held?.player,joystick:probe.walkInput}:name==='jump'?{jumpAt:probe.held?.player?.jumpAt}:probe.coordinates});}
    catch(error){summary.checks.push({profile,test:'multitouch reale tramite CDP',pass:false,details:String(error?.message||error)});}
+   try{summary.pointerResetProbe=await capturedInputResetProbe(page);summary.checks.push({profile,test:'focus perso rilascia joystick, corsa e pointer capture',pass:summary.pointerResetProbe.pass,details:summary.pointerResetProbe});}
+   catch(error){summary.checks.push({profile,test:'focus perso rilascia i controlli touch',pass:false,details:String(error?.message||error)});}
    try{summary.orientationProbe=await orientationProbe(page,outputDir);summary.checks.push({profile,test:'portrait mostra ruota dispositivo',pass:summary.orientationProbe.portrait.overlayDisplay!=='none'&&summary.orientationProbe.portrait.worldLoaded,details:summary.orientationProbe.portrait});summary.checks.push({profile,test:'ritorno landscape preserva partita',pass:summary.orientationProbe.landscape.overlayDisplay==='none'&&summary.orientationProbe.statePreserved,details:summary.orientationProbe.landscape});}
    catch(error){summary.checks.push({profile,test:'rotazione portrait/landscape',pass:false,details:String(error?.message||error)});}
    console.log('Test a piedi completato in landscape.');

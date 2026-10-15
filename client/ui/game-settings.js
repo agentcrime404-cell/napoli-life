@@ -1,3 +1,5 @@
+import {defaultFrameRateLimit} from './frame-rate.js';
+
 const PROFILES=[
  {id:'min',name:'Bassa',note:'Più leggera per telefoni meno potenti'},
  {id:'med',name:'Media',note:'Equilibrio per smartphone'},
@@ -20,12 +22,12 @@ export function openGraphicsSettings({modal,getWorld=()=>null}){
  const root=document.createElement('section');root.className='graphics-settings';root.setAttribute('aria-label','Impostazioni grafiche');
  const state={
   profile:read('humana-gfx',getWorld()?.gfx||'med'),
-  fps:read('humana-fps-limit',matchMedia('(pointer:coarse)').matches?'30':'60'),adaptive:read('humana-adaptive-graphics','on'),
+  fps:read('humana-fps-limit',String(defaultFrameRateLimit())),adaptive:read('humana-adaptive-graphics','on'),
   shadows:read('humana-shadows','auto'),shadowQuality:read('humana-shadow-quality','high'),
   ao:read('humana-ao','on'),detail:read('humana-detail','high'),effects:read('humana-effects','on'),
   distance:Number(read('humana-distance',''))||((getWorld()?.mobile)?260:420)
  };
- const intro=document.createElement('p');intro.className='gs-intro';intro.textContent='Scegli una configurazione adatta al tuo dispositivo. La qualità Ultra può ridurre gli FPS sui telefoni.';root.append(intro);
+ const intro=document.createElement('p');intro.className='gs-intro';intro.textContent='Scegli una configurazione adatta al tuo dispositivo. Sui telefoni più potenti il limite predefinito è 60 FPS; sui dispositivi meno potenti resta a 30 FPS.';root.append(intro);
  const profileTitle=document.createElement('h3');profileTitle.textContent='Profilo grafico';root.append(profileTitle);
  const cards=document.createElement('div');cards.className='gs-profiles';const profileButtons=[];
  for(const profile of PROFILES){const b=document.createElement('button');b.type='button';b.className='gs-profile';b.setAttribute('aria-pressed',String(state.profile===profile.id));b.innerHTML='<strong></strong><small></small>';b.querySelector('strong').textContent=profile.name;b.querySelector('small').textContent=profile.note;b.onclick=()=>{state.profile=profile.id;profileButtons.forEach(q=>q.setAttribute('aria-pressed',String(q===b)));};profileButtons.push(b);cards.append(b);}root.append(cards);
