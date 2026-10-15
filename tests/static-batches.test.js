@@ -41,3 +41,24 @@ test('Batch mobile: unisce solo materiali opachi equivalenti mantenendo le diffe
  assert.ok(batch);assert.equal(batch.material,a);assert.equal(batch.geometry.attributes.position.count,72);
  assert.equal(unmerged.material,c);assert.equal(unmerged.geometry.attributes.position.count,24);
 });
+
+test('Batch mobile testurizzato: riunisce solo la stessa texture condivisa e conserva UV e posizioni',()=>{
+ const root=new THREE.Group(),geometry=new THREE.BoxGeometry(),texture=new THREE.DataTexture(new Uint8Array([255,255,255,255]),1,1),shared=new THREE.MeshLambertMaterial({map:texture}),separate=new THREE.MeshLambertMaterial({map:texture});
+ for(const x of [2,6]){const mesh=new THREE.Mesh(geometry,shared);mesh.position.set(x,1,3);root.add(mesh);}
+ const differentMaterial=new THREE.Mesh(geometry,separate);differentMaterial.position.set(10,1,3);root.add(differentMaterial);
+ const before=vertices(root);assert.equal(bakeStatic(root,{mobile:true,spatial:true}),1);assert.deepEqual(vertices(root),before);
+ const batch=root.children.find(object=>object.userData.baked),unchanged=root.children.find(object=>object.material===separate);
+ assert.ok(batch);assert.equal(batch.material,shared);assert.equal(batch.material.map,texture);assert.ok(batch.geometry.attributes.uv);
+ assert.equal(batch.geometry.attributes.position.count,72);assert.equal(unchanged.geometry.attributes.position.count,24);
+});
+
+test('Batch mobile: conserva le finestre emissive condivise e la variazione notturna del materiale',()=>{
+ const root=new THREE.Group(),geometry=new THREE.BoxGeometry(),pixel=new Uint8Array([255,255,255,255]),map=new THREE.DataTexture(pixel,1,1),emissiveMap=new THREE.DataTexture(pixel,1,1),shared=new THREE.MeshLambertMaterial({map,emissive:'#ffcf7a',emissiveMap,side:THREE.DoubleSide}),separate=shared.clone();
+ shared.userData.glow=1;separate.userData={glow:1};
+ for(const x of [2,6]){const mesh=new THREE.Mesh(geometry,shared);mesh.position.set(x,1,3);root.add(mesh);}
+ root.add(new THREE.Mesh(geometry,separate));
+ const before=vertices(root);assert.equal(bakeStatic(root,{mobile:true,spatial:true}),1);assert.deepEqual(vertices(root),before);
+ const batch=root.children.find(object=>object.userData.baked),untouched=root.children.find(object=>object.material===separate);
+ assert.ok(batch);assert.equal(batch.material,shared);assert.equal(batch.material.map,map);assert.equal(batch.material.emissiveMap,emissiveMap);assert.equal(batch.material.userData.glow,1);
+ assert.equal(untouched.geometry.attributes.position.count,24);
+});

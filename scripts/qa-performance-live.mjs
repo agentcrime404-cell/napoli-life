@@ -201,7 +201,7 @@ export async function run({baseURL,executablePath=process.env.PLAYWRIGHT_CHROMIU
   const cdp=await context.newCDPSession(page);await cdp.send('Performance.enable');const cpuThrottle=Number(process.env.QA_CPU_THROTTLE)||1;if(cpuThrottle>1){await cdp.send('Emulation.setCPUThrottlingRate',{rate:cpuThrottle}).catch(error=>summary.limits.push('Throttle CPU browser non disponibile: '+String(error?.message||error)));}
   let profileStarted=false;
   try{await cdp.send('Profiler.enable');await cdp.send('Profiler.setSamplingInterval',{interval:1000});await cdp.send('Profiler.start');profileStarted=true;}catch(error){summary.limits.push('Profiler JavaScript non disponibile: '+String(error?.message||error));}
-  const url=dashboard?new URL('/debug-controls',baseURL):new URL('/?3d=1&qa=1',baseURL);
+  const url=dashboard?new URL('/debug-controls.html',baseURL):new URL('/?3d=1&qa=1',baseURL);
   const response=await page.goto(url.href,{waitUntil:'domcontentloaded',timeout:30000});
   if(!response||response.status()>=400)throw new Error(name+' non aperto: HTTP '+(response?.status()||'nessuna risposta'));
   if(dashboard){

@@ -27,10 +27,17 @@ export function bakeStatic(root,{mobile=false,spatial=false,cellSize=100}={}){
  const inverse=new THREE.Matrix4().copy(root.matrixWorld).invert(),by=new Map(),point=new THREE.Vector3(),matrix=new THREE.Matrix4();
  root.traverse(object=>{
   if(!object.isMesh||object.isInstancedMesh||Array.isArray(object.material)||object.userData.keep||object.userData.baked||!object.geometry.attributes.normal||object.geometry.morphAttributes&&Object.keys(object.geometry.morphAttributes).length)return;
-  const material=object.material,userDataKeys=Object.keys(material.userData||{}),flatMobile=mobile&&material.userData.merge!==false&&!material.map&&!material.normalMap&&!material.bumpMap&&!material.displacementMap&&!material.aoMap&&!material.lightMap&&!material.emissiveMap&&!material.alphaMap&&!material.envMap&&!material.transparent&&material.opacity>=1&&!material.alphaTest&&!material.vertexColors&&!material.clippingPlanes&&(material.isMeshBasicMaterial||material.isMeshLambertMaterial||material.isMeshStandardMaterial)&&material.onBeforeCompile===THREE.Material.prototype.onBeforeCompile&&material.customProgramCacheKey===THREE.Material.prototype.customProgramCacheKey&&userDataKeys.every(key=>key==='merge'||key==='outlineParameters')&&object.geometry.attributes.uv;
-  if(!material.userData.merge&&!flatMobile)return;
+  const material=object.material,userDataKeys=Object.keys(material.userData||{}),supportedMobileMaterial=(material.isMeshBasicMaterial||material.isMeshLambertMaterial||material.isMeshStandardMaterial)&&material.onBeforeCompile===THREE.Material.prototype.onBeforeCompile&&material.customProgramCacheKey===THREE.Material.prototype.customProgramCacheKey&&userDataKeys.every(key=>key==='merge'||key==='outlineParameters'||key==='glow'),
+   flatMobile=mobile&&material.userData.merge!==false&&!material.map&&!material.normalMap&&!material.bumpMap&&!material.displacementMap&&!material.aoMap&&!material.lightMap&&!material.emissiveMap&&!material.alphaMap&&!material.envMap&&!material.transparent&&material.opacity>=1&&!material.alphaTest&&!material.vertexColors&&!material.clippingPlanes&&supportedMobileMaterial&&object.geometry.attributes.uv,
+   // Repeated opaque props often share one textured material (awnings, signs,
+   // street furniture). Baking their transforms into a nearby static batch
+   // removes draw calls without changing UVs, texture sampling or map placement.
+   // The material itself is the batch key, so shared emissive window maps
+   // keep their night-light animation while static facade panes lose draw calls.
+   texturedMobile=mobile&&material.userData.merge!==false&&!!material.map&&!material.normalMap&&!material.bumpMap&&!material.displacementMap&&!material.aoMap&&!material.lightMap&&!material.alphaMap&&!material.envMap&&!material.transparent&&material.opacity>=1&&!material.alphaTest&&!material.vertexColors&&!material.clippingPlanes&&material.blending===THREE.NormalBlending&&supportedMobileMaterial&&object.geometry.attributes.uv;
+  if(!material.userData.merge&&!flatMobile&&!texturedMobile)return;
   point.setFromMatrixPosition(matrix.multiplyMatrices(inverse,object.matrixWorld));
-  const batchCell=spatial&&flatMobile?Math.max(cellSize,180):cellSize,cell=spatial?Math.floor(point.x/batchCell)+','+Math.floor(point.z/batchCell):'room';
+  const batchCell=spatial&&(flatMobile||texturedMobile)?Math.max(cellSize,180):cellSize,cell=spatial?Math.floor(point.x/batchCell)+','+Math.floor(point.z/batchCell):'room';
   const key=flatMobile?'flat:'+flatMaterialKey(material):material;let batch=by.get(key);if(!batch)by.set(key,batch={material,cells:new Map()});
   let list=batch.cells.get(cell);if(!list)batch.cells.set(cell,list=[]);list.push(object);
  });
