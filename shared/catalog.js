@@ -1,3 +1,4 @@
+import {EXTRA_VEHICLES} from './vehicles-extra.js';
 // Prezzi e categorie sono definiti dal server, mai dal carrello inviato dal client.
 export const CATALOG=[
  {id:'palette-jade',name:'Palette giada',type:'cosmetic',slot:'outfit',value:'jade',color:'#65d6a6',price:3,currency:'gems'},
@@ -107,6 +108,7 @@ export const VEHICLES_3D=[
  {id:'b-corsa',shop:'bici',base:'bici',model:'corsa',name:'Bici da corsa',emoji:'🚴',buy:700,speed:2.2,color:'#ffc928'},
  {id:'b-cargo',shop:'bici',base:'bici',model:'cargo',name:'Bici da passeggio con cestino',emoji:'🚲',buy:380,speed:1.7,color:'#ff7ab6'},
  {id:'b-ebike',shop:'bici',base:'bici',model:'ebike',name:'Bici elettrica',emoji:'🚲',buy:950,speed:2.4,color:'#3b4250'}];
+VEHICLES_3D.push(...EXTRA_VEHICLES);
 for(const v of VEHICLES_3D)VEHICLE[v.id]=v;
 // Le moto condividono la classe di guida "scooter", ma non tutte hanno la
 // retromarcia: solo auto, scooter veri e monopattini possono inserirla da fermi.

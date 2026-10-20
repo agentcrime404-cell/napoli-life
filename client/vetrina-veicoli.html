@@ -1,0 +1,24 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vetrina veicoli nuovi</title>
+<style>html,body{margin:0;background:#9fc7e6;font:14px system-ui,sans-serif}#g{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:10px;padding:10px}
+.c{background:#bcd9ee;border-radius:12px;overflow:hidden;position:relative}.c canvas{display:block;width:100%;height:240px}.c b{position:absolute;left:10px;top:8px;color:#0b1622}.c small{position:absolute;left:10px;bottom:8px;color:#0b1622}
+#m{padding:20px;color:#0b1622}</style>
+<div id="m">Carico i veicoli nuovi…</div><div id="g"></div>
+<script type="module">
+// Mostra ogni veicolo di nuovi/manifest.json con la stessa normalizzazione del gioco. Freccia verde = davanti (+z).
+import * as THREE from './vendor/three/three.module.min.js';import {loadExtraVehicles,realCopy} from './world/realvehicles.js';
+const w={mobile:false,gfx:'high',realV:{}},tmp=new THREE.WebGLRenderer({antialias:true});w.gl=tmp.getContext();
+const extra=await loadExtraVehicles(w),m=document.getElementById('m'),G=document.getElementById('g'),ids=Object.keys(w.realV);
+m.textContent=ids.length?(ids.length+' veicoli caricati'+(extra.failed.length?' · NON caricati: '+extra.failed.map(f=>f.id+' ('+f.message+')').join('; '):'')+(extra.skipped.length?' · saltati sul telefono: '+extra.skipped.map(f=>f.id).join(', '):'')):'Nessun veicolo nuovo. Aggiungine uno con: node scripts/aggiungi-veicolo.mjs modello.glb --id ... (vedi nuovi/LEGGIMI.txt)';
+const items=[];
+for(const id of ids){const card=document.createElement('div');card.className='c';const cv=document.createElement('canvas');cv.width=680;cv.height=480;card.append(cv);
+ const r=new THREE.WebGLRenderer({canvas:cv,antialias:true});r.setSize(680,480,false);const s=new THREE.Scene();s.background=new THREE.Color('#bcd9ee');
+ s.add(new THREE.HemisphereLight('#fff','#8a8f98',1.5));const d=new THREE.DirectionalLight('#fff3dd',2.4);d.position.set(4,8,5);s.add(d);
+ const gr=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshLambertMaterial({color:'#8d8f93'}));gr.rotation.x=-Math.PI/2;s.add(gr);
+ const o=realCopy(w,id),h=new THREE.Group();h.add(o);s.add(h);const b=new THREE.Box3().setFromObject(o),sz=b.getSize(new THREE.Vector3());
+ const arrow=new THREE.Mesh(new THREE.ConeGeometry(.12,.5,16).rotateX(Math.PI/2),new THREE.MeshBasicMaterial({color:'#18c964'}));arrow.position.set(0,.05,sz.z/2+.4);h.add(arrow);
+ const cam=new THREE.PerspectiveCamera(32,680/480,.1,100),R=Math.max(sz.x,sz.y,sz.z)*2.6;
+ card.insertAdjacentHTML('beforeend','<b>'+id+'</b><small>'+sz.z.toFixed(2)+' × '+sz.x.toFixed(2)+' × '+sz.y.toFixed(2)+' m</small>');G.append(card);items.push({r,s,cam,h,R,sy:sz.y});}
+const still=new URLSearchParams(location.search).has('fermo');let t=0;
+function loop(){t+=.012;for(const i of items){i.h.rotation.y=still?.6:t;i.cam.position.set(i.R*.6,i.sy*.9+i.R*.25,i.R*.8);i.cam.lookAt(0,i.sy*.45,0);i.r.render(i.s,i.cam);}requestAnimationFrame(loop);}loop();
+window.__vetrina={ids,extra};
+</script>

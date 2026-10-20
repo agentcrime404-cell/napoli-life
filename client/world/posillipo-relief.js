@@ -173,8 +173,14 @@ export class PosillipoRelief {
   heightAt(x, z) {
     const bounds = this.bounds;
     if (!bounds || x < bounds.minX || x > bounds.maxX || z < bounds.minZ || z > bounds.maxZ) return 0;
-    let bestSq = Infinity, distance = 0;
+    // Every nearby route segment contributes, weighted by a steep kernel of its distance.
+    // Using only the nearest segment made the height jump by 10–20 m wherever two legs of the
+    // switchbacks (or the bottom of the route and a higher leg) were equally close: roads and
+    // pavements were then draped over vertical walls. The blend is continuous, and on the path
+    // itself its own segment still dominates (another leg 10 m away weighs ~2.5%).
     const stamp = ++this.queryStamp, cellX = Math.floor(x / this.cellSize), cellZ = Math.floor(z / this.cellSize);
+    const last = POSILLIPO_ELEVATION_PROFILE_M.length - 1;
+    let sumW = 0, sumH = 0, found = false;
     const search = radius => { for (let gx = cellX - radius; gx <= cellX + radius; gx++) for (let gz = cellZ - radius; gz <= cellZ + radius; gz++) {
       const list = this.segmentGrid.get(`${gx},${gz}`); if (!list) continue;
       for (const index of list) {
@@ -183,18 +189,20 @@ export class PosillipoRelief {
         const a = this.route[index], b = this.route[index + 1], dx = b[0] - a[0], dz = b[1] - a[1], lenSq = dx * dx + dz * dz;
         if (lenSq < .0025) continue;
         const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (z - a[1]) * dz) / lenSq));
-        const px = a[0] + dx * t, pz = a[1] + dz * t, sq = (x - px) ** 2 + (z - pz) ** 2;
-        if (sq < bestSq) { bestSq = sq; distance = this.cumulative[index] + Math.sqrt(lenSq) * t; }
+        const px = a[0] + dx * t, pz = a[1] + dz * t, lateral = Math.hypot(x - px, z - pz);
+        const distance = this.cumulative[index] + Math.sqrt(lenSq) * t;
+        const along = this.length > 0 ? Math.max(0, Math.min(last, distance / this.length * last)) : 0;
+        const i = Math.min(last - 1, Math.floor(along)), mix = along - i;
+        let h = POSILLIPO_ELEVATION_PROFILE_M[i] + (POSILLIPO_ELEVATION_PROFILE_M[i + 1] - POSILLIPO_ELEVATION_PROFILE_M[i]) * mix;
+        h *= 1 - smoothstep(this.lateralFadeStart, this.lateralFadeEnd, lateral);
+        const k = lateral / 4, w = 1 / (1 + k * k * k * k);
+        sumW += w; sumH += w * h; found = true;
       }
     }};
     search(2);
-    if (bestSq > 90 ** 2) search(4);
-    if (!Number.isFinite(bestSq)) return 0;
-    const along = this.length > 0 ? Math.max(0, Math.min(POSILLIPO_ELEVATION_PROFILE_M.length - 1, distance / this.length * (POSILLIPO_ELEVATION_PROFILE_M.length - 1))) : 0;
-    const index = Math.min(POSILLIPO_ELEVATION_PROFILE_M.length - 2, Math.floor(along)), mix = along - index;
-    let height = POSILLIPO_ELEVATION_PROFILE_M[index] + (POSILLIPO_ELEVATION_PROFILE_M[index + 1] - POSILLIPO_ELEVATION_PROFILE_M[index]) * mix;
-    const lateral = Math.sqrt(bestSq);
-    height *= 1 - smoothstep(this.lateralFadeStart, this.lateralFadeEnd, lateral);
+    if (!found) search(4);
+    if (!found || sumW <= 0) return 0;
+    let height = sumH / sumW;
 
     // Keep the church footprint aligned with the regional DTM sample at its OSM centroid.
     const churchDistance = Math.hypot(x - this.church[0], z - this.church[1]);

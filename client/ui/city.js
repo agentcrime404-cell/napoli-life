@@ -1,6 +1,6 @@
 import {MAPS,distance,doors} from '/shared/world.js';
 import {BUS_STOPS} from '/shared/district.js';
-import {napoliServices} from '/shared/napoli.js';import {GAS,POLICE,gasGeom,policeGeom,MENU,COUNTER,MALL_SHOPS,SIM_PRICE,BOATS,BOAT_PRICE,DEALERS,JUKEBOX,JUKEBOX_PRICE,DRINKS,PACKS,ATM_RATE,WEAR,WEAR_ITEMS,COLORS,HAIR_STYLES,BEARD_STYLES,HAIR_COLORS,BARBER_PRICE} from '/shared/catalog.js';
+import {napoliServices} from '/shared/napoli.js';import {FUEL,GAS,POLICE,gasGeom,policeGeom,MENU,COUNTER,MALL_SHOPS,SIM_PRICE,BOATS,BOAT_PRICE,DEALERS,JUKEBOX,JUKEBOX_PRICE,DRINKS,PACKS,ATM_RATE,WEAR,WEAR_ITEMS,COLORS,HAIR_STYLES,BEARD_STYLES,HAIR_COLORS,BARBER_PRICE} from '/shared/catalog.js';
 // Bancomat e fermate dell'autobus: interazioni di quartiere.
 export function installCity({net,api,modal,button,el,notify,closeModal,getMe,getW3,renderer,getUser,onUser}){
  const euro=c=>(c/100).toLocaleString('it-IT',{style:'currency',currency:'EUR'});

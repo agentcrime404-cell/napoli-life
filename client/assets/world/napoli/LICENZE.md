@@ -54,3 +54,6 @@ La geografia reale non implica l'uso di marchi reali. Le insegne e i nomi delle 
 - vehicles/auto-vere/sportscar.glb — "LowPoly_SportsCar_Red" di Belmunt, pacchetto "Low Poly Cars Pack" (7 auto sportive, da Sketchfab/pacchetto): licenza dichiarata dall utente 2026-10-08 "utilizzabile anche in giochi commerciali". Citata nei Crediti per cortesia. Link originale da aggiungere.
 
 - `lighting/sky/kloofendal-mobile.jpg`: versione 1024×512 con esposizione compressa del cielo Poly Haven `kloofendal_48d_partly_cloudy_puresky`, CC0. Generatore riproducibile: `scripts/sky-mobile.mjs`.
+| vehicles/nuovi/utilitaria-golfo.glb | "Utilitaria Golfo" — Quaternius — https://poly.pizza/m/unqqkULtRU | CC0 1.0 (nessun obbligo di citazione) |
+| vehicles/nuovi/suv-vesuvio.glb | "SUV Vesuvio" — Quaternius — https://poly.pizza/m/xsMtZhBkxL | CC0 1.0 (nessun obbligo di citazione) |
+| vehicles/nuovi/sportiva-partenope.glb | "Sportiva Partenope" — Quaternius — https://poly.pizza/m/1mkmFkAz5v | CC0 1.0 (nessun obbligo di citazione) |

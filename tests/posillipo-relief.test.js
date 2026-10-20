@@ -52,3 +52,15 @@ test('OSM still contains the mapped stair sections and upper terrace', () => {
   assert.ok(map.squares.some(square => square.osm === 'way/122851273'));
   assert.ok(map.buildings.some(building => building.osm === 'way/1120756060'));
 });
+
+test('the relief has no vertical walls where switchback legs or the city edge meet', () => {
+  const relief = new PosillipoRelief(map);
+  // Near Piazza Sannazaro the nearest-segment rule made the ground jump ~13 m in 5 m (x 185→190, z 140).
+  let worst = 0;
+  for (let x = 150; x <= 260; x += 2) for (let z = 100; z <= 200; z += 2) {
+    const h = relief.heightAt(x, z);
+    worst = Math.max(worst, Math.abs(relief.heightAt(x + 2, z) - h), Math.abs(relief.heightAt(x, z + 2) - h));
+  }
+  assert.ok(worst < 3, `ground step of ${worst.toFixed(1)} m over 2 m near Piazza Sannazaro`);
+  assert.ok(Math.abs(relief.heightAt(249, 150) - POSILLIPO_ELEVATION_PROFILE_M[0]) < .5, 'Piazza Sannazaro stays at street level');
+});

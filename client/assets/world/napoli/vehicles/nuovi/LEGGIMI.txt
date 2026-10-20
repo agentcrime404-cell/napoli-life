@@ -1,0 +1,20 @@
+VEICOLI NUOVI (modelli 3D scaricati, es. da Sketchfab)
+
+Non copiare i file a mano: usa lo script, che controlla il modello e aggiorna tutto insieme
+(questa cartella, manifest.json, il catalogo shared/vehicles-extra.js e client/assets/world/napoli/LICENZE.md):
+
+  node scripts/aggiungi-veicolo.mjs "C:\percorso\modello.glb" --id vespa-gts --tipo scooter ^
+       --nome "Scooter GTS" --prezzo 900 --colore "#d9d3c3" --lunghezza 1.9 ^
+       --autore "Nome autore" --fonte "https://sketchfab.com/3d-models/..." --licenza "CC BY 4.0"
+
+Tipi: auto, cabrio, moto, scooter, bici.  Lunghezza = lunghezza vera in metri (auto ~4.2, moto ~2.1, scooter ~1.8, bici ~1.8).
+Se il muso del modello e' girato dalla parte sbagliata aggiungi  --yaw 3.1416  (si puo' rifare lo stesso comando).
+Per rimuovere un veicolo:  node scripts/aggiungi-veicolo.mjs --rimuovi vespa-gts
+
+Prova nel browser (con il gioco avviato):  http://localhost:3079/vetrina-veicoli.html
+  La freccia verde deve puntare AVANTI (muso). Se non e' cosi' usa --yaw.
+
+Regole del gioco: formato GLB unico file (niente file esterni), meglio sotto i 30.000 triangoli e sotto 1,5 MB:
+oltre 1,5 MB il modello NON viene caricato sui telefoni (vi resta il modello disegnato dal gioco).
+Licenza ammessa: CC0 o CC BY (con autore e link). Niente marchi visibili o loghi: nomi di gioco inventati.
+Se un modello non si carica, il gioco usa da solo il modello disegnato di riserva: non si rompe nulla.

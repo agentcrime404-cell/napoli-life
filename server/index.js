@@ -37,6 +37,8 @@ export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqli
     if(req.method==='OPTIONS'){res.writeHead(204);res.end();return;}
     if(url.pathname==='/api/stripe/webhook'&&req.method==='POST'){let raw='';for await(const chunk of req){raw+=chunk;if(raw.length>65536)return json(413,{error:'Richiesta troppo grande'});}return json(200,pay.webhook(raw,req.headers['stripe-signature']));}
     if(!rate(req.socket.remoteAddress+(url.pathname.startsWith('/api/auth')?'auth':'api'),url.pathname.startsWith('/api/auth')?20:180))return json(429,{error:'Troppe richieste. Riprova fra un minuto.'});
+    // Stato pubblico per il sito: nessun dato personale, solo numeri.
+    if(url.pathname==='/api/stato'&&req.method==='GET')return json(200,{gioco:'Napoli life',build:BUILD,online:game.players.size,capienza:32});
     // Il QR Wi-Fi è disponibile solo nel server 3D e solo ai dispositivi della rete locale.
     if(url.pathname==='/api/wifi'&&req.method==='GET'){
      if(edition!=='3d'||process.env.RENDER||!isLocalAddress(req.socket.remoteAddress))return json(404,{error:'Condivisione Wi-Fi disponibile solo sulla rete locale di Napoli life'});
@@ -123,7 +125,7 @@ export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqli
    if(process.env.EXPERIMENTAL!=='1'){const p=url.pathname,onPc=['127.0.0.1','::1','::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
     if((edition==='3d'?['/index.html','/3d','/3d.html']:['/3d','/3d.html']).includes(p)||!onPc&&['/real','/real.html'].includes(p)){res.writeHead(302,{Location:'/'});res.end();return;}}
    const prefix=url.pathname.startsWith('/shared/')?'shared':'client';
-   const rel=decodeURIComponent(url.pathname==='/'?'3d.html':url.pathname==='/admin'?'admin.html':url.pathname==='/debug-controls'?'debug-controls.html':url.pathname==='/3d'?'3d.html':url.pathname==='/real'?'real.html':url.pathname==='/manifest.webmanifest'&&edition==='3d'?'manifest-3d.webmanifest':(url.pathname==='/scarica'||url.pathname==='/scarica-3d')?'scarica-3d.html':url.pathname.replace(/^\/(?:shared\/)?/,''));
+   const rel=decodeURIComponent(url.pathname==='/'?'3d.html':url.pathname==='/admin'?'admin.html':url.pathname==='/debug-controls'?'debug-controls.html':url.pathname==='/3d'?'3d.html':(url.pathname==='/sito'||url.pathname==='/sito/')?'sito/index.html':url.pathname==='/real'?'real.html':url.pathname==='/manifest.webmanifest'&&edition==='3d'?'manifest-3d.webmanifest':(url.pathname==='/scarica'||url.pathname==='/scarica-3d')?'scarica-3d.html':url.pathname.replace(/^\/(?:shared\/)?/,''));
    const base=pathResolve(root,prefix),path=pathResolve(base,rel);if(!path.startsWith(base+sep)||rel.split('/').some(p=>p.startsWith('.')))return json(403,{error:'Accesso negato'});
    const file=await readFile(path),head={'Content-Type':({'.html':'text/html','.js':'text/javascript','.css':'text/css','.png':'image/png','.svg':'image/svg+xml','.webmanifest':'application/manifest+json','.json':'application/json'})[extname(path)]||'application/octet-stream','X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin','Permissions-Policy':'camera=(), microphone=(self)','Cache-Control':'no-cache'};
    // Solo HUMANA life 3D: ETag per non riscaricare ciò che non è cambiato, immagini e modelli tenuti in memoria dal telefono per 3 giorni

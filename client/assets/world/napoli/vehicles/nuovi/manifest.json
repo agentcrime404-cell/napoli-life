@@ -1,0 +1,40 @@
+{
+ "modelli": [
+  {
+   "id": "utilitaria-golfo",
+   "file": "utilitaria-golfo.glb",
+   "length": 4,
+   "yaw": 0,
+   "bytes": 174320,
+   "triangles": 3124,
+   "credit": {
+    "text": "Veicolo \"Utilitaria Golfo\": modello di Quaternius, licenza CC0 1.0.",
+    "url": "https://poly.pizza/m/unqqkULtRU"
+   }
+  },
+  {
+   "id": "suv-vesuvio",
+   "file": "suv-vesuvio.glb",
+   "length": 4.7,
+   "yaw": 0,
+   "bytes": 181608,
+   "triangles": 3294,
+   "credit": {
+    "text": "Veicolo \"SUV Vesuvio\": modello di Quaternius, licenza CC0 1.0.",
+    "url": "https://poly.pizza/m/xsMtZhBkxL"
+   }
+  },
+  {
+   "id": "sportiva-partenope",
+   "file": "sportiva-partenope.glb",
+   "length": 4.4,
+   "yaw": 0,
+   "bytes": 175100,
+   "triangles": 3148,
+   "credit": {
+    "text": "Veicolo \"Sportiva Partenope\": modello di Quaternius, licenza CC0 1.0.",
+    "url": "https://poly.pizza/m/1mkmFkAz5v"
+   }
+  }
+ ]
+}

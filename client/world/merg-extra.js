@@ -5,8 +5,12 @@ import {chaletDetail} from './chalet-detail.js';
 import {NAPOLI,napoliCell,napoliServices,signalPhase} from '/shared/napoli.js';
 const H=s=>{let h=0;for(const c of String(s))h=(h*31+c.charCodeAt(0))|0;return Math.abs(h);};
 const lam=(c,o={})=>new THREE.MeshLambertMaterial({color:c,...o}),bas=c=>new THREE.MeshBasicMaterial({color:c});
-function sign(text,w,h,bg,fg='#fff'){const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);g.strokeStyle=fg;g.lineWidth=5;g.strokeRect(5,5,c.width-10,c.height-10);g.fillStyle=fg;g.font='bold '+Math.round(c.height*.42)+'px system-ui,sans-serif';g.textAlign='center';g.textBaseline='middle';
- let t=text;while(g.measureText(t).width>c.width-30&&t.length>6)t=t.slice(0,-2);if(t!==text)t+='…';g.fillText(t,c.width/2,c.height/2+2);const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tx,side:THREE.DoubleSide}));}
+function sign(text,w,h,bg,fg='#fff'){const c=document.createElement('canvas');c.width=512;c.height=Math.round(512*h/w);const g=c.getContext('2d');g.fillStyle=bg;g.fillRect(0,0,c.width,c.height);g.strokeStyle=fg;g.lineWidth=5;g.strokeRect(5,5,c.width-10,c.height-10);g.fillStyle=fg;g.textAlign='center';g.textBaseline='middle';
+ // Rimpicciolisce il testo finché entra (prima veniva tagliato: «CARBURAN…»), e taglia solo se resta troppo lungo.
+ let size=Math.round(c.height*.42);const fit=()=>{g.font='bold '+size+'px system-ui,sans-serif';return g.measureText(t).width<=c.width-30;};let t=text;while(!fit()&&size>c.height*.2)size--;
+ while(g.measureText(t).width>c.width-30&&t.length>6)t=t.slice(0,-2);if(t!==text)t+='…';g.fillText(t,c.width/2,c.height/2+2);const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;
+ // Due facce, una per lato: con DoubleSide la scritta vista da dietro era a specchio.
+ const geo=new THREE.PlaneGeometry(w,h),mat=new THREE.MeshBasicMaterial({map:tx}),out=new THREE.Group(),front=new THREE.Mesh(geo,mat),back=new THREE.Mesh(geo,mat);back.rotation.y=Math.PI;out.add(front,back);return out;}
 const box=(g,sx,sy,sz,x,y,z,m)=>{const q=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),m);q.position.set(x,y,z);g.add(q);return q;};
 export class MergExtra{
  constructor(w){this.w=w;this.boats=[];this.sigMat=null;this.t=0;this.bt=0;this.built=false;this.fuelBuilt=false;}
@@ -21,7 +25,7 @@ export class MergExtra{
    box(g,.3,6,.3,-5.4,3,2.4,gray);const sg=sign('CARBURANTE',3.2,1.1,'#d9262c');sg.position.set(-5.4,6.4,2.4);g.add(sg);
    w.bake?.(g);Z.add(g);}
   this.fuelBuilt=true;}
- build(){const w=this.w,S=napoliServices(),Z=w.static;if(!S)return;this.buildFuelStations();
+ build(){const w=this.w,S=napoliServices(),Z=w.static;if(!S)return;this.buildFuelStations();const gray=lam('#666b73');
   // ---- caserme/ambulatori veri: cartello sulla porta, mezzi davanti, lampeggiante ----
   for(const kind of ['police','hospital']){for(const f of S[kind]){const g=new THREE.Group();g.position.set(f.x,w.lev(f.x,f.y),f.y);g.rotation.y=f.h;const blue=kind==='police';
     box(g,.25,4.4,.25,-1.6,2.2,0,gray);const sg=sign(f.name,3.4,1.1,blue?'#16357a':'#c0262d');sg.position.set(-1.6,4.6,.05);g.add(sg);

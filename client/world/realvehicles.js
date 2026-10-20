@@ -34,7 +34,7 @@ function enhanceVehicleMaterials(root,w){
   }
  });
 }
-export function loadRealVehicles(w){return w.realVehicleLoad??=loadOnce(w);}
+export function loadRealVehicles(w){return w.realVehicleLoad??=loadOnce(w).then(()=>loadExtraVehicles(w));}
 async function loadOnce(w){w.realV??={};const loader=new GLTFLoader(),cfg={},status=w.realVehicleStatus={state:'loading',mobile:!!w.mobile,requested:[],loaded:[],skipped:[],failed:[]};
  for(const d of ['moto-vere','auto-vere']){try{const r=await fetch(BASE+d+'/config.json',{cache:'no-cache'});if(r.ok)Object.assign(cfg,await r.json());}catch{}}
  const selected=realVehicleAssetsFor(!!w.mobile);status.requested=selected.map(asset=>asset.id);
@@ -50,3 +50,38 @@ async function loadOnce(w){w.realV??={};const loader=new GLTFLoader(),cfg={},sta
  status.state='ready';
 }
 export const realCopy=(w,id)=>{const t=w.realV?.[id];return t?t.clone(true):null;};
+
+// ── Veicoli nuovi aggiunti con scripts/aggiungi-veicolo.mjs ──────────────────────────────
+// Il manifest elenca i GLB (cartella nuovi/). Un modello che manca, è rotto o è troppo pesante per il telefono
+// viene semplicemente saltato: il catalogo (shared/vehicles-extra.js) ha sempre un modello disegnato di riserva.
+export const EXTRA_VEHICLE_MANIFEST=BASE+'nuovi/manifest.json';
+/** Mette in scala un modello: lunghezza vera in metri lungo z, muso verso +z, ruote a terra, centrato. */
+export function normalizeVehicleModel(root,{yaw=0,length=4}={}){
+ root.rotation.y=yaw;root.updateMatrixWorld(true);
+ let b=new THREE.Box3().setFromObject(root),s=b.getSize(new THREE.Vector3());
+ if(s.x>s.z*1.2){root.rotation.y+=Math.PI/2;root.updateMatrixWorld(true);b=new THREE.Box3().setFromObject(root);s=b.getSize(new THREE.Vector3());}
+ root.scale.multiplyScalar(length/Math.max(s.z,.01));root.updateMatrixWorld(true);
+ b=new THREE.Box3().setFromObject(root);const c=b.getCenter(new THREE.Vector3());root.position.set(-c.x,-b.min.y,-c.z);
+ const box=new THREE.Group();box.add(root);box.updateMatrixWorld(true);
+ const size=new THREE.Box3().setFromObject(box).getSize(new THREE.Vector3());
+ return {box,size};
+}
+export async function loadExtraVehicles(w){
+ const status=w.realVehicleStatus??={state:'ready',loaded:[],skipped:[],failed:[]};
+ const extra=status.extra={loaded:[],skipped:[],failed:[]};w.extraVehicleCredits=[];w.realV??={};
+ try{
+  const r=await fetch(EXTRA_VEHICLE_MANIFEST,{cache:'no-cache'});if(!r.ok)return extra;
+  const list=(await r.json()).modelli||[],loader=new GLTFLoader();
+  await Promise.all(list.map(async m=>{try{
+   if(w.mobile&&m.bytes>MOBILE_MODEL_LIMIT){extra.skipped.push({id:m.id,reason:'sopra il limite mobile'});return;}
+   const g=await new Promise((ok,no)=>loader.load(BASE+'nuovi/'+m.file+'?v='+(m.bytes||''),ok,undefined,no));
+   const {box,size}=normalizeVehicleModel(g.scene,{yaw:m.yaw||0,length:m.length||4});
+   enhanceVehicleMaterials(g.scene,w);
+   let tris=0;g.scene.traverse(o=>{if(o.isMesh)tris+=(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3;});
+   box.userData.real=true;box.userData.seat=m.seat||{x:.36,y:-size.y*.5,z:0,hw:size.x/2};
+   w.realV[m.id]=box;extra.loaded.push({id:m.id,triangles:Math.round(tris)});
+   if(m.credit?.text)w.extraVehicleCredits.push({text:m.credit.text,url:m.credit.url||''});
+  }catch(e){extra.failed.push({id:m.id,message:String(e?.message||e)});console.warn('[veicoli nuovi]',m.id,e?.message||e);}}));
+ }catch(e){console.warn('[veicoli nuovi] manifest non leggibile',e?.message||e);}
+ return extra;
+}

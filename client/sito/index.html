@@ -1,0 +1,587 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#08121c">
+<title>Napoli life · Il gioco sociale 3D di Napoli</title>
+<meta name="description" content="Napoli life: gioco sociale 3D multiplayer ambientato a Mergellina, Napoli, ricostruita in scala 1:1. Passeggia, chatta, entra nei locali, guida e vivi la città con gli amici. Gratis, nel browser e su Android.">
+<meta property="og:title" content="Napoli life – Vivi Napoli insieme">
+<meta property="og:description" content="Gioco sociale 3D nel browser e su Android, ambientato nella Mergellina vera.">
+<meta property="og:image" content="/sito/img/hero.webp">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08121c;--bg2:#0d1b2a;--card:#0f2133;--card2:#13283d;--ink:#f1f5fa;--mut:#9fb2c4;--dim:#6f8396;
+  --gold:#f4d597;--gold2:#e2b56a;--teal:#7fe8d1;--line:#ffffff17;--line2:#ffffff26;
+  --rosso:#d8412f;--verde:#1f8a70;--crema:#f6ead2;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:22px;--ease:cubic-bezier(.2,.7,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px;-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.65 var(--sans);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img{max-width:100%;display:block}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
+.wrap{width:min(1180px,100% - 32px);margin-inline:auto}
+section{padding:110px 0;position:relative}
+h1,h2,h3{font-family:var(--serif);line-height:1.08;letter-spacing:-.01em}
+h2{font-size:clamp(2.1rem,5vw,3.6rem);margin-bottom:14px}
+h2 em,h1 em{font-style:italic;font-weight:600;background:linear-gradient(100deg,var(--gold) 10%,#fff3d6 45%,var(--gold2) 70%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.lead{color:var(--mut);max-width:60ch;font-size:1.08rem;margin-bottom:44px}
+.kicker{display:inline-flex;align-items:center;gap:10px;text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;font-weight:800;color:var(--teal);margin-bottom:16px}
+.kicker::before{content:"";width:28px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--verde) 33%,var(--crema) 33% 66%,var(--rosso) 66%)}
+.center{text-align:center}.center .lead{margin-inline:auto}
+.btn{position:relative;display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border-radius:999px;background:linear-gradient(100deg,var(--gold),var(--gold2));color:#1a1205;font-weight:800;text-decoration:none;font-size:1rem;border:0;cursor:pointer;box-shadow:0 10px 30px #e2b56a3a,inset 0 1px 0 #fff8;transition:transform .25s var(--ease),box-shadow .25s;overflow:hidden;isolation:isolate}
+.btn::after{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 30%,#fff9 50%,transparent 70%);transform:translateX(-120%);transition:transform .8s var(--ease);z-index:-1}
+.btn:hover{transform:translateY(-3px);box-shadow:0 18px 40px #e2b56a55,inset 0 1px 0 #fff8}
+.btn:hover::after{transform:translateX(120%)}
+.btn.ghost{background:#ffffff10;color:var(--ink);border:1px solid #ffffff40;box-shadow:none;backdrop-filter:blur(8px)}
+.btn.ghost:hover{background:#ffffff1c}
+.btn svg{width:18px;height:18px}
+
+/* nav */
+header{position:fixed;inset:0 0 auto;z-index:50;transition:background .35s,border-color .35s;border-bottom:1px solid transparent}
+header.solid{background:#08121ccc;backdrop-filter:blur(14px) saturate(140%);border-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+.logo{font-family:var(--serif);font-weight:800;letter-spacing:.16em;color:var(--gold);text-decoration:none;font-size:1.35rem;display:flex;align-items:baseline}
+.logo small{font:italic 500 .82em var(--serif);letter-spacing:0;color:var(--teal);margin-left:4px}
+nav ul{list-style:none;display:flex;gap:26px;align-items:center}
+nav a{text-decoration:none;color:#d6e0ea;font-size:.92rem;font-weight:600;position:relative}
+nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .3s var(--ease)}
+nav ul a:hover::after{transform:scaleX(1)}
+.nav .btn{padding:10px 20px;font-size:.9rem}
+.menu-btn{display:none;background:#ffffff12;border:1px solid var(--line2);border-radius:12px;width:44px;height:44px;cursor:pointer}
+@media(max-width:960px){
+  nav ul{position:fixed;inset:70px 0 auto;flex-direction:column;align-items:stretch;gap:0;background:#08121cf2;backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:8px 20px 20px;transform:translateY(-12px);opacity:0;pointer-events:none;transition:.3s var(--ease)}
+  nav ul.open{transform:none;opacity:1;pointer-events:auto}
+  nav ul li a{display:block;padding:14px 4px;border-bottom:1px solid var(--line);font-size:1.05rem}
+  nav ul a::after{display:none}
+  .menu-btn{display:grid;place-items:center}
+  .nav .btn.play{display:none}
+}
+
+/* hero */
+.hero{min-height:100svh;display:grid;align-items:end;padding:0;overflow:hidden;background:#08121c}
+/* l'immagine ha la scritta NAPOLILIFE in alto: si ritaglia la parte superiore così non si sovrappone al titolo */
+.hero .bg{position:absolute;inset:-6%;background:#08121c url(/sito/img/hero.webp) 62% 100%/auto 138% no-repeat;animation:kb 32s ease-in-out infinite alternate;will-change:transform}
+@keyframes kb{from{transform:scale(1.02)}to{transform:scale(1.12) translate(-2%,-1.5%)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:1;background:radial-gradient(120% 80% at 70% 20%,#08121c00 30%,#08121c99 75%),linear-gradient(180deg,#08121c88 0%,#08121c00 25%,#08121c00 45%,#08121cf5 92%)}
+#fx{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+.hero .wrap{position:relative;z-index:3;padding:140px 0 40px}
+.hero h1{font-size:clamp(3rem,9vw,7rem);max-width:12ch;margin-bottom:18px;text-shadow:0 6px 40px #000a}
+.hero .sub{font-size:clamp(1.05rem,2vw,1.28rem);max-width:52ch;color:#e6eef6;margin-bottom:10px;text-shadow:0 2px 18px #000}
+.motto{font:italic 500 1.15rem var(--serif);color:var(--gold);margin-bottom:30px}
+.cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+.live{display:inline-flex;align-items:center;gap:10px;font-size:.9rem;background:#08121cb0;border:1px solid var(--line2);padding:8px 16px;border-radius:999px;backdrop-filter:blur(8px)}
+.dot{width:9px;height:9px;border-radius:50%;background:#7a8794}
+.live.on .dot{background:#4ade80;box-shadow:0 0 0 0 #4ade80aa;animation:ping 2s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 10px #4ade8000}100%{box-shadow:0 0 0 0 #4ade8000}}
+.hero-foot{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap;margin-top:44px}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{background:#ffffff0d;border:1px solid var(--line2);border-radius:18px;padding:14px 20px;backdrop-filter:blur(10px);min-width:118px}
+.stat b{display:block;font:700 1.7rem var(--serif);color:var(--gold);line-height:1.1}
+.stat span{font-size:.78rem;color:var(--mut)}
+.scroll{display:flex;flex-direction:column;align-items:center;gap:8px;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);text-decoration:none}
+.scroll i{width:24px;height:38px;border:2px solid #ffffff55;border-radius:14px;position:relative}
+.scroll i::after{content:"";position:absolute;left:50%;top:7px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--gold);animation:wheel 1.8s infinite}
+@keyframes wheel{to{transform:translateY(12px);opacity:0}}
+@media(min-aspect-ratio:2/1){.hero .bg{background-size:cover;background-position:62% 85%}}
+@media(max-width:700px){.scroll{display:none}.stat{flex:1 1 40%;min-width:0;padding:12px 14px}.stat b{font-size:1.4rem}.hero .wrap{padding-top:110px}}
+
+/* tenda */
+.tenda{height:30px;background:repeating-linear-gradient(90deg,var(--verde) 0 40px,var(--crema) 40px 80px,var(--rosso) 80px 120px);-webkit-mask:linear-gradient(#000,#000) top/100% 12px no-repeat,radial-gradient(20px 18px at 50% 0,#000 97%,#0000) 0 12px/40px 18px repeat-x;mask:linear-gradient(#000,#000) top/100% 12px no-repeat,radial-gradient(20px 18px at 50% 0,#000 97%,#0000) 0 12px/40px 18px repeat-x;opacity:.92;filter:drop-shadow(0 6px 8px #0006)}
+
+/* marquee */
+.marquee{overflow:hidden;background:var(--bg2);border-block:1px solid var(--line);padding:20px 0;white-space:nowrap;-webkit-mask:linear-gradient(90deg,#0000,#000 10%,#000 90%,#0000);mask:linear-gradient(90deg,#0000,#000 10%,#000 90%,#0000)}
+.marquee div{display:inline-block;animation:scorri 55s linear infinite;font:italic 500 1.35rem var(--serif);color:var(--gold)}
+.marquee span{margin:0 28px}.marquee i{color:var(--rosso);font-style:normal;font-size:.8em}
+@keyframes scorri{to{transform:translateX(-50%)}}
+
+/* galleria */
+.gal{display:grid;grid-template-columns:1fr;gap:18px}
+.stage{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:16/9;background:#000;border:1px solid var(--line2);box-shadow:0 40px 80px #0009}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.04);transition:opacity .9s var(--ease),transform 6s var(--ease)}
+.stage img.on{opacity:1;transform:scale(1)}
+.stage .capt{position:absolute;left:0;right:0;bottom:0;padding:60px 26px 22px;background:linear-gradient(0deg,#000c,#0000);font-size:1rem}
+.stage .capt b{font:600 1.5rem var(--serif);display:block;color:#fff}
+.stage .badge{position:absolute;top:16px;left:16px;z-index:2;background:#08121cc0;border:1px solid var(--line2);border-radius:999px;padding:6px 14px;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;font-weight:700;backdrop-filter:blur(6px)}
+.thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.thumb{border:1px solid var(--line2);border-radius:16px;overflow:hidden;padding:0;background:#000;cursor:pointer;position:relative;aspect-ratio:16/10;opacity:.6;transition:opacity .3s,transform .3s var(--ease),border-color .3s}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.thumb span{position:absolute;left:8px;bottom:6px;font-size:.75rem;font-weight:700;text-shadow:0 1px 6px #000}
+.thumb:hover{opacity:.9;transform:translateY(-3px)}
+.thumb.on{opacity:1;border-color:var(--gold)}
+@media(max-width:700px){.thumbs{grid-template-columns:repeat(5,minmax(110px,1fr));overflow-x:auto;padding-bottom:6px}.stage{border-radius:18px}.stage .capt{padding:40px 16px 14px;font-size:.9rem}.stage .capt b{font-size:1.15rem}}
+
+/* bento */
+.bento{display:grid;gap:16px;grid-template-columns:repeat(4,1fr)}
+.tile{position:relative;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:28px;overflow:hidden;transition:transform .35s var(--ease),border-color .35s}
+.tile::before{content:"";position:absolute;inset:0;background:radial-gradient(400px circle at var(--mx,50%) var(--my,0%),#f4d59722,transparent 45%);opacity:0;transition:opacity .35s;pointer-events:none}
+.tile:hover{border-color:#f4d59755}
+.tile:hover::before{opacity:1}
+.tile.big{grid-column:span 2;grid-row:span 2;display:flex;flex-direction:column;justify-content:flex-end;min-height:380px;background:#000}
+.tile.big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.75;transition:transform 1.2s var(--ease)}
+.tile.big:hover img{transform:scale(1.05)}
+.tile.big::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#08121cf0 10%,#08121c00 70%)}
+.tile.big>*:not(img){position:relative;z-index:2}
+.tile.wide{grid-column:span 2}
+.maj{width:56px;height:56px;border-radius:16px;display:grid;place-items:center;font-size:1.7rem;margin-bottom:16px;background:radial-gradient(circle at 50% 50%,var(--crema) 0 17%,transparent 18%),conic-gradient(from 45deg,#1f6fb2 0 25%,#e8b83a 0 50%,#1f6fb2 0 75%,#e8b83a 0);box-shadow:inset 0 0 0 3px #fff7,0 8px 20px #0007}
+.tile h3{font-size:1.3rem;margin-bottom:8px}
+.tile.big h3{font-size:2rem}
+.tile p{color:var(--mut);font-size:.95rem}
+@media(max-width:980px){.bento{grid-template-columns:repeat(2,1fr)}.tile.big{grid-row:auto;min-height:320px}}
+@media(max-width:600px){.bento{grid-template-columns:1fr}.tile.big,.tile.wide{grid-column:auto}}
+
+/* mappa */
+.mapbox{position:relative;border-radius:28px;border:1px solid var(--line2);overflow:hidden;background:#0a2238;box-shadow:0 40px 80px #0008}
+.mapscroll{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.map{position:relative;min-width:900px;aspect-ratio:3460/1370}
+.map>img{position:absolute;inset:0;width:100%;height:100%}
+.pin{position:absolute;transform:translate(-50%,-100%);background:none;border:0;cursor:pointer;padding:0;display:flex;flex-direction:column;align-items:center}
+.pin i{width:16px;height:16px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 4px #f4d59740,0 0 18px #f4d597;display:block;animation:glow 2.4s infinite}
+.pin span{margin-bottom:6px;background:#08121ce6;border:1px solid var(--line2);border-radius:10px;padding:4px 10px;font-size:.78rem;font-weight:700;white-space:nowrap;opacity:.94;transition:transform .25s var(--ease),background .25s}
+.pin:hover span,.pin.on span{background:var(--gold);color:#1a1205;transform:translateY(-3px)}
+@keyframes glow{50%{box-shadow:0 0 0 9px #f4d59700,0 0 26px #f4d597}}
+.mapinfo{position:absolute;right:18px;bottom:18px;width:min(320px,calc(100% - 36px));background:#08121ce8;border:1px solid var(--line2);border-radius:18px;padding:18px 20px;backdrop-filter:blur(10px)}
+.mapinfo b{font:600 1.25rem var(--serif);color:var(--gold);display:block;margin-bottom:4px}
+.mapinfo p{font-size:.9rem;color:var(--mut)}
+.maplegend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-size:.85rem;color:var(--mut)}
+.maplegend span::before{content:"";display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+@media(max-width:700px){.mapinfo{position:static;width:auto;margin:12px}.mapbox{border-radius:18px}}
+
+/* locali */
+.railwrap{position:relative}
+.rail{display:flex;gap:18px;overflow-x:auto;padding:10px 16px 26px;margin:0 -16px;scroll-snap-type:x mandatory;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.loc{flex:0 0 min(290px,76vw);scroll-snap-align:start;background:radial-gradient(120% 80% at 50% 25%,#1d4467,var(--card) 70%);border:1px solid var(--line);border-radius:24px;padding:18px 16px 22px;text-align:center;transition:transform .35s var(--ease),border-color .35s}
+.loc:hover{transform:translateY(-6px);border-color:#f4d59766}
+.loc img{height:190px;width:100%;object-fit:contain;margin-bottom:10px;filter:drop-shadow(0 18px 20px #000a);transition:transform .4s var(--ease)}
+.loc:hover img{transform:scale(1.07) translateY(-4px)}
+.loc h3{font-size:1.15rem}
+.loc p{font-size:.88rem;color:var(--mut)}
+.arrows{display:flex;gap:10px;justify-content:flex-end;margin-bottom:8px}
+.arrow{width:48px;height:48px;border-radius:50%;border:1px solid var(--line2);background:#ffffff0d;cursor:pointer;font-size:1.2rem;transition:background .2s}
+.arrow:hover{background:#ffffff1f}
+.cap{font-size:.84rem;color:var(--dim);margin-top:8px}
+
+/* giorno/sera */
+.cmp{position:relative;border-radius:28px;overflow:hidden;border:1px solid var(--line2);aspect-ratio:16/9;background:#000;user-select:none;box-shadow:0 40px 80px #0009}
+.cmp img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cmp .top{clip-path:inset(0 0 0 50%)}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;margin:0}
+.cmp .bar{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 18px #000;pointer-events:none}
+.cmp .bar::after{content:"⟷";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:50px;height:50px;border-radius:50%;background:#fff;color:#08121c;display:grid;place-items:center;font-size:1.3rem;font-weight:800;box-shadow:0 6px 20px #0008}
+.cmp .tag{position:absolute;bottom:16px;padding:6px 14px;border-radius:999px;background:#08121cc8;font-size:.82rem;font-weight:700;backdrop-filter:blur(6px)}
+.cmp .t1{left:16px}.cmp .t2{right:16px}
+@media(max-width:700px){.cmp{aspect-ratio:4/3;border-radius:18px}}
+
+/* personaggi */
+.cast{display:grid;grid-template-columns:repeat(8,1fr);gap:8px;align-items:end}
+.pg{text-align:center}
+.pg img{height:min(230px,24vw);width:auto;margin:0 auto;filter:drop-shadow(0 14px 16px #000a) grayscale(.15);transition:transform .35s var(--ease),filter .35s}
+.pg:hover img{transform:translateY(-12px) scale(1.05);filter:drop-shadow(0 20px 22px #000c) grayscale(0)}
+.pg b{display:block;margin-top:10px;font:600 1.05rem var(--serif);color:var(--gold)}
+.stage-floor{height:16px;margin-top:-6px;border-radius:50%;background:radial-gradient(closest-side,#f4d59733,transparent)}
+@media(max-width:800px){.cast{grid-template-columns:repeat(4,1fr);row-gap:26px}.pg img{height:170px}}
+
+/* passi + piattaforme */
+.steps{display:grid;gap:18px;grid-template-columns:repeat(3,1fr);counter-reset:s}
+.step{counter-increment:s;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:var(--r);padding:30px 28px;position:relative;overflow:hidden}
+.step::before{content:counter(s);position:absolute;right:18px;top:-6px;font:800 6rem var(--serif);color:#ffffff08;line-height:1}
+.step b{display:block;font:600 1.3rem var(--serif);margin-bottom:6px;color:var(--gold)}
+.step span{color:var(--mut)}
+.plat{display:grid;gap:18px;grid-template-columns:repeat(3,1fr);margin-top:22px}
+.plat .tile .btn{margin-top:18px;padding:12px 20px;font-size:.92rem}
+@media(max-width:900px){.steps,.plat{grid-template-columns:1fr}}
+
+/* stato */
+.status{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:start}
+.note{background:linear-gradient(160deg,#f4d5971f,#f4d59708);border:1px solid #f4d59755;border-radius:var(--r);padding:28px}
+.note p{color:#efe3c9}.note b{color:var(--gold)}
+.timeline{position:relative;padding-left:28px}
+.timeline::before{content:"";position:absolute;left:8px;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--gold),#f4d59700)}
+.tl{position:relative;margin-bottom:20px}
+.tl::before{content:"";position:absolute;left:-26px;top:7px;width:14px;height:14px;border-radius:50%;background:var(--bg);border:3px solid var(--gold)}
+.tl b{display:block;font-weight:700}
+.tl span{color:var(--mut);font-size:.93rem}
+@media(max-width:900px){.status{grid-template-columns:1fr}}
+
+/* faq */
+.faq{max-width:820px;margin:0 auto}
+details{border-bottom:1px solid var(--line);padding:6px 0}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 4px;font-weight:700;font-size:1.06rem}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font:400 1.6rem var(--serif);color:var(--gold);transition:transform .3s var(--ease)}
+details[open] summary::after{transform:rotate(45deg)}
+details p{color:var(--mut);padding:0 4px 18px;max-width:70ch}
+
+/* finale */
+.finale{padding:150px 0;text-align:center;overflow:hidden}
+.finale .bg{position:absolute;inset:0;background:url(/sito/img/gioco-notte.webp) center/cover;opacity:.55}
+.finale::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 70% at 50% 50%,#08121c55,#08121c)}
+.finale .wrap{position:relative;z-index:2}
+.finale h2{font-size:clamp(2.6rem,7vw,5rem)}
+.finale .cta{justify-content:center;margin-top:30px}
+.credits{font-size:.9rem;color:var(--mut);display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.credits div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.credits b{color:var(--ink)}
+footer{border-top:1px solid var(--line);padding:40px 0 calc(40px + env(safe-area-inset-bottom));color:var(--mut);font-size:.88rem}
+.foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer nav a{margin-right:18px;text-decoration:none;color:var(--mut)}
+footer nav a:hover{color:var(--gold)}
+
+/* apparizione */
+.rv{opacity:0;transform:translateY(30px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<header id="hdr">
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="Napoli life, torna all'inizio">NAPOLI<small>life</small></a>
+    <nav aria-label="Principale">
+      <ul id="menu">
+        <li><a href="#guarda">Il gioco</a></li>
+        <li><a href="#vita">Cosa fai</a></li>
+        <li><a href="#mappa">Mappa</a></li>
+        <li><a href="#locali">Locali</a></li>
+        <li><a href="#iniziare">Inizia</a></li>
+        <li><a href="#domande">Domande</a></li>
+      </ul>
+    </nav>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a class="btn play" href="/">Gioca ora</a>
+      <button class="menu-btn" id="menuBtn" aria-label="Apri il menu" aria-expanded="false" aria-controls="menu">☰</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="bg" role="img" aria-label="Il lungomare di Napoli al tramonto con Castel dell'Ovo e il Vesuvio"></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <p class="kicker">Gioco sociale 3D · Multiplayer · Gratis</p>
+    <h1>Vivi <em>Napoli</em> insieme agli altri.</h1>
+    <p class="sub">Mergellina ricostruita metro per metro: passeggia sul lungomare, entra nei locali, chiacchiera, guida e costruisci la tua vita in città. Nel browser e su Android.</p>
+    <p class="motto">“Napule è mille culure.”</p>
+    <div class="cta">
+      <a class="btn" href="/"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>Gioca subito, è gratis</a>
+      <a class="btn ghost" href="/scarica-3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>Scarica per Android</a>
+      <span class="live" id="live" role="status"><span class="dot"></span><span id="liveTxt">Controllo il server…</span></span>
+    </div>
+    <div class="hero-foot">
+      <div class="stats" aria-label="Mergellina in numeri">
+        <div class="stat"><b data-n="2.5" data-d="1">0</b><span>km di costa</span></div>
+        <div class="stat"><b data-n="1601">0</b><span>palazzi veri</span></div>
+        <div class="stat"><b data-n="295">0</b><span>porte di locali</span></div>
+        <div class="stat"><b data-n="32">0</b><span>giocatori insieme</span></div>
+      </div>
+      <a class="scroll" href="#guarda"><i></i>Scopri</a>
+    </div>
+  </div>
+</section>
+
+<div class="tenda" aria-hidden="true"></div>
+<div class="marquee" aria-hidden="true"><div id="mq"></div></div>
+
+<section id="guarda">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Guarda il gioco</p>
+      <h2>Mergellina, <em>dentro</em> il gioco.</h2>
+      <p class="lead">Queste sono immagini vere, catturate dentro Napoli life senza ritocchi: dal porto di giorno al lungomare acceso di notte.</p>
+    </div>
+    <div class="gal rv d1">
+      <div class="stage" id="stage">
+        <span class="badge">Immagine reale del gioco</span>
+        <img class="on" src="/sito/img/gioco-porto.webp" width="1600" height="900" alt="Il porto di Mergellina di giorno, con i pontili, le barche e la collina di Posillipo" data-t="Il porto di Mergellina" data-c="Pontili, barche ormeggiate e la collina di Posillipo alle spalle.">
+        <img src="/sito/img/gioco-strada.webp" width="1600" height="900" alt="Una strada di Mergellina con palazzi colorati, lo chalet e i tavolini all'aperto" loading="lazy" data-t="A piedi tra i palazzi" data-c="Persiane verdi, balconi in ferro e i tavolini dello chalet.">
+        <img src="/sito/img/gioco-notte.webp" width="1600" height="900" alt="Il lungomare di notte con le finestre illuminate" loading="lazy" data-t="Quando cala la sera" data-c="Le finestre si accendono una a una: un giorno nel gioco dura 40 minuti.">
+        <img src="/sito/img/gioco-castello.webp" width="1600" height="900" alt="Castel dell'Ovo e il Borgo Marinari visti dal mare" loading="lazy" data-t="Castel dell’Ovo" data-c="Il castello sulla sua pianta vera e le case basse del Borgo Marinari.">
+        <img src="/sito/img/gioco-villa.webp" width="1600" height="900" alt="La Villa Comunale con la pista ciclabile sul mare" loading="lazy" data-t="Villa Comunale e Caracciolo" data-c="Prati, palme, chioschi e la pista ciclabile rossa lungo il mare.">
+        <div class="capt"><b id="capT">Il porto di Mergellina</b><span id="capC">Pontili, barche ormeggiate e la collina di Posillipo alle spalle.</span></div>
+      </div>
+      <div class="thumbs" role="tablist" aria-label="Scegli l'immagine">
+        <button class="thumb on" role="tab" aria-selected="true" data-i="0"><img src="/sito/img/gioco-porto.webp" alt="" loading="lazy"><span>Porto</span></button>
+        <button class="thumb" role="tab" aria-selected="false" data-i="1"><img src="/sito/img/gioco-strada.webp" alt="" loading="lazy"><span>Strada</span></button>
+        <button class="thumb" role="tab" aria-selected="false" data-i="2"><img src="/sito/img/gioco-notte.webp" alt="" loading="lazy"><span>Notte</span></button>
+        <button class="thumb" role="tab" aria-selected="false" data-i="3"><img src="/sito/img/gioco-castello.webp" alt="" loading="lazy"><span>Castello</span></button>
+        <button class="thumb" role="tab" aria-selected="false" data-i="4"><img src="/sito/img/gioco-villa.webp" alt="" loading="lazy"><span>Villa</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="vita" style="background:linear-gradient(180deg,var(--bg),var(--bg2))">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Cosa fai</p>
+      <h2>Una città da <em>vivere</em>, non da combattere.</h2>
+      <p class="lead">Le persone che vedi sono giocatori veri, collegati in quel momento. Qui si chiacchiera, si lavora, si esce la sera.</p>
+    </div>
+    <div class="bento">
+      <article class="tile big rv"><img src="/sito/img/gioco-mobile.png" alt="Schermata del gioco su telefono con chat, amici, voce e minimappa" loading="lazy"><div class="maj">🗺️</div><h3>Mergellina vera, in 1:1</h3><p>Strade, palazzi, costa e piazze arrivano da OpenStreetMap: da Mergellina a Castel dell’Ovo, a misura reale.</p></article>
+      <article class="tile rv d1"><div class="maj">💬</div><h3>Chat, amici e voce</h3><p>Scrivi nella stanza, aggiungi amici, parla in voce e chiama dal telefono di gioco.</p></article>
+      <article class="tile rv d2"><div class="maj">🍕</div><h3>Locali veri dentro</h3><p>Bar, pizzerie, osterie, negozi, banca e barbiere: entri, ti siedi, ordini.</p></article>
+      <article class="tile rv d1"><div class="maj">🛵</div><h3>Guida e benzina</h3><p>Auto, scooter, moto e bici. Il pieno si fa ai distributori di Mergellina.</p></article>
+      <article class="tile rv d2"><div class="maj">🔧</div><h3>Lavori civili</h3><p>Meccanico tra guasti e riparazioni, o tassista con tassametro e corse pagate.</p></article>
+      <article class="tile wide rv"><div class="maj">🏡</div><h3>Case, ville e Chalet</h3><p>Compra il tuo spazio, come lo Chalet Ciro, e invita gli amici. Alcune ville si visitano davvero.</p></article>
+      <article class="tile rv d1"><div class="maj">📱</div><h3>Telefono di gioco</h3><p>Messaggi, chiamate e app, per restare in contatto con chi incontri.</p></article>
+      <article class="tile rv d2"><div class="maj">🌅</div><h3>Città viva</h3><p>Giorno e notte, meteo, semafori, pedoni, barche e il camion ESI dei rifiuti.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="mappa">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">La mappa</p>
+      <h2>Dal Sebeto a <em>Castel dell’Ovo</em>.</h2>
+      <p class="lead">Questa è la mappa vera del gioco, disegnata dai suoi stessi dati: quasi 1.500 palazzi e più di 1.600 strade. Tocca un luogo.</p>
+    </div>
+    <div class="mapbox rv d1">
+      <div class="mapscroll">
+        <div class="map" id="map">
+          <img src="/sito/img/mappa-mergellina.svg" alt="Mappa di Mergellina, Chiaia e Castel dell'Ovo come appare nel gioco" loading="lazy" width="3460" height="1370">
+        </div>
+      </div>
+      <div class="mapinfo" id="mapinfo" aria-live="polite"><b>Scegli un luogo</b><p>Ogni punto si trova nel gioco nella sua posizione reale.</p></div>
+    </div>
+    <div class="maplegend rv"><span style="--c:#e2b56a">Strade principali</span><span style="--c:#41556a">Palazzi</span><span style="--c:#24453a">Parchi</span><span style="--c:#123a5c">Golfo</span></div>
+    <p class="cap">Dati © OpenStreetMap contributors (ODbL). Alcune forme nel gioco sono stilizzate.</p>
+  </div>
+</section>
+
+<section id="locali" style="background:linear-gradient(180deg,var(--bg),var(--bg2))">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Dove andare</p>
+      <h2>I locali del <em>golfo</em>.</h2>
+      <p class="lead">Ogni locale ha il suo interno. Scegli dove cenare, farti la barba o ballare.</p>
+    </div>
+    <div class="railwrap rv d1">
+      <div class="arrows"><button class="arrow" id="prev" aria-label="Locali precedenti">←</button><button class="arrow" id="next" aria-label="Locali successivi">→</button></div>
+      <div class="rail" id="rail" tabindex="0" aria-label="Locali del gioco">
+        <article class="loc"><img src="/sito/img/loc-pizzeria.webp" width="520" height="425" loading="lazy" alt="Pizzeria con forno a legna e tende tricolori"><h3>Pizzeria del Golfo</h3><p>Forno a legna e tende tricolori.</p></article>
+        <article class="loc"><img src="/sito/img/loc-bar.webp" width="520" height="358" loading="lazy" alt="Bar sul lungomare"><h3>Bar Lungomare</h3><p>Caffè al bancone e vista mare.</p></article>
+        <article class="loc"><img src="/sito/img/loc-osteria.webp" width="520" height="400" loading="lazy" alt="Osteria"><h3>Osteria del Borgo</h3><p>Cucina di casa, tavoli fuori.</p></article>
+        <article class="loc"><img src="/sito/img/loc-trattoria.webp" width="520" height="400" loading="lazy" alt="Trattoria"><h3>Trattoria del Borgo</h3><p>Pasta, pesce e vino della casa.</p></article>
+        <article class="loc"><img src="/sito/img/loc-panorama.webp" width="520" height="400" loading="lazy" alt="Ristorante panoramico"><h3>Ristorante Panorama</h3><p>Cena con il golfo davanti.</p></article>
+        <article class="loc"><img src="/sito/img/loc-vesuvio.webp" width="520" height="473" loading="lazy" alt="Ristorante Vesuvio"><h3>Ristorante Vesuvio</h3><p>Il vulcano come insegna.</p></article>
+        <article class="loc"><img src="/sito/img/loc-barbiere.webp" width="520" height="400" loading="lazy" alt="Barbiere"><h3>Barbiere Totò</h3><p>Taglio, barba e chiacchiere.</p></article>
+        <article class="loc"><img src="/sito/img/loc-discoteca.webp" width="520" height="400" loading="lazy" alt="Discoteca"><h3>Luna · Discoteca</h3><p>Musica e luci fino a tardi.</p></article>
+        <article class="loc"><img src="/sito/img/loc-moda.webp" width="520" height="400" loading="lazy" alt="Negozio di moda"><h3>Moda Market</h3><p>Cambia look e stile.</p></article>
+        <article class="loc"><img src="/sito/img/loc-negozio.webp" width="520" height="400" loading="lazy" alt="Bottega"><h3>Bottega Marina</h3><p>Spesa e cose utili.</p></article>
+        <article class="loc"><img src="/sito/img/loc-banca.webp" width="520" height="400" loading="lazy" alt="Banca"><h3>Banca del Golfo</h3><p>Il tuo saldo, al sicuro.</p></article>
+        <article class="loc"><img src="/sito/img/loc-villa-2.webp" width="520" height="400" loading="lazy" alt="Villa"><h3>Le ville</h3><p>Si entra nelle stanze ospiti.</p></article>
+      </div>
+    </div>
+    <p class="cap">Illustrazioni dei locali del gioco. Insegne e nomi sono originali; i marchi veri compaiono solo con accordo scritto.</p>
+  </div>
+</section>
+
+<section id="atmosfera">
+  <div class="wrap">
+    <div class="rv center">
+      <p class="kicker">Atmosfera</p>
+      <h2>Dal sole alla <em>luna</em> sul golfo.</h2>
+      <p class="lead">Stessa inquadratura, dentro il gioco: alle 10:30 e alle 21:30. Trascina per far calare la sera.</p>
+    </div>
+    <div class="cmp rv d1" id="cmp">
+      <img src="/sito/img/gioco-porto.webp" alt="Il porto di Mergellina nel gioco alle 10:30 del mattino" width="1600" height="900" loading="lazy">
+      <img class="top" src="/sito/img/gioco-notte.webp" alt="Lo stesso porto nel gioco alle 21:30, con le finestre accese" width="1600" height="900" loading="lazy">
+      <div class="bar"></div>
+      <span class="tag t1">☀️ Mattina</span><span class="tag t2">🌙 Sera</span>
+      <input type="range" min="0" max="100" value="50" aria-label="Confronta mattina e sera">
+    </div>
+    <p class="cap center">Immagini reali del gioco. Un giorno a Napoli life dura 40 minuti.</p>
+  </div>
+</section>
+
+<section id="personaggi" style="background:linear-gradient(180deg,var(--bg),var(--bg2))">
+  <div class="wrap">
+    <div class="rv center">
+      <p class="kicker">Tu</p>
+      <h2>Scegli il tuo <em>napoletano</em>.</h2>
+      <p class="lead">Otto personaggi pronti all’ingresso. Poi li cambi dal barbiere e nei negozi di moda, o crei l’avatar da una tua foto.</p>
+    </div>
+    <div class="cast rv d1" id="cast"></div>
+    <div class="stage-floor"></div>
+  </div>
+</section>
+
+<section id="iniziare">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Come iniziare</p>
+      <h2>Ti basta <em>un minuto</em>.</h2>
+      <p class="lead">Non serve installare niente per provare.</p>
+    </div>
+    <div class="steps">
+      <div class="step rv"><b>Apri il gioco</b><span>Tocca «Gioca ora»: parte nel browser, su PC e telefono.</span></div>
+      <div class="step rv d1"><b>Entra come ospite</b><span>Scegli un personaggio. Per tenere i progressi, registrati.</span></div>
+      <div class="step rv d2"><b>Esplora e incontra</b><span>Joystick o tastiera, entra nei locali, scrivi in chat.</span></div>
+    </div>
+    <div class="plat">
+      <div class="tile rv"><div class="maj">💻</div><h3>PC e Mac</h3><p>Dal browser, con tastiera e mouse.</p><a class="btn" href="/">Gioca nel browser</a></div>
+      <div class="tile rv d1"><div class="maj">🤖</div><h3>Android</h3><p>Scarica l’app: gli aggiornamenti arrivano da soli.</p><a class="btn" href="/scarica-3d">Scarica l’app</a></div>
+      <div class="tile rv d2"><div class="maj">🍎</div><h3>iPhone e iPad</h3><p>Apri in Safari → Condividi → «Aggiungi alla schermata Home».</p><a class="btn ghost" href="/scarica-3d">Le istruzioni</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="stato" style="background:linear-gradient(180deg,var(--bg),var(--bg2))">
+  <div class="wrap">
+    <div class="rv">
+      <p class="kicker">Stato del progetto</p>
+      <h2>In collaudo, e te lo <em>diciamo</em>.</h2>
+    </div>
+    <div class="status">
+      <div class="note rv">
+        <p><b>Versione di prova.</b> Puoi giocare, ma troverai ancora difetti. Le prestazioni sui telefoni sono in miglioramento e il gioco può essere lento sui dispositivi meno potenti. Il server regge fino a <b>32 giocatori insieme</b>. Se il servizio gratuito è «a riposo», il primo accesso può richiedere qualche istante, e gli account di prova possono essere azzerati dopo un aggiornamento.</p>
+        <p style="margin-top:14px">Versione in uso: <b id="build">…</b></p>
+      </div>
+      <div class="timeline rv d1" aria-label="Cosa stiamo preparando">
+        <div class="tl"><b>Più fluidità sui telefoni</b><span>Meno oggetti da disegnare, caricamento a zone.</span></div>
+        <div class="tl"><b>Account che restano</b><span>Salvataggio stabile di account e monete.</span></div>
+        <div class="tl"><b>Editor del personaggio</b><span>Più scelte e animazioni sociali.</span></div>
+        <div class="tl"><b>Moderazione e notifiche</b><span>Ruoli, segnalazioni, casella dei messaggi.</span></div>
+        <div class="tl"><b>Mergellina più fedele</b><span>Porto, Largo Sermoneta e Borgo Marinari curati.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="domande">
+  <div class="wrap">
+    <div class="rv center">
+      <p class="kicker">Domande</p>
+      <h2>Domande <em>frequenti</em>.</h2>
+    </div>
+    <div class="faq rv d1">
+      <details><summary>È gratis?</summary><p>Sì, provare e giocare non costa nulla. Le ricariche di monete sono in modalità demo: nessun pagamento reale è attivo.</p></details>
+      <details><summary>Ci sono armi, rapine o bande?</summary><p>No. Napoli life è un gioco di vita sociale: combattimenti, armi, rapine, bande, arresti e multe sono disattivati.</p></details>
+      <details><summary>Le persone che vedo sono vere?</summary><p>Sì. Nomi e avatar sono utenti realmente collegati; pedoni e auto di sfondo servono solo a rendere viva la città.</p></details>
+      <details><summary>Serve registrarsi?</summary><p>No, puoi entrare come ospite. Con un account conservi progressi, amici e monete.</p></details>
+      <details><summary>Come funziona la voce?</summary><p>Usa il microfono del dispositivo e parte solo se dai il permesso. Tra reti diverse può servire qualche secondo in più per collegarsi.</p></details>
+      <details><summary>Posso segnalare un utente?</summary><p>Sì, dal gioco puoi bloccare e segnalare un giocatore, indicando il motivo.</p></details>
+      <details><summary>I negozi sono quelli veri?</summary><p>I nomi vengono da OpenStreetMap quando esistono, altrimenti sono inventati. Un marchio reale compare solo con un accordo scritto con il titolare.</p></details>
+    </div>
+  </div>
+</section>
+
+<section class="finale">
+  <div class="bg" aria-hidden="true"></div>
+  <div class="wrap rv">
+    <p class="motto" style="margin-bottom:12px">“Vedi Napoli e poi muori.” — Goethe</p>
+    <h2>Il golfo <em>ti aspetta</em>.</h2>
+    <div class="cta"><a class="btn" href="/">Entra a Mergellina</a><a class="btn ghost" href="/scarica-3d">Scarica l’app</a></div>
+  </div>
+</section>
+
+<section id="crediti" style="padding:80px 0">
+  <div class="wrap">
+    <p class="kicker">Crediti</p>
+    <div class="credits">
+      <div>Mappa © <b>OpenStreetMap contributors</b>, licenza ODbL.</div>
+      <div>Modelli e texture CC0 da <b>Kenney</b>, <b>Poly Haven</b> e <b>Quaternius</b>.</div>
+      <div>Personaggi <b>Rocketbox</b>, usati con la loro licenza.</div>
+      <div>Rilievo di Posillipo: <b>DTM Regione Campania</b>, CC BY 4.0.</div>
+      <div>Grafica 3D con <b>three.js</b>; server Node.js e WebSocket.</div>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="tenda" aria-hidden="true" style="transform:scaleY(-1)"></div>
+<footer>
+  <div class="wrap foot">
+    <a class="logo" href="#top">NAPOLI<small>life</small></a>
+    <nav aria-label="Piè di pagina"><a href="/">Gioca</a><a href="/scarica-3d">Scarica</a><a href="#vita">Il gioco</a><a href="#domande">Domande</a><a href="#crediti">Crediti</a></nav>
+    <span>Fatto con passione per Napoli.</span>
+  </div>
+</footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const calm=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// header e menu
+const hdr=$('#hdr'),menu=$('#menu'),mb=$('#menuBtn');
+const onScroll=()=>hdr.classList.toggle('solid',scrollY>40);addEventListener('scroll',onScroll,{passive:true});onScroll();
+const closeMenu=()=>{menu.classList.remove('open');mb.setAttribute('aria-expanded','false');mb.textContent='☰';};
+mb.addEventListener('click',()=>{const o=menu.classList.toggle('open');mb.setAttribute('aria-expanded',String(o));mb.textContent=o?'✕':'☰';});
+menu.addEventListener('click',e=>{if(e.target.tagName==='A')closeMenu();});
+
+// detti napoletani
+const frasi=['Napule è mille culure','Chi nasce tondo nun po’ murì quadrato','Vedi Napoli e poi muori','Nun è overo ma ce credo','Ogne scarrafone è bello a mamma soja','Pizza, mare e Vesuvio','Ccà nisciuno è fesso'];
+const mq=$('#mq');mq.innerHTML=[...frasi,...frasi].map(f=>`<span>${f}</span><i>♦</i>`).join('');mq.innerHTML+=mq.innerHTML;
+
+// stato del server
+(async()=>{try{const r=await fetch('/api/stato',{cache:'no-store'});if(!r.ok)throw 0;const s=await r.json();$('#live').classList.add('on');
+  $('#liveTxt').textContent=s.online===0?'Server attivo · la città ti aspetta':s.online===1?'1 giocatore in città adesso':s.online+' giocatori in città adesso';$('#build').textContent='build '+s.build;}
+ catch{$('#liveTxt').textContent='Stato del server non disponibile';$('#build').textContent='non disponibile';}})();
+
+// lucciole nel cielo dell'hero: si fermano quando l'hero non è visibile
+const cv=$('#fx'),c2=cv.getContext('2d');let P=[],run=false,raf=0,W=0,H=0;
+const size=()=>{const d=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*d;cv.height=H*d;c2.setTransform(d,0,0,d,0,0);
+  P=Array.from({length:Math.round(Math.min(70,W/18))},()=>({x:Math.random()*W,y:Math.random()*H,r:.6+Math.random()*2.2,v:.15+Math.random()*.45,a:Math.random()*6.28,s:.004+Math.random()*.01}));};
+const tick=()=>{c2.clearRect(0,0,W,H);for(const p of P){p.y-=p.v;p.a+=p.s;p.x+=Math.sin(p.a)*.3;if(p.y<-10){p.y=H+10;p.x=Math.random()*W;}
+  const al=.25+.55*(.5+.5*Math.sin(p.a*3)),g=c2.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*5);g.addColorStop(0,`rgba(255,214,150,${al})`);g.addColorStop(1,'rgba(255,214,150,0)');c2.fillStyle=g;c2.beginPath();c2.arc(p.x,p.y,p.r*5,0,6.28);c2.fill();}
+  if(run)raf=requestAnimationFrame(tick);};
+if(!calm&&'IntersectionObserver' in window){size();addEventListener('resize',size);new IntersectionObserver(([e])=>{run=e.isIntersecting;cancelAnimationFrame(raf);if(run)tick();}).observe($('.hero'));}
+
+// galleria con immagini reali
+const imgs=$$('#stage img'),th=$$('.thumb');let gi=0,timer=0;
+const show=i=>{gi=i;imgs.forEach((im,k)=>im.classList.toggle('on',k===i));th.forEach((t,k)=>{t.classList.toggle('on',k===i);t.setAttribute('aria-selected',String(k===i));});$('#capT').textContent=imgs[i].dataset.t;$('#capC').textContent=imgs[i].dataset.c;};
+th.forEach(t=>t.addEventListener('click',()=>{show(+t.dataset.i);clearInterval(timer);}));
+if(!calm)timer=setInterval(()=>show((gi+1)%imgs.length),6000);
+
+// luce che segue il puntatore sulle tessere
+$$('.tile').forEach(t=>t.addEventListener('pointermove',e=>{const r=t.getBoundingClientRect();t.style.setProperty('--mx',(e.clientX-r.left)+'px');t.style.setProperty('--my',(e.clientY-r.top)+'px');}));
+
+// mappa: posizioni in % ricavate dai dati del gioco con scripts/sito-mappa.mjs
+const luoghi=[
+ ['Piazza Sannazaro',22.25,44.89,'La piazza della fontana, da cui parte la salita delle Tredici Scese verso Sant’Antonio.'],
+ ['Porto di Mergellina',27,60,'Pontili veri, barche ormeggiate e altre che navigano al largo.'],
+ ['Fontana del Sebeto',20.4,91.02,'La fontana seicentesca di Largo Sermoneta, nella sua posizione vera.'],
+ ['Via Caracciolo',42.2,37.8,'Il lungomare con la pista ciclabile: si passeggia, si corre, si guida.'],
+ ['Villa Comunale',53.41,14.6,'Il grande parco sul mare, con i chioschi e il luna park.'],
+ ['Via Partenope',83.79,31.02,'Il lungomare degli alberghi, verso il Borgo Marinari.'],
+ ['Castel dell’Ovo',90.4,53.87,'Il castello costruito sulla sua pianta vera, con il Borgo Marinari.']];
+const map=$('#map'),info=$('#mapinfo');
+for(const [n,x,y,d] of luoghi){const b=document.createElement('button');b.className='pin';b.style.left=x+'%';b.style.top=y+'%';b.innerHTML=`<span>${n}</span><i></i>`;b.setAttribute('aria-label',n);
+  b.addEventListener('click',()=>{$$('.pin').forEach(p=>p.classList.remove('on'));b.classList.add('on');info.innerHTML=`<b>${n}</b><p>${d}</p>`;});map.append(b);}
+
+// locali: frecce
+const rail=$('#rail');$('#prev').onclick=()=>rail.scrollBy({left:-rail.clientWidth*.8,behavior:'smooth'});$('#next').onclick=()=>rail.scrollBy({left:rail.clientWidth*.8,behavior:'smooth'});
+
+// mattina/sera
+const cmp=$('#cmp'),rng=cmp.querySelector('input'),topImg=cmp.querySelector('.top'),bar=cmp.querySelector('.bar');
+rng.addEventListener('input',()=>{topImg.style.clipPath=`inset(0 0 0 ${rng.value}%)`;bar.style.left=rng.value+'%';});
+
+// personaggi: stesso ordine di shared/looks.js
+$('#cast').innerHTML=['Ciro','Giulia','Enzo','Sofia','Luca','Marta','Diego','Aurora'].map((n,i)=>`<div class="pg"><img src="/sito/img/pg-${i+1}.webp" width="171" height="420" loading="lazy" alt="${n}"><b>${n}</b></div>`).join('');
+
+// contatori e apparizione
+const fmt=(n,d)=>n.toLocaleString('it-IT',{minimumFractionDigits:d,maximumFractionDigits:d,useGrouping:'always'});
+const count=el=>{const to=+el.dataset.n,d=+(el.dataset.d||0);if(calm){el.textContent=fmt(to,d);return;}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1600),e=1-Math.pow(1-k,3);el.textContent=fmt(to*e,d);if(k<1)requestAnimationFrame(f);})(t0);};
+setTimeout(()=>$$('[data-n]').forEach(count),500);
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.12,rootMargin:'0px 0px -40px 0px'});$$('.rv').forEach(el=>io.observe(el));}
+else $$('.rv').forEach(el=>el.classList.add('in'));
+})();
+</script>
+</body>
+</html>
