@@ -32,18 +32,19 @@ test('Il furto vale per acquisti, barbiere, bevande, benzina e mezzi',()=>{
 
 import {WebSocket} from 'ws';
 import {createApp} from '../server/index.js';
+import {ensureState,state} from '../server/storage.js';
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
-test('Prigione: uscire e rientrare non libera; la cella e le auto restano salvate',async t=>{
+test('Napoli Life 3D rimuove progressi criminali legacy e non attiva la polizia',async t=>{
  const app=createApp({dbPath:':memory:',edition:'3d'});await new Promise(r=>app.server.listen(0,'127.0.0.1',r));t.after(()=>app.close());
  const base=`http://127.0.0.1:${app.server.address().port}`;
  const reg=await (await fetch(base+'/api/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'Ladro_1',password:'test-secret-ladro'})})).json();
+ ensureState(app.db,reg.user.id);const saved=state(app.db,reg.user.id).progress;Object.assign(saved,{wanted:{until:Date.now()+9000},jail:{until:Date.now()+9000},heist:{id:'old'},firearms:['pistola'],equippedWeapon:'pistola',work:'polizia',duty:true});
+ app.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(saved),reg.user.id);
  const connect=async()=>{const ws=new WebSocket(base.replace('http','ws')+'/ws'),m=[];ws.on('message',b=>m.push(JSON.parse(b)));await new Promise(r=>ws.once('open',r));ws.send(JSON.stringify({type:'auth',token:reg.token}));for(let i=0;i<100&&!m.some(x=>x.type==='welcome');i++)await pause(20);return {ws,m};};
- let c=await connect();await pause(150);let p=app.game.players.get(reg.user.id);assert.ok(p,'giocatore connesso');
- p.wanted={t0:Date.now(),until:Date.now()-1,caught:true,station:POLICE[0].id,value:5};app.game.police.save(p);app.game.police.tick(p);assert.ok(p.jail,'arrestato');
- c.ws.close();await pause(200);c=await connect();await pause(200);p=app.game.players.get(reg.user.id);
- assert.ok(p.jail,'dopo il rientro è ancora in cella');const cell=prisonCell(POLICE[0]);assert.ok(Math.hypot(p.x-cell.x,p.y-cell.y)<1,'ed è dentro la cella');
- // da detenuto 'travel' non porta a Mergellina
- c.ws.send(JSON.stringify({type:'travel',to:'mergellina'}));await pause(150);assert.equal(app.game.players.get(reg.user.id).room,'lungomare','in cella non si viaggia');
+ const c=await connect();await pause(100);const p=app.game.players.get(reg.user.id);assert.ok(p,'giocatore connesso');
+ assert.equal(app.game.police,undefined);assert.equal(p.wanted,undefined);assert.equal(p.jail,undefined);app.game.rp.load(p);assert.equal(p.work,null);
+ const progress=state(app.db,reg.user.id).progress;for(const key of ['wanted','jail','heist','firearms','equippedWeapon'])assert.equal(Object.hasOwn(progress,key),false,key);
+ const blocked=await fetch(base+'/api/rp/arrest',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+reg.token},body:JSON.stringify({id:reg.user.id})});assert.equal(blocked.status,410);
  c.ws.close();
 });
 

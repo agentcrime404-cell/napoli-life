@@ -109,3 +109,7 @@ body.in-cockpit #hud .actions{bottom:calc(28vw + var(--safe-bottom))}
 body.is3d #cam3d button:nth-of-type(3){display:none!important}
 #scene-loading{padding:0 16px;text-align:center}#scene-loading[data-state=error]::before{display:none}
 #scene-loading small{max-width:min(90vw,520px);font-size:13px;opacity:.75;overflow-wrap:anywhere}#scene-loading small[hidden],#scene-loading button[hidden]{display:none}
+/* La preparazione della città deve informare senza congelare o coprire i comandi. */
+#scene-loading{inset:auto auto calc(88px + var(--safe-bottom,0px)) 50%;transform:translateX(-50%);width:min(92vw,420px);min-height:0;padding:10px 14px;gap:7px;border:1px solid #d7ba8066;border-radius:14px;background:#0b1c2bd9;box-shadow:0 8px 28px #0005;font-size:13px;pointer-events:none}
+#scene-loading::before{width:20px;height:20px;flex:0 0 20px}
+#scene-loading button{pointer-events:auto;padding:7px 14px;font-size:13px}

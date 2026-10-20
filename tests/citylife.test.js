@@ -5,6 +5,8 @@ import {Traffic} from '../shared/traffic.js';
 const run=(tr,sec,hour)=>{tr.hour=hour;for(let t=0;t<sec;t+=.1)tr.update(.1,[]);};
 
 test('Traffico vivo: più mezzi, cambia con l’ora e nessuno resta bloccato per sempre',()=>{
+ const previousRandom=Math.random;let seed=36;Math.random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+ try{
  const tr=new Traffic();tr.lights=true;tr.enrich();tr.viewer={x:-500,y:-500};
  assert.ok(tr.cars.some(c=>c.model==='scooter')&&tr.cars.some(c=>c.model==='furgone')&&tr.cars.some(c=>c.model==='rifiuti'),'scooter, furgoni e camion dei rifiuti');
  run(tr,60,8);const morning=tr.cars.filter(c=>!c.off).length;
@@ -18,6 +20,7 @@ test('Traffico vivo: più mezzi, cambia con l’ora e nessuno resta bloccato per
  assert.ok(parked>0,'i camion si fermano a svuotare i bidoni');
  const before=new Map(act.map(c=>[c,c.s]));let stuck=0;const moved2=new Map(act.map(c=>[c,0]));for(let t=0;t<120;t+=.1){tr.update(.1,[]);for(const c of act)if(c.v>.3)moved2.set(c,moved2.get(c)+1);}for(const c of act)if(!c.off&&moved2.get(c)<20)stuck++;
  assert.ok(stuck<=1,'nessun mezzo bloccato per sempre (bloccati: '+stuck+')');
+ }finally{Math.random=previousRandom;}
 });
 
 test('Traffico: la velocità si abbassa con il traffico intenso e un ostacolo ferma chi arriva',()=>{

@@ -19,7 +19,7 @@ export class Heists{
   const loot=Math.round(T.loot[0]+Math.random()*(T.loot[1]-T.loot[0])),name=this.place(p),cops=this.cops(p);
   p.heist={room:p.room,name,t0:now,until:now+T.sec*1000,loot};
   // Con agenti giocatori in servizio si è ricercati da subito (possono arrestare durante il colpo) e gli agenti del gioco non intervengono.
-  if(cops.length){const st=this.game.police.nearest(p);p.wanted={t0:now,until:now+(T.sec+RP.chase)*1000,caught:false,station:st.id,value:loot,x:p.x,y:p.y,room:p.room,cops:true};this.game.police.save(p);
+  if(cops.length){const st=this.game.police.nearest(p);p.wanted={t0:now,until:now+(T.sec+RP.chase)*1000,/* se gli agenti giocatori non arrestano, alla fine vale la regola normale (police.tick) */caught:Math.random()<PRISON.catch,station:st.id,value:loot,x:p.x,y:p.y,room:p.room,cops:true};this.game.police.save(p);
    for(const c of cops)this.tell(c,'🚨 Centrale: RAPINA in corso a '+name+'! '+p.username+' è ricercato. Hai '+T.sec+' secondi: corri!');}
   for(const q of this.game.players.values())if(q!==p&&q.room===p.room)this.tell(q,'😱 Rapina! '+p.username+' sta svuotando '+T.label+'!');
   this.tell(p,'💰 Rapina iniziata: resta dentro per '+T.sec+' secondi'+(cops.length?'. La polizia è stata avvisata!':'!'));return p.heist;}

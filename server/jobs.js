@@ -17,14 +17,16 @@ export class Jobs{
  claim(id,mid){const m=DAILY.find(x=>x.id===mid);if(!m)fail('Missione sconosciuta');const v=this.view(id).missions.find(x=>x.id===mid);if(!v.done)fail('Missione non ancora completata');if(v.claimed)fail('Premio già riscosso');
   const {pr}=this.daily(id);pr.daily.claimed.push(mid);this.save(id,pr);this.pay(id,m.reward);return this.view(id);}
  // Consegna: destinazione casuale raggiungibile a 25-110 m, paga base + bonus se arrivi in fretta.
- start(id){const p=this.game.players.get(id);if(!p||p.room!=='lungomare')fail('Esci all’aperto per lavorare');if(p.job)fail('Hai già una consegna in corso');
-  const places=[...doors('lungomare').map(d=>({name:d.name,x:d.x,y:d.y}))].filter(t=>{const dd=distance(t,p);return dd>25&&dd<110&&canStand('lungomare',t.x,t.y,.3);});
+ // Si lavora all'aperto sia sul Lungomare sia a Mergellina (dove si gioca di solito): le destinazioni sono le porte della zona.
+ start(id){const p=this.game.players.get(id),room=p?.room;if(!p||(room!=='lungomare'&&room!=='mergellina'))fail('Esci all’aperto per lavorare');if(p.job)fail('Hai già una consegna in corso');
+  const places=[...doors(room).map(d=>({name:d.name,x:d.x,y:d.y}))].filter(t=>{const dd=distance(t,p);return dd>25&&dd<110&&canStand(room,t.x,t.y,.3);});
   if(!places.length)fail('Nessuna consegna disponibile qui vicino');const t=places[Math.floor(Math.random()*places.length)],dist=distance(t,p);
-  p.job={name:t.name,x:t.x,y:t.y,started:Date.now(),deadline:Date.now()+Math.round(dist/2.5*1000+30000),reward:Math.round(20+dist*.8)};return this.view(id);}
+  p.job={name:t.name,room,x:t.x,y:t.y,started:Date.now(),deadline:Date.now()+Math.round(dist/2.5*1000+30000),reward:Math.round(20+dist*.8)};return this.view(id);}
  cancel(id){const p=this.game.players.get(id);if(p)p.job=null;return this.view(id);}
- service(p,dt){if(!p?.duty||!p.work||!Number.isFinite(dt)||dt<=0)return;const {pr,d}=this.daily(p.id);d.service=(d.service||0)+dt;if(Math.floor(d.service)%15<dt)this.save(p.id,pr);}
+ // Il tempo in servizio si accumula in memoria e si scrive ogni secondo: rileggendo dal DB a ogni tick gli incrementi non salvati andavano persi.
+ service(p,dt){if(!p?.duty||!p.work||!Number.isFinite(dt)||dt<=0)return;p.serviceAcc=(p.serviceAcc||0)+dt;if(p.serviceAcc<1)return;const {pr,d}=this.daily(p.id);d.service=(d.service||0)+p.serviceAcc;p.serviceAcc=0;this.save(p.id,pr);}
  // Chiamato dal ciclo di gioco: consegna completata quando arrivi a destinazione.
- tick(p){if(!p.job||p.room!=='lungomare'||distance(p,p.job)>2.6)return;const j=p.job;p.job=null;const fast=Date.now()<=j.deadline,coins=j.reward+(fast?Math.round(j.reward*.5):0);
+ tick(p){if(!p.job||p.room!==(p.job.room||'lungomare')||distance(p,p.job)>2.6)return;const j=p.job;p.job=null;const fast=Date.now()<=j.deadline,coins=j.reward+(fast?Math.round(j.reward*.5):0);
   this.pay(p.id,coins);const {pr}=this.daily(p.id);pr.daily.deliver++;this.save(p.id,pr);this.game.send(p.ws,{type:'jobDone',coins,fast,place:j.name});}
  visit(p,room){if(!room||room==='lungomare'||room.startsWith('home:'))return;const {pr}=this.daily(p.id);if(!pr.daily.visits.includes(room)){pr.daily.visits.push(room);this.save(p.id,pr);}}
  // Premio di livello: 50 monete per ogni livello nuovo raggiunto.

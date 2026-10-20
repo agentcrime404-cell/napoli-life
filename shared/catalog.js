@@ -26,14 +26,16 @@ export const CATALOG=[
 // Moda: articoli generati da modelli × colori (oltre mille). Ogni articolo imposta uno slot dell'avatar.
 export const COLORS=[['nero','#1f2226'],['bianco','#f2f2f2'],['grigio','#8a9099'],['blu navy','#1f3a6b'],['azzurro','#5fb6ff'],['rosso','#d93a3a'],['bordeaux','#7a1f2b'],['rosa','#ff7ab6'],['verde','#2f9e5b'],['oliva','#6b7a3a'],['giallo','#ffc928'],['arancio','#ff8a3d'],['beige','#d8c3a0'],['marrone','#7a5236'],['viola','#8a5cff'],['turchese','#2ec4c4'],['corallo','#ff6f61'],['cammello','#c19a6b'],['jeans','#3d5f8f'],['oro','#d4a73a']];
 export const WEAR={
- top:{label:'Giacche e felpe',models:['Felpa','Giacca','Bomber','Cappotto','Giubbotto','Cardigan','Blazer','Piumino','Gilet','Trench','Giacca di pelle','Maglione'],base:30},
+ top:{label:'Magliette, giacche e felpe',models:['Felpa','Giacca','Bomber','Cappotto','Giubbotto','Cardigan','Blazer','Piumino','Gilet','Trench','Giacca di pelle','Maglione','Maglietta'],base:30},
  pants:{label:'Pantaloni',models:['Jeans','Chino','Cargo','Tuta','Elegante','Shorts','Palazzo'],base:25},
- shoes:{label:'Scarpe',models:['Sneakers','Mocassini','Stivaletti','Running','Sandali','Décolleté','Anfibi','Slip-on'],base:28},
+ shoes:{label:'Scarpe',models:['Sneakers','Mocassini','Stivaletti','Running','Sandali','Décolleté','Anfibi','Slip-on','Pantofole'],base:28},
  hat:{label:'Cappelli',models:['Cappellino','Berretto','Borsalino','Pescatore','Coppola','Cowboy','Bandana','Fascia','Visiera'],base:18},
  bag:{label:'Borse',models:['Zaino','Tracolla','Marsupio','Shopper','Pochette','Bauletto','Borsone'],base:35},
  glasses:{label:'Occhiali',models:['Da sole','Tondi','Aviator','Vista','Sportivi','Cat-eye'],base:22},
  neck:{label:'Collane',models:['Catena','Perle','Pendente','Sciarpa','Foulard'],base:40},
- watch:{label:'Orologi',models:['Sportivo','Classico','Smart','Cronografo','Bracciale'],base:45}
+ watch:{label:'Orologi',models:['Sportivo','Classico','Smart','Cronografo','Bracciale'],base:45},
+ gloves:{label:'Guanti',models:['Guanti urbani','Guanti imbottiti'],base:20},
+ mask:{label:'Maschere e freddo',models:['Mascherina','Scaldacollo','Passamontagna'],base:24}
 };
 export const WEAR_ITEMS=[];
 for(const [slot,w] of Object.entries(WEAR))w.models.forEach((model,m)=>COLORS.forEach(([cname,hex],c)=>WEAR_ITEMS.push({id:`${slot}-${m}-${c}`,name:`${model} ${cname}`,type:'wear',slot,style:m,color:hex,price:w.base+m*5+(c%5)*3})));
@@ -53,6 +55,12 @@ export const PACKS=[
 export const ATM_RATE=40;
 // Ville: acquisto definitivo o affitto settimanale, solo con monete di gioco.
 export const VILLA_PRICE=5000,VILLA_RENT=400,VILLA_RENT_DAYS=7;
+// Velivoli originali da collezione: si acquistano e si parcheggiano solo nel lotto della propria villa.
+// Sono oggetti statici da esposizione; la fisica di volo non è ancora parte del gioco.
+export const VILLA_AIRCRAFT=[
+ {id:'jet',name:'Jet privato Levante',emoji:'✈️',price:42000,parking:'piazzola principale'},
+ {id:'helicopter',name:'Elicottero Vesuvio',emoji:'🚁',price:26000,parking:'eliporto privato'}
+];
 // Sala slot: fiches gratuite giornaliere, non acquistabili né convertibili (nessun gioco con denaro reale).
 export const DAILY_FICHES=100,SLOT_BETS=[1,5,10];
 export const SLOT_SYMBOLS=[{s:'🍋',w:30,x:3},{s:'🍒',w:25,x:5},{s:'🔔',w:18,x:10},{s:'⭐',w:12,x:15},{s:'7️⃣',w:8,x:30},{s:'💎',w:4,x:60}];
@@ -100,13 +108,17 @@ export const VEHICLES_3D=[
  {id:'b-cargo',shop:'bici',base:'bici',model:'cargo',name:'Bici da passeggio con cestino',emoji:'🚲',buy:380,speed:1.7,color:'#ff7ab6'},
  {id:'b-ebike',shop:'bici',base:'bici',model:'ebike',name:'Bici elettrica',emoji:'🚲',buy:950,speed:2.4,color:'#3b4250'}];
 for(const v of VEHICLES_3D)VEHICLE[v.id]=v;
+// Le moto condividono la classe di guida "scooter", ma non tutte hanno la
+// retromarcia: solo auto, scooter veri e monopattini possono inserirla da fermi.
+export function canVehicleReverse(id){const vehicle=String(id||''),base=VEHICLE[vehicle]?.base||vehicle;return ['auto','cabrio','furgone'].includes(base)||['scooter','monopattino','m-50','m-epoca','m-xadv'].includes(vehicle);}
 
 // Banca digitale del telefono (HUMANA life 3D).
 export const BANK_NAME='NPL Bank';
 
 // Negozi dentro il centro commerciale (HUMANA life 3D): stanno ai banconi della sala. kind: fashion = abiti, shop = accessori e arredi, sim = scelta del numero di telefono.
-export const MALL_SHOPS=[{id:'abiti',name:'Abbigliamento',icon:'👗',kind:'fashion',slots:['top','pants','hat'],x:8,y:3},{id:'sim',name:'Negozio SIM',icon:'📱',kind:'sim',x:3,y:7},{id:'accessori',name:'Accessori e arredi',icon:'🕶️',kind:'shop',x:13,y:7},
- {id:'scarpe',room:'mall2',name:'Scarpe e borse',icon:'👟',kind:'fashion',slots:['shoes','bag'],x:8,y:3},{id:'gioielli',room:'mall2',name:'Orologi e gioielli',icon:'⌚',kind:'fashion',slots:['watch','neck','glasses'],x:3,y:7},{id:'casa',room:'mall2',name:'Casa e arredo',icon:'🛋️',kind:'shop',x:13,y:6}];
+export const MALL_SHOPS=[{id:'abiti',name:'Abbigliamento',icon:'👗',kind:'fashion',slots:['top','pants','hat','gloves','mask'],x:8,y:3},{id:'sim',name:'Negozio SIM',icon:'📱',kind:'sim',x:3,y:7},{id:'accessori',name:'Accessori e arredi',icon:'🕶️',kind:'shop',x:13,y:7},
+ {id:'scarpe',room:'mall2',name:'Scarpe e borse',icon:'👟',kind:'fashion',slots:['shoes','bag'],x:8,y:3},{id:'gioielli',room:'mall2',name:'Orologi e gioielli',icon:'⌚',kind:'fashion',slots:['watch','neck','glasses'],x:3,y:7},{id:'casa',room:'mall2',name:'Casa e arredo',icon:'🛋️',kind:'shop',x:13,y:6},
+ {id:'mercatino-invernale',room:'mall2',name:'Mercatino d’inverno',icon:'🧣',kind:'fashion',slots:['top','pants','shoes','hat','gloves','mask','neck'],x:13,y:2.7}];
 export const SIM_PRICE=50;
 // Noleggio barche: un giro guidato nel golfo. dock = dove si sale (a terra), route = punti in mare (andata; il ritorno è lo stesso percorso al contrario).
 export const BOAT_PRICE=40,BOAT_SPEED=9;
@@ -170,8 +182,9 @@ export const MENU={
  burger:[Fd('burger','Hamburger','🍔',6),Fd('fries','Patatine','🍟',3),COLA,WATER,BEER],
  club:[WATER,D('energia','Bibita energetica','⚡',3),BEER,SPRITZ,D('cocktail','Cocktail della casa','🍸',8,40),LIMON]};
 export const STAFF_ROLE={bar:'Barista',pizzeria:'Pizzaiolo',osteria:'Oste',vesuvio:'Cuoco',trattoria:'Cameriere',panorama:'Cameriera',burger:'Addetto al banco',club:'Barman'};
-// Rettangoli [x0,y0,x1,y1] che bloccano i passi: arena, distributori (negozio, pompe, pali) e caserme (edificio, auto, bandiera).
-export const solidBlocks=()=>{const out=[...arenaBlocks()];
+// Rettangoli [x0,y0,x1,y1] che bloccano i passi: distributori e strutture civili.
+// Il vecchio campo arena non è più gameplay e non deve lasciare collisioni invisibili.
+export const solidBlocks=()=>{const out=[];
  for(const g of GAS){const G=gasGeom(g);out.push(G.shop);for(const p of G.pumps)out.push([p.x-.45,p.y-.6,p.x+.45,p.y+.6]);for(const dx of [-6,6])out.push([G.cx+dx-.2,G.island.y-1.9,G.cx+dx+.2,G.island.y-1.5]);}
  for(const c of POLICE){const P=policeGeom(c);out.push(P.build,...P.cars,[P.flag.x-.2,P.flag.y-.2,P.flag.x+.2,P.flag.y+.2]);}
  out.push(esiGeom(ESI).build,hospGeom(HOSPITAL).build);for(const m of MODERN)out.push(...modernGeom(m).houses);

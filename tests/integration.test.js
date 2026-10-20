@@ -44,17 +44,19 @@ test('Due client reali: account, sincronizzazione, social, interni e permessi',a
  await t.test('Veicolo fermo: salita, autorizzazione stradale persistente, guida e uscita',async()=>{
   if(!napoliParkedVehicles().some(vehicle=>vehicle.id==='ciro-africa-9')){setNapoli(JSON.parse(readFileSync('client/assets/world/napoli/map/mergellina.json','utf8')));registerMergellina();}
   const pa=app.game.players.get(a.user.id),pb=app.game.players.get(b.user.id),target=napoliParkedVehicles().find(vehicle=>vehicle.id==='ciro-africa-9'),original={room:pa.room,x:pa.x,y:pa.y,direction:pa.direction,heading:pa.heading},otherOriginal={room:pb.room,x:pb.x,y:pb.y,direction:pb.direction,heading:pb.heading};
+  t.after(()=>{Object.assign(pa,original);Object.assign(pb,otherOriginal);});
   assert.ok(target,'la moto ferma di test è presente nella scena di Mergellina');
   assert.equal(VEHICLE_INTERACTION_RANGE,5);
   Object.assign(pb,{room:'mergellina',x:target.x+1,y:target.y,vehicle:null,vehicleSource:null,streetVehicleId:null,seat:null,input:{x:0,y:0}});
-  await pause(190);Object.assign(pa,{room:'mergellina',x:target.x+4.2,y:target.y,vehicle:null,seat:null,input:{x:0,y:0}});
-  assert.ok(Math.hypot(pa.x-target.x,pa.y-target.y)<VEHICLE_INTERACTION_RANGE,'il giocatore è nel raggio mostrato dal pulsante');
-  ca.send({type:'interact'});await until(()=>pa.vehicle===target.v);assert.equal(pa.vehicleSource,'street');
+  await pause(190);Object.assign(pa,{room:'mergellina',x:target.x+5.8,y:target.y,vehicle:null,seat:null,input:{x:0,y:0}});
+  assert.ok(Math.hypot(pa.x-target.x,pa.y-target.y)<VEHICLE_INTERACTION_RANGE+1.5,'il margine server assorbe lo scarto fra posizione visualizzata e posizione autorevole');
+  ca.send({type:'interact',vehicleId:'veicolo-che-non-esiste'});await pause(220);assert.equal(pa.vehicle,null,'un ID non valido non deve far prendere il primo mezzo vicino');
+   ca.send({type:'interact',vehicleId:target.id});await until(()=>pa.vehicle===target.v);assert.equal(pa.vehicleSource,'street');assert.equal(pa.streetVehicleId,target.id,'sale proprio sul mezzo selezionato');assert.ok(Math.hypot(pa.x-target.x,pa.y-target.y)<.1,'il personaggio viene allineato al veicolo appena sale');
   await pause(2700);assert.equal(pa.vehicle,target.v,'il controllo periodico del garage non deve smontare dal mezzo pubblico');
   for(let i=0;i<7;i++){ca.send({type:'input',drive:true,throttle:1,steer:0,brake:0});await pause(100);}
-  assert.ok(pa.vel>0,'l’acceleratore raggiunge la fisica server del veicolo');
+   assert.ok(pa.vel>0,'l’acceleratore raggiunge la fisica server del veicolo: '+JSON.stringify({room:pa.room,x:pa.x,y:pa.y,heading:pa.heading,vehicle:pa.vehicle,velocity:pa.vel,input:pa.input}));
   ca.send({type:'input',drive:true,throttle:0,steer:0,brake:1});await pause(650);const dropPoint={x:pa.x,y:pa.y};ca.send({type:'interact'});await until(()=>pa.vehicle===null);assert.equal(pa.vehicleSource,null);
-  const parkedAtDrop=app.game.streetVehicleState(target.id);assert.ok(parkedAtDrop&&!parkedAtDrop.occupied,'dopo l’uscita il mezzo pubblico resta disponibile');assert.ok(Math.hypot(parkedAtDrop.x-dropPoint.x,parkedAtDrop.y-dropPoint.y)<.25,'il mezzo viene parcheggiato dove è sceso il giocatore');await pause(180);const receivedByA=ca.state()?.streetVehicles?.find(vehicle=>vehicle.id===target.id),receivedByB=cb.state()?.streetVehicles?.find(vehicle=>vehicle.id===target.id);assert.ok(receivedByA&&!receivedByA.occupied,'il guidatore riceve la posizione del mezzo appena parcheggiato: '+JSON.stringify({room:pa.room,server:parkedAtDrop,received:receivedByA}));assert.ok(receivedByB&&!receivedByB.occupied,'gli altri client vicini ricevono il parcheggio condiviso: '+JSON.stringify({room:app.game.players.get(b.user.id).room,server:parkedAtDrop,received:receivedByB}));
+  const parkedAtDrop=app.game.streetVehicleState(target.id);assert.ok(parkedAtDrop&&!parkedAtDrop.occupied,'dopo l’uscita il mezzo pubblico resta disponibile');assert.ok(Math.hypot(parkedAtDrop.x-dropPoint.x,parkedAtDrop.y-dropPoint.y)<.25,'il mezzo viene parcheggiato dove è sceso il giocatore');const receivedByA=()=>ca.state()?.streetVehicles?.find(vehicle=>vehicle.id===target.id),receivedByB=()=>cb.state()?.streetVehicles?.find(vehicle=>vehicle.id===target.id);await until(()=>!!receivedByA()&&!receivedByA().occupied&&!!receivedByB()&&!receivedByB().occupied);assert.ok(receivedByA()&&!receivedByA().occupied,'il guidatore riceve la posizione del mezzo appena parcheggiato: '+JSON.stringify({room:pa.room,server:parkedAtDrop,received:receivedByA()}));assert.ok(receivedByB()&&!receivedByB().occupied,'gli altri client vicini ricevono il parcheggio condiviso: '+JSON.stringify({room:app.game.players.get(b.user.id).room,server:parkedAtDrop,received:receivedByB()}));
   const progress=JSON.parse(app.db.prepare('SELECT progress FROM player_state WHERE user_id=?').get(a.user.id).progress);
   assert.ok(!(progress.vehicles||[]).includes(target.v),'un veicolo stradale non diventa proprietà dopo l’uscita');assert.equal(pa.streetVehicleId,null,'l’identità del mezzo è liberata quando il giocatore scende');
   Object.assign(pa,{room:'mergellina',x:parkedAtDrop.x+.4,y:parkedAtDrop.y+.25,vehicle:null,vehicleSource:null,streetVehicleId:null,seat:null,input:{x:0,y:0}});Object.assign(pb,{room:'mergellina',x:parkedAtDrop.x+.4,y:parkedAtDrop.y+.25,vehicle:null,vehicleSource:null,streetVehicleId:null,seat:null,input:{x:0,y:0}});
@@ -62,6 +64,18 @@ test('Due client reali: account, sincronizzazione, social, interni e permessi',a
   assert.equal(pa.streetVehicleId,target.id,'il primo giocatore acquisisce l’identità del mezzo stradale');assert.equal(pb.vehicle,null,'il secondo giocatore non può duplicare il veicolo già occupato');
   ca.send({type:'interact'});await until(()=>pa.vehicle===null);assert.equal(pa.streetVehicleId,null,'il veicolo torna disponibile dopo l’uscita');
   Object.assign(pa,original);Object.assign(pb,otherOriginal);
+ });
+  await t.test('Passeggero nuovo: ingresso mirato sul passeggero di una moto ferma',async t=>{
+  if(!napoliParkedVehicles().some(vehicle=>vehicle.id==='ciro-africa-9')){setNapoli(JSON.parse(readFileSync('client/assets/world/napoli/map/mergellina.json','utf8')));registerMergellina();}
+  const driver=app.game.players.get(a.user.id),passenger=app.game.players.get(b.user.id),target=napoliParkedVehicles().find(vehicle=>vehicle.id==='ciro-africa-9');
+   const saved=p=>Object.fromEntries(['room','x','y','direction','vehicle','vehicleSource','streetVehicleId','seat','passenger','passengerIndex','vehicleOwner','vehicleLocked','heading','vel','input'].map(key=>[key,p[key]])),driverState=saved(driver),passengerState=saved(passenger),progressRow=app.db.prepare('SELECT progress FROM player_state WHERE user_id=?').get(driver.id),driverProgress=JSON.parse(progressRow.progress),originalProgress=progressRow.progress;
+   driverProgress.vehicles=[...new Set([...(driverProgress.vehicles||[]),'m-enduro'])];app.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(JSON.stringify(driverProgress),driver.id);
+   t.after(()=>{Object.assign(driver,driverState);Object.assign(passenger,passengerState);app.db.prepare('UPDATE player_state SET progress=? WHERE user_id=?').run(originalProgress,driver.id);});
+  Object.assign(driver,{room:'mergellina',x:target.x,y:target.y,vehicle:'m-enduro',vehicleSource:'owned',vehicleOwner:driver.id,vehicleLocked:false,streetVehicleId:null,seat:null,input:{x:0,y:0}});
+  Object.assign(passenger,{room:'mergellina',x:target.x+1,y:target.y,vehicle:null,vehicleSource:null,streetVehicleId:null,seat:null,passenger:null,input:{x:0,y:0}});
+  await pause(220);cb.send({type:'interact',intent:'passenger',playerId:driver.id});await until(()=>passenger.seat==='car');
+  assert.equal(passenger.passenger,driver.id,'il nuovo giocatore risulta collegato al guidatore');assert.equal(passenger.passengerIndex,0,'riceve il posto passeggero libero');assert.equal(driver.vehicle,'m-enduro','il guidatore resta sul mezzo');
+  await pause(220);cb.send({type:'interact'});await until(()=>passenger.seat===null);assert.equal(passenger.passenger,null,'il passeggero può scendere con il comando contestuale');
  });
  await t.test('Richieste amicizia: solo destinatario può accettare',async()=>{
   assert.equal((await api('friends',{id:b.user.id},a.token)).status,200);
@@ -81,7 +95,7 @@ test('Due client reali: account, sincronizzazione, social, interni e permessi',a
   assert.equal((await api('social',null,a.token)).data.friends.length,0);await api('block',{id:b.user.id,remove:true},a.token);
  });
  await t.test('Porta verificata, interno condiviso e seduta esclusiva',async()=>{
-  const pa=app.game.players.get(a.user.id),pb=app.game.players.get(b.user.id);ca.send({type:'interact'});await pause(40);assert.equal(pa.room,'lungomare');
+   const pa=app.game.players.get(a.user.id),pb=app.game.players.get(b.user.id),exit=doors('bar').find(d=>d.to==='lungomare');assert.ok(exit,'la porta di uscita del locale esiste');Object.assign(pa,{room:'bar',x:exit.x,y:exit.y,seat:null,input:{x:0,y:0}});ca.send({type:'interact'});await pause(40);assert.equal(pa.room,'lungomare');
   // Fixture server vicino alla porta: il client non dispone di teletrasporto.
   await pause(190);Object.assign(pa,(({x,y})=>({x,y}))(doors('lungomare')[0]));ca.send({type:'interact'});await until(()=>pa.room==='bar');
   await until(()=>ca.state()?.players.length===1);Object.assign(pb,(({x,y})=>({x,y}))(doors('lungomare')[0]));cb.send({type:'interact'});await until(()=>pb.room==='bar');await until(()=>ca.state()?.players.length===2);

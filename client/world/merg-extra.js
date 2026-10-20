@@ -9,15 +9,19 @@ function sign(text,w,h,bg,fg='#fff'){const c=document.createElement('canvas');c.
  let t=text;while(g.measureText(t).width>c.width-30&&t.length>6)t=t.slice(0,-2);if(t!==text)t+='…';g.fillText(t,c.width/2,c.height/2+2);const tx=new THREE.CanvasTexture(c);tx.colorSpace=THREE.SRGBColorSpace;return new THREE.Mesh(new THREE.PlaneGeometry(w,h),new THREE.MeshBasicMaterial({map:tx,side:THREE.DoubleSide}));}
 const box=(g,sx,sy,sz,x,y,z,m)=>{const q=new THREE.Mesh(new THREE.BoxGeometry(sx,sy,sz),m);q.position.set(x,y,z);g.add(q);return q;};
 export class MergExtra{
- constructor(w){this.w=w;this.boats=[];this.sigMat=null;this.t=0;this.bt=0;this.built=false;}
- build(){const w=this.w,S=napoliServices(),Z=w.static;if(!S)return;
-  // ---- distributori veri ----
+ constructor(w){this.w=w;this.boats=[];this.sigMat=null;this.t=0;this.bt=0;this.built=false;this.fuelBuilt=false;}
+ // Le pompe fanno parte della geometria base del quartiere: si costruiscono subito,
+ // anche quando il profilo semplificato non attiva il sistema di vita avanzato.
+ buildFuelStations(){if(this.fuelBuilt)return;const w=this.w,S=napoliServices(),Z=w.static;if(!S)return;
+  // ---- stazioni di servizio con insegne originali e nomi generici ----
   const red=lam('#d9262c'),white=lam('#f4f1ea'),gray=lam('#666b73');
   for(const f of S.fuel){const g=new THREE.Group();g.position.set(f.x,w.lev(f.x,f.y),f.y);g.rotation.y=f.h;
    box(g,9,.5,5.6,0,4.6,0,white);box(g,9.05,.2,5.65,0,4.3,0,red);for(const sx of [-3.9,3.9])for(const sz of [-2.2,2.2])box(g,.28,4.4,.28,sx,2.2,sz,gray);
    for(const dx of [-2.6,0,2.6]){box(g,.8,1.5,.55,dx,.75,0,red);box(g,.5,.4,.58,dx,1.2,0,lam('#1c2b39'));}
-   const pole=box(g,.3,6,.3,-5.4,3,2.4,gray);const sg=sign(f.name,2.6,1.1,'#d9262c');sg.position.set(-5.4,6.4,2.4);g.add(sg);
-   Z.add(g);w.col.c.push([f.x,f.y,3.2]);}
+   box(g,.3,6,.3,-5.4,3,2.4,gray);const sg=sign('CARBURANTE',3.2,1.1,'#d9262c');sg.position.set(-5.4,6.4,2.4);g.add(sg);
+   w.bake?.(g);Z.add(g);}
+  this.fuelBuilt=true;}
+ build(){const w=this.w,S=napoliServices(),Z=w.static;if(!S)return;this.buildFuelStations();
   // ---- caserme/ambulatori veri: cartello sulla porta, mezzi davanti, lampeggiante ----
   for(const kind of ['police','hospital']){for(const f of S[kind]){const g=new THREE.Group();g.position.set(f.x,w.lev(f.x,f.y),f.y);g.rotation.y=f.h;const blue=kind==='police';
     box(g,.25,4.4,.25,-1.6,2.2,0,gray);const sg=sign(f.name,3.4,1.1,blue?'#16357a':'#c0262d');sg.position.set(-1.6,4.6,.05);g.add(sg);
@@ -30,15 +34,15 @@ export class MergExtra{
    const heads=new THREE.Group(),poleG=new THREE.BoxGeometry(.14,3.6,.14),headG=new THREE.BoxGeometry(.4,1.1,.3),lampG=new THREE.SphereGeometry(.13,6,5),poleM=lam('#2b2f36');const stripes=[];
    for(const s of D.signals||[]){for(const r of D.roads){if(NOT.has(r.k)||r.tn)continue;const j=r.p.findIndex(q=>Math.hypot(q[0]-s[0],q[1]-s[1])<1.2);if(j<0)continue;
      for(const dj of [-1,1]){const q=r.p[j+dj];if(!q)continue;let dx=q[0]-s[0],dy=q[1]-s[1];const L=Math.hypot(dx,dy);if(L<9)continue;dx/=L;dy/=L;const ax=Math.abs(dx)>=Math.abs(dy)?'A':'B',nx=-dy,ny=dx,rw=r.w||6;
-      const px=s[0]+dx*8+nx*(rw/2+.9),pz=s[1]+dy*8+ny*(rw/2+.9);if(napoliCell(px,pz)||true){const g=new THREE.Group();g.position.set(px,w.lev(px,pz),pz);g.rotation.y=Math.atan2(dx,dy);const p=new THREE.Mesh(poleG,poleM);p.position.y=1.8;g.add(p);const hd=new THREE.Mesh(headG,poleM);hd.position.set(0,3.7,.05);g.add(hd);
-       [['r',.34],['y',0],['g',-.34]].forEach(([c,y])=>{const l=new THREE.Mesh(lampG,mats[ax][c]);l.position.set(0,3.7+y,.22);g.add(l);});heads.add(g);}
+      const px=s[0]+dx*8+nx*(rw/2+.9),pz=s[1]+dy*8+ny*(rw/2+.9);if(!napoliCell(px,pz))continue;const g=new THREE.Group();g.position.set(px,w.lev(px,pz),pz);g.rotation.y=Math.atan2(dx,dy);const p=new THREE.Mesh(poleG,poleM);p.position.y=1.8;g.add(p);const hd=new THREE.Mesh(headG,poleM);hd.position.set(0,3.7,.05);g.add(hd);
+      [['r',.34],['y',0],['g',-.34]].forEach(([c,y])=>{const l=new THREE.Mesh(lampG,mats[ax][c]);l.position.set(0,3.7+y,.22);g.add(l);});heads.add(g);
       for(let k=-Math.floor(rw/2)+.5;k<rw/2;k+=1.1)stripes.push([s[0]+dx*5.2+nx*k,s[1]+dy*5.2+ny*k,Math.atan2(dx,dy)]);}}}
    w.static.add(heads);
    if(stripes.length){const im=new THREE.InstancedMesh(new THREE.BoxGeometry(.55,.02,3.2),new THREE.MeshLambertMaterial({color:'#f4f2ea',polygonOffset:true,polygonOffsetFactor:-3,polygonOffsetUnits:-3}),stripes.length),o=new THREE.Object3D();stripes.forEach((s,i)=>{o.position.set(s[0],.045,s[1]);o.rotation.y=s[2];o.updateMatrix();im.setMatrixAt(i,o.matrix);});im.frustumCulled=false;w.static.add(im);}}
   try{this.buildCiro();}catch(e){console.warn('Ciro',e);}
   this.built=true;}
  // Chalet del Golfo (Via Caracciolo, Mergellina): padiglione basso crema con vetrate, tende a strisce blu e bianche, siepi sul tetto, insegna, tavolini; scooter in fila sul marciapiede e platani lungo la strada.
- buildCiro(){const w=this.w,D=NAPOLI.data,b=D.buildings.find(q=>q.name==='Chalet del Golfo');if(!b)return;const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4,gy=w.groundY||.12,g=new THREE.Group();
+ buildCiro(){const w=this.w,D=NAPOLI.data,b=D.buildings.find(q=>q.osm==='way/1365095986'||q.displayName==='Chalet del Golfo'||q.name==='Chalet del Golfo');if(!b)return;const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4,gy=w.groundY||.12,g=new THREE.Group();
   g.position.set(cx,gy,cy);g.rotation.y=Math.PI/2;const L=(c)=>w.sm(c),cream=w.gfx==='ultra'?w.pbr('painted_plaster_wall',{color:'#f0e8d6',roughness:.95,envMapIntensity:.25,normalScale:new THREE.Vector2(.18,.18)}):L('#f0e8d6'),white=L('#faf7f0'),navy=L('#1c2a4a'),green=w.gfx==='ultra'?L('#526344'):L('#2e6a34'),glass=new THREE.MeshLambertMaterial({color:'#27394d',transparent:true,opacity:.7});
   const H=3.7;w.shopInside(g,{interior:'bar'},Wd,Dp,31,{accent:'#40382d'});box(g,Wd,.7,Dp,0,H-.35,0,cream);box(g,Wd+.5,.3,Dp+.5,0,H+.15,0,white);
   // vetrate e montanti
@@ -66,9 +70,10 @@ export class MergExtra{
   }
   // Il locale viene creato dopo il bake del quartiere: unire qui gli arredi fermi.
   w.bake(g);w.static.add(g);
-  // scooter in fila lungo il marciapiede davanti allo chalet, platani lungo la strada
-  const cols=['#1b1b1f','#c7ccd4','#b3261e','#1d4e89'],mk=[(c)=>w.scooter(c,{top:true}),(c)=>w.moto(c,'xadv'),(c)=>w.scooter(c,{top:true}),(c)=>w.moto(c,'africa')],byc=cols.map(()=>[]);let k=0;for(let y=cy-Wd/2+1;y<cy+Wd/2-.5;y+=1.15){const x=cx+Dp/2+4.4;if(napoliCell(x,y)&&(k===4||k===9)){byc[3].push([x,y,Math.PI+ (k%3-1)*.06]);w.col.c.push([x,y,.45]);}k++;}/* solo mezzi veri: due Africa Twin (modello vero), niente motorini disegnati */
-  byc.forEach((l,i)=>{if(l.length)w.instanced(mk[i](cols[i]),l);});
+  // I due Africa Twin sono disegnati dal livello dei veicoli parcheggiati, che
+  // usa le stesse coordinate e lo stesso stato di occupazione del server. Una
+  // copia statica qui resterebbe visibile dopo che il mezzo è stato spostato,
+  // inducendo il giocatore a provare a salire su una moto fantasma.
   const T=[[],[],[]];let kk=0;for(const x of [cx+Dp/2+5.4,cx+Dp/2+23.5])for(let y=cy-70;y<=cy+70;y+=12.5){if(Math.abs(y-cy)<Wd/2+1&&x<cx+10)continue;if(napoliCell(x,y)&&napoliCell(x+.8,y)&&napoliCell(x-.8,y)&&!w.onRoad?.(x,y)){T[kk%3].push([x,y,0]);w.col.c.push([x,y,.4]);kk++;}}
   for(let v=0;v<3;v++)w.instanced(w.tree(1,v),T[v]);}
  // barche ormeggiate ai pontili e tre barche che navigano al largo

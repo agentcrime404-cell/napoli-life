@@ -11,9 +11,9 @@ const shade=(hex,k)=>'#'+new THREE.Color(hex).multiplyScalar(k).getHexString();
 
 // ---------- Scheda dell'avatar ----------
 // Indici uguali a quelli del catalogo del gioco (shared/catalog.js): capi, pantaloni, scarpe, cappelli, borse, occhiali, collane, tagli.
-const TOPS=['hoodie','jacket','jacket','coat','jacket','jacket','jacket','puffer','vest','coat','jacket','sweater'];
+const TOPS=['hoodie','jacket','jacket','coat','jacket','jacket','jacket','puffer','vest','coat','jacket','sweater','tee'];
 const BOTTOMS=['jeans','chino','cargo','jogger','chino','shorts','wide'];
-const SHOES=['sneakers','loafers','boots','sneakers','sandals','heels','boots','loafers'];
+const SHOES=['sneakers','loafers','boots','sneakers','sandals','heels','boots','loafers','slippers'];
 const HATS=['cap','beanie','fedora','bucket','cap','fedora','band','band','visor'];
 const BAGS=['backpack','shoulder','shoulder','shoulder','shoulder','shoulder','backpack'];
 const HAIR=['short','buzz','short','quiff','crest','crest','afro','curly','long','ponytail','bun','braids','bob','undercut','quiff','mullet','pigtails','bald'];
@@ -36,6 +36,8 @@ export function avatarSpec(avatar={},id='',look=null){
  if(w.neck)s.neck={kind:w.neck.style>=3?'scarf':'chain',color:w.neck.color};
  if(w.bag)s.bag={kind:BAGS[w.bag.style]||'shoulder',color:w.bag.color};
  if(w.watch)s.watch={color:w.watch.color};
+ if(w.gloves)s.gloves={kind:w.gloves.style===1?'padded':'street',color:w.gloves.color};
+ if(w.mask)s.mask={kind:['mask','gaiter','balaclava'][w.mask.style]||'mask',color:w.mask.color};
  return s;}
 
 // ---------- Viso: quattro espressioni disegnate (normale, occhi chiusi, bocca aperta, sorriso largo) ----------
@@ -101,7 +103,7 @@ export function buildAvatar(s,material,gradientMap){
  for(const [sx,up,lo] of [[1,B.armL,B.foreL],[-1,B.armR,B.foreR]]){const x=sx*armX;
   add(lathe([[.001,.478],[foreR*.8,.484],[foreR*.92,.52],[foreR*1.1,.6],[armR*.92,.632],[armR,.7],[armR*1.12,.765],[armR*.95,.797],[.001,.808]],10),up,(_,y)=>sleeveless?skin:shortSl?(y>.705?top.color:skin):top.color,mat(x,0,0),blend(lo,Y.elbow,.022));
   if(!sleeveless&&!shortSl)add(new THREE.CylinderGeometry(foreR*1.1,foreR*1.1,.02,10),lo,shade(top.color,.8),mat(x,.493,0));
-  add(sph(2),lo,skin,mat(x,.462,.004,.024,.034,.028));}
+  add(sph(2),lo,skin,mat(x,.462,.004,.024,.034,.028));if(s.gloves)add(ball(10,8),lo,s.gloves.color,mat(x,.462,.013,s.gloves.kind==='padded'?.031:.027,.038,.034));}
  // Gambe: pantaloni lunghi, larghi, corti, oppure gamba nuda sotto gonna e vestito; scarpe.
  const thR=f?.057:.056,shR=BK==='wide'?.052:BK==='cargo'?.048:BK==='jogger'?.043:f?.038:.042,longP=['jeans','chino','cargo','jogger','wide'].includes(BK);
  for(const [sx,up,lo] of [[1,B.legL,B.shinL],[-1,B.legR,B.shinR]]){const x=sx*legX;
@@ -112,6 +114,7 @@ export function buildAvatar(s,material,gradientMap){
   const sk=s.shoes.kind,sc=s.shoes.color;
   if(sk==='heels'){add(sph(2),lo,sc,mat(x,.04,.035,.036,.03,.075));add(new THREE.CylinderGeometry(.008,.006,.06,6),lo,sc,mat(x,.03,-.03));add(sph(1),lo,skin,mat(x,.062,.01,.03,.03,.04));}
   else if(sk==='sandals'){add(box(.075,.014,.2),lo,sc,mat(x,.012,.035));add(sph(2),lo,skin,mat(x,.04,.04,.034,.026,.08));}
+  else if(sk==='slippers'){add(box(.078,.018,.19),lo,shade(sc,.62),mat(x,.014,.035));add(box(.073,.025,.1),lo,sc,mat(x,.037,.004));}
   else{const tall=sk==='boots';add(sph(2),lo,sc,mat(x,.042,.035,.043,tall?.05:.038,.09));add(box(.084,.022,.2),lo,sk==='sneakers'?'#f4f4f4':shade(sc,.6),mat(x,.011,.035));if(tall)add(new THREE.CylinderGeometry(.043,.04,.07,10),lo,sc,mat(x,.1,0));
    if(sk==='sneakers')add(box(.05,.012,.07),lo,'#f4f4f4',mat(x,.074,.06,1,1,1,-.5));}}
  // Gonna, vestito, cappotto: una campana attaccata al bacino.
@@ -166,6 +169,10 @@ export function buildAvatar(s,material,gradientMap){
  // Viso: una calotta sottile davanti alla testa, con la texture delle espressioni.
  const tex=faceTexture(s),fm=gradientMap?new THREE.MeshToonMaterial({map:tex,gradientMap,transparent:true,alphaTest:.3}):new THREE.MeshLambertMaterial({map:tex,transparent:true,alphaTest:.3});fm.userData.outlineParameters={visible:false};
  const face=new THREE.Mesh(new THREE.SphereGeometry(1,16,12,Math.PI/2-.86,1.72,Math.PI/2-.7,1.42),fm);face.scale.set(hx*1.012,hy*1.012,hz*1.012);face.position.set(0,Y.head-Y.neck,0);head.add(face);
+ if(s.mask){const mm=gradientMap?new THREE.MeshToonMaterial({color:s.mask.color,gradientMap,side:THREE.DoubleSide}):new THREE.MeshStandardMaterial({color:s.mask.color,roughness:.92,side:THREE.DoubleSide});
+  const panel=new THREE.Mesh(new THREE.SphereGeometry(1,12,8),mm);panel.scale.set(.058,.027,.018);panel.position.set(0,-.025,.078);head.add(panel);
+  if(s.mask.kind==='gaiter'){const collar=new THREE.Mesh(new THREE.TorusGeometry(.047,.014,6,14),mm);collar.position.set(0,-.073,0);collar.rotation.x=Math.PI/2;head.add(collar);}
+  if(s.mask.kind==='balaclava'){const hood=new THREE.Mesh(new THREE.SphereGeometry(1,14,10,0,Math.PI*2,0,Math.PI*.64),mm);hood.scale.set(.083,.097,.086);hood.position.set(0,0,-.002);head.add(hood);for(const sx of [-1,1]){const ear=new THREE.Mesh(new THREE.SphereGeometry(1,8,6),mm);ear.scale.set(.012,.025,.018);ear.position.set(sx*.077,-.006,0);head.add(ear);}}}
  const root=new THREE.Group();root.add(mesh);root.scale.setScalar(s.h);
  return {root,mesh,bones,tex,spec:s,ph:hash(JSON.stringify(s))%7,walk:0,seed:Math.random()*6.28,blink:1+Math.random()*3,
   dispose(){geo.dispose();tex.dispose();fm.dispose();skeleton.dispose();}};}

@@ -24,9 +24,9 @@ export class CollisionGrid {
   for(let i=this.rectCount;i<rects.length;i++){const q=rects[i];if(!q||q.length<4||!q.slice(0,4).every(Number.isFinite))continue;this.insert(this.rects,Math.min(q[0],q[2]),Math.min(q[1],q[3]),Math.max(q[0],q[2]),Math.max(q[1],q[3]),q);}
   this.circleCount=circles.length;this.rectCount=rects.length;
  }
- blocked(x,z,r=.3){
+ blocked(x,z,r=.3,ignoredRectangles=null){
   this.sync();const cellX=Math.floor(x/this.cellSize),cellZ=Math.floor(z/this.cellSize),rects=bucketAt(this.rects,cellX,cellZ),circles=bucketAt(this.circles,cellX,cellZ);
-  if(rects)for(const q of rects)if(x>q[0]-r&&x<q[2]+r&&z>q[1]-r&&z<q[3]+r)return true;
+  if(rects)for(const q of rects){if(ignoredRectangles?.has(q))continue;if(x>q[0]-r&&x<q[2]+r&&z>q[1]-r&&z<q[3]+r)return true;}
   if(circles)for(const q of circles){const dx=x-q[0],dz=z-q[1],l=q[2]+r;if(dx<l&&dx>-l&&dz<l&&dz>-l&&dx*dx+dz*dz<l*l)return true;}
   return false;
  }

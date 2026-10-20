@@ -17,7 +17,7 @@ export class SocialGroups{
    .filter(d=>d.distance<=190).sort((a,b)=>a.distance-b.distance).slice(0,8);
   const lungomare=doors('lungomare').filter(d=>LUNGOMARE_SPOTS.has(d.id))
    .map(d=>({...d,room:'lungomare',category:d.id==='club'?'Musica e socialità':'Caffè e ristorazione'}));
-  return [...mergellina,...lungomare].map(d=>({id:d.room+':'+d.id,name:d.name,room:d.room,x:d.exitX??d.x,y:d.exitY??d.y,category:d.category}));
+  return [...mergellina,...lungomare].map(d=>({id:d.room==='mergellina'&&d.osm==='node/2508856019'?'mergellina:m31':d.room+':'+d.id,name:d.name,room:d.room,x:d.exitX??d.x,y:d.exitY??d.y,category:d.category}));
  }
  groupIdFor(userId){return this.db.prepare('SELECT group_id FROM social_group_members WHERE user_id=?').get(userId)?.group_id||null;}
  isFriend(a,b){return !!this.db.prepare("SELECT 1 FROM friendships WHERE status='accepted' AND ((sender=? AND receiver=?) OR (sender=? AND receiver=?))").get(a,b,b,a);}

@@ -4,11 +4,16 @@
 // Opzionale: config.json nella stessa cartella, es. {"vespa":{"yaw":3.1416,"len":1.8}} per girare/ridimensionare un modello.
 import * as THREE from '../vendor/three/three.module.min.js';
 import {GLTFLoader} from '../vendor/three/GLTFLoader.js';
-// In produzione carichiamo solo modelli con licenza già verificata nel kit CC0.
-// I mezzi originali di Napoli Life (moto e auto) restano generati dal codice;
-// eventuali GLB esterni nelle cartelle di lavoro non vengono distribuiti.
-const LIST=[['city','kenney-car-kit',3.8],['sedan','kenney-car-kit',4.2],['suv','kenney-car-kit',4.4],['gt','kenney-car-kit',4.6],['super','kenney-car-kit',4.6],['coupe','kenney-car-kit',4.3]];
 const BASE='/assets/world/napoli/vehicles/';
+// Collega i GLB effettivamente consultati da World3D. Il vecchio elenco
+// scaricava sei modelli Kenney con chiavi che realCopy() non richiedeva,
+// mentre sportscar.glb e africa.glb, presenti nel progetto, non venivano caricati.
+export const REAL_VEHICLE_ASSETS=Object.freeze([
+ Object.freeze({id:'sportscar',directory:'auto-vere',file:'sportscar',length:4.6,bytes:356896}),
+ Object.freeze({id:'africa',directory:'moto-vere',file:'africa',length:2.3,bytes:5227400}),
+]);
+export const MOBILE_MODEL_LIMIT=1_500_000;
+export function realVehicleAssetsFor(mobile=false){return REAL_VEHICLE_ASSETS.filter(a=>!mobile||a.bytes<=MOBILE_MODEL_LIMIT);}
 // I GLB arrivano da pacchetti diversi: normalizza il color management e i
 // parametri PBR una sola volta, evitando auto troppo lucide o texture sbiadite.
 function enhanceVehicleMaterials(root,w){
@@ -30,13 +35,18 @@ function enhanceVehicleMaterials(root,w){
  });
 }
 export function loadRealVehicles(w){return w.realVehicleLoad??=loadOnce(w);}
-async function loadOnce(w){w.realV??={};const loader=new GLTFLoader(),cfg={};
+async function loadOnce(w){w.realV??={};const loader=new GLTFLoader(),cfg={},status=w.realVehicleStatus={state:'loading',mobile:!!w.mobile,requested:[],loaded:[],skipped:[],failed:[]};
  for(const d of ['moto-vere','auto-vere']){try{const r=await fetch(BASE+d+'/config.json',{cache:'no-cache'});if(r.ok)Object.assign(cfg,await r.json());}catch{}}
- await Promise.all(LIST.map(async([id,dir,len0])=>{try{const aliases={city:'hatchback-sports',sedan:'sedan',suv:'suv',gt:'sedan-sports',super:'race',coupe:'hatchback-sports'};const file=aliases[id]||id,url=BASE+dir+'/'+file+'.glb',h=await fetch(url,{method:'HEAD',cache:'no-cache'});if(!h.ok)return;if(w.mobile&&+h.headers.get('content-length')>1500000){console.info('[modelli veri]',id,'saltato sul telefono (file pesante)');return;}
+ const selected=realVehicleAssetsFor(!!w.mobile);status.requested=selected.map(asset=>asset.id);
+ status.skipped=REAL_VEHICLE_ASSETS.filter(asset=>!selected.includes(asset)).map(asset=>({id:asset.id,bytes:asset.bytes,reason:'sopra il limite mobile'}));
+ await Promise.all(selected.map(async asset=>{try{const {id,directory,file,length}=asset,url=BASE+directory+'/'+file+'.glb';
   const g=await new Promise((ok,no)=>loader.load(url+'?v='+(window.__build||''),ok,undefined,no)),root=g.scene,C=cfg[id]||{};root.rotation.y=C.yaw||0;root.updateMatrixWorld(true);
   let b=new THREE.Box3().setFromObject(root),s=b.getSize(new THREE.Vector3());if(s.x>s.z*1.2){root.rotation.y+=Math.PI/2;root.updateMatrixWorld(true);b=new THREE.Box3().setFromObject(root);s=b.getSize(new THREE.Vector3());}
-  const k=(C.len||len0)/Math.max(s.z,.01),box=new THREE.Group();root.scale.multiplyScalar(k);root.updateMatrixWorld(true);b=new THREE.Box3().setFromObject(root);const c=b.getCenter(new THREE.Vector3());root.position.set(-c.x,-b.min.y,-c.z);box.add(root);
+  const k=(C.len||length)/Math.max(s.z,.01),box=new THREE.Group();root.scale.multiplyScalar(k);root.updateMatrixWorld(true);b=new THREE.Box3().setFromObject(root);const c=b.getCenter(new THREE.Vector3());root.position.set(-c.x,-b.min.y,-c.z);box.add(root);
   let tris=0;enhanceVehicleMaterials(root,w);root.traverse(o=>{if(o.isMesh)tris+=(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3;});
   if(tris>40000)console.warn('[modelli veri]',id,'ha',Math.round(tris),'triangoli: troppo pesante per il telefono, meglio ridurlo sotto 30000');
-  box.userData.real=true;w.realV[id]=box;console.info('[modelli veri]',id,'caricato',Math.round(tris),'triangoli');}catch(e){console.warn('[modelli veri]',id,e?.message||e);}}));}
+  box.userData.real=true;w.realV[id]=box;status.loaded.push({id,triangles:Math.round(tris)});console.info('[modelli veri]',id,'caricato',Math.round(tris),'triangoli');}catch(e){const message=String(e?.message||e);status.failed.push({id:asset.id,message});console.warn('[modelli veri]',asset.id,message);}}));
+ for(const item of status.skipped)console.info('[modelli veri]',item.id,'saltato sul telefono ('+Math.round(item.bytes/1024)+' KB; limite '+Math.round(MOBILE_MODEL_LIMIT/1024)+' KB)');
+ status.state='ready';
+}
 export const realCopy=(w,id)=>{const t=w.realV?.[id];return t?t.clone(true):null;};

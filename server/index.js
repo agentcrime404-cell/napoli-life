@@ -1,17 +1,15 @@
 import {cleanAvatar,cleanPhoto} from '../shared/avatar.js';
 import {Roleplay} from './rp.js';
-import {Heists} from './heist.js';
 import {Bag} from './bag.js';
 import {Biz} from './biz.js';
-import {Gangs} from './gang.js';
-import {LOOKS} from '../shared/looks.js';import {setNapoli} from '../shared/napoli.js';import {registerMergellina,registerMallFloor,EXTRA_BLOCKS} from '../shared/world.js';import {solidBlocks} from '../shared/catalog.js';import {Arena} from './arena.js';import {Fuel} from './fuel.js';import {Police} from './police.js';import {Service} from './service.js';
+import {LOOKS} from '../shared/looks.js';import {setNapoli} from '../shared/napoli.js';import {registerMergellina,registerMallFloor,EXTRA_BLOCKS} from '../shared/world.js';import {solidBlocks} from '../shared/catalog.js';import {Fuel} from './fuel.js';import {Service} from './service.js';
 // Zona Mergellina di HUMANA life 3D (mappa vera OpenStreetMap), se il file della mappa esiste.
 const BUILD=(()=>{try{return (readFileSync(new URL('../client/sw.js',import.meta.url),'utf8').match(/humana-life-(\d+)/)||[])[1]||'0';}catch{return '0';}})();
 let napoliLoaded=false;function loadMergellina(){if(napoliLoaded)return;napoliLoaded=true;try{setNapoli(JSON.parse(readFileSync(new URL('../client/assets/world/napoli/map/mergellina.json',import.meta.url),'utf8')));registerMergellina();}catch(e){console.warn('Mergellina non caricata:',e.message);}}
 import http from 'node:http';import https from 'node:https';import {readFileSync,createReadStream} from 'node:fs';import {readFile,stat} from 'node:fs/promises';import {networkInterfaces} from 'node:os';import {gzipSync} from 'node:zlib';import {fileURLToPath} from 'node:url';import {resolve as pathResolve,extname,sep,dirname as pathDirname,join as pathJoin} from 'node:path';import {randomUUID} from 'node:crypto';import {WebSocketServer} from 'ws';
 import {database} from './database.js';import {hashPassword,verify,token,resolve,publicUser,digest} from './auth.js';import {Game} from './game.js';import {payments} from './payments.js';import {Living} from './living.js';import {saveReport,logError} from './reports.js';import {MapEditor} from './editor.js';import {Jobs} from './jobs.js';import {Phone} from './phone.js';import {verifyGoogle,googleUser,googleClientId,randomSecret} from './google.js';import {SocialGroups} from './social-groups.js';
 import {Needs} from './needs.js';
-import {Firearms} from './firearms.js';
+import {SOCIAL_LIFE_MODE,socialLifeApiDisabled} from '../shared/social-mode.js';
 const root=fileURLToPath(new URL('..',import.meta.url));
 const ipv4Number=address=>address.split('.').reduce((n,part)=>(n*256+Number(part))>>>0,0);
 function isPrivateIPv4(address){const p=address.split('.').map(Number);return p.length===4&&(p[0]===10||p[0]===192&&p[1]===168||p[0]===172&&p[1]>=16&&p[1]<=31||p[0]===169&&p[1]===254);}
@@ -23,9 +21,9 @@ const APP_ORIGINS=new Set(['http://localhost','https://localhost','capacitor://l
 // "edition": '' = HUMANA life (2D, scripts/play.mjs), '3d' = HUMANA life 3D (scripts/play-3d.mjs).
 export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqlite',edition=''}={}){
  if(edition==='3d'){loadMergellina();registerMallFloor();} // la zona Mergellina esiste solo in HUMANA life 3D
- const db=database(dbPath),game=new Game(db),limits=new Map();const firearms=new Firearms(game);game.firearms=firearms;
+ const db=database(dbPath),game=new Game(db),limits=new Map();game.socialMode=SOCIAL_LIFE_MODE;
  const zipped=new Map();function rate(key,max){const now=Date.now();let r=limits.get(key);if(!r||now-r.time>60000)limits.set(key,r={time:now,n:0});if(limits.size>10000)limits.delete(limits.keys().next().value);return ++r.n<=max;}
- const living=new Living(db,game);living.edition=edition;const socialGroups=new SocialGroups(db,game);const editor=new MapEditor(db,game);const jobs=new Jobs(db,game);game.jobs=jobs;const needs=new Needs(game);game.needs=needs;const phone=new Phone(db,game);game.phone=phone;game.living=living;if(edition==='3d'){if(!EXTRA_BLOCKS.length)EXTRA_BLOCKS.push(...solidBlocks());game.arena=new Arena(game);game.fuel=new Fuel(game);game.service=new Service(game);game.police=new Police(game);game.rp=new Roleplay(game);game.heist=new Heists(game);game.bag=new Bag(game);game.biz=new Biz(game);game.gangs=new Gangs(game);}const pay=payments(db);
+  const living=new Living(db,game);living.edition=edition;const socialGroups=new SocialGroups(db,game);const editor=new MapEditor(db,game);const jobs=new Jobs(db,game);game.jobs=jobs;const needs=new Needs(game);game.needs=needs;const phone=new Phone(db,game);game.phone=phone;game.living=living;if(edition==='3d'){if(!EXTRA_BLOCKS.length)EXTRA_BLOCKS.push(...solidBlocks());game.fuel=new Fuel(game);game.service=new Service(game);game.rp=new Roleplay(game);game.bag=new Bag(game);game.biz=new Biz(game);}const pay=payments(db);
  const handler=async(req,res)=>{
   const json=(code,data)=>{res.writeHead(code,{'Content-Type':'application/json','Cache-Control':'no-store'});res.end(JSON.stringify(data));};
   try{
@@ -49,7 +47,7 @@ export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqli
     }
     if(url.pathname==='/api/errore'&&req.method==='POST'){let text='';for await(const chunk of req){text+=chunk;if(text.length>3000)break;}try{await logError(pathDirname(pathResolve(dbPath)),JSON.parse(text.slice(0,3000)),req.headers['user-agent']);}catch{}return json(200,{ok:true});}
     if(url.pathname==='/api/segnala'&&req.method==='POST'){const user=resolve(db,req.headers.authorization?.replace(/^Bearer /,''));if(!user)return json(401,{error:'Accedi per continuare'});if(!editor.isAdmin(user))return json(403,{error:'Solo gli admin possono inviare segnalazioni'});let text='';for await(const chunk of req){text+=chunk;if(text.length>3e6)return json(413,{error:'Immagine troppo grande'});}try{return json(200,await saveReport(pathJoin(pathDirname(pathResolve(dbPath)),'segnalazioni'),user,JSON.parse(text)));}catch(e){return json(e.status||400,{error:e.message});}}
-    let body={};if(['POST','PATCH','DELETE'].includes(req.method)){let text='';for await(const chunk of req){text+=chunk;if(text.length>8192)return json(413,{error:'Richiesta troppo grande'});}try{body=JSON.parse(text||'{}');if(!body||Array.isArray(body)||typeof body!=='object')return json(400,{error:'Oggetto JSON richiesto'});}catch{return json(400,{error:'JSON non valido'});}}
+     let body={};if(['POST','PATCH','DELETE'].includes(req.method)){let text='';for await(const chunk of req){text+=chunk;if(text.length>8192)return json(413,{error:'Richiesta troppo grande'});}try{body=JSON.parse(text||'{}');if(!body||Array.isArray(body)||typeof body!=='object')return json(400,{error:'Oggetto JSON richiesto'});}catch{return json(400,{error:'JSON non valido'});}}
     if(url.pathname==='/api/auth/options'&&req.method==='GET')return json(200,{googleClientId:googleClientId()});
     if(url.pathname==='/api/auth/google'&&req.method==='POST'){try{const g=await verifyGoogle(body.credential);const {user,created}=googleUser(db,g,await hashPassword(randomSecret()));return json(200,{token:token(db,user.id),user:publicUser(user),created});}catch(e){return json(e.status||500,{error:e.message});}}
     if(['/api/auth/register','/api/auth/login'].includes(url.pathname)&&req.method==='POST'){
@@ -72,7 +70,8 @@ export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqli
      for(let i=0;i<20&&!guest;i++){const name=LOOKS[look].name+'_'+(1000+Math.floor(Math.random()*9000));try{db.prepare('INSERT INTO users(id,username,password,avatar) VALUES(?,?,?,?)').run(randomUUID(),name,hashed,JSON.stringify({color:'#41d9cf',accessory:'none',body:'regular',glasses:false,look,guest:true,...(edition==='3d'&&cleanPhoto(body.photo)?{photo:cleanPhoto(body.photo)}:{})}));guest=db.prepare('SELECT * FROM users WHERE username=?').get(name);}catch{}}
      if(!guest)return json(503,{error:'Non riesco a creare il profilo ospite. Riprova.'});return json(200,{token:token(db,guest.id),user:publicUser(guest),created:true});
     }
-    const raw=req.headers.authorization?.replace(/^Bearer /,'');const user=resolve(db,raw);if(!user)return json(401,{error:'Accedi per continuare'});
+     const raw=req.headers.authorization?.replace(/^Bearer /,'');const user=resolve(db,raw);if(!user)return json(401,{error:'Accedi per continuare'});
+     if(edition==='3d'&&socialLifeApiDisabled(url.pathname,body))return json(410,{error:'Questa attività non è disponibile in Napoli Life: vita sociale.'});
     // Cambio del personaggio pronto (vale per il 3D; il 2D non cambia).
     if(url.pathname==='/api/look'&&req.method==='POST'){if(!Number.isInteger(body.look)||body.look<0||body.look>=LOOKS.length)return json(400,{error:'Personaggio non valido'});const avatar={...JSON.parse(user.avatar),look:body.look},ph=edition==='3d'?cleanPhoto(body.photo):null;if(ph)avatar.photo=ph;else delete avatar.photo;db.prepare('UPDATE users SET avatar=? WHERE id=?').run(JSON.stringify(avatar),user.id);const active=game.players.get(user.id);if(active)active.avatar=avatar;return json(200,{...publicUser(user),avatar});}
     if(url.pathname==='/api/map/edits'&&req.method==='GET')return json(200,{doc:editor.doc,admin:editor.isAdmin(user)});
@@ -86,7 +85,6 @@ export function createApp({dbPath=process.env.DATABASE_PATH||'./data/humana.sqli
     if(url.pathname==='/api/social-group'){try{const r=socialGroups.route(url.pathname,req.method,user,req.method==='GET'?Object.fromEntries(url.searchParams):body);if(r!==undefined)return json(200,r);}catch(e){return json(e.status||500,{error:e.message});}}
     if(url.pathname.startsWith('/api/jobs')){try{const r=jobs.route(url.pathname,req.method,user);if(r!==undefined)return json(200,r);}catch(e){return json(e.status||500,{error:e.message});}}
     const needsPlayer=game.players.get(user.id)||{id:user.id,ws:null};const needsResult=needs.route(url.pathname,req.method,needsPlayer);if(needsResult!==undefined)return json(200,needsResult);
-    const firearmsPlayer=game.players.get(user.id)||{id:user.id,ws:null};const firearmsResult=firearms.route(url.pathname,req.method,firearmsPlayer,body);if(firearmsResult!==undefined)return json(200,firearmsResult);
     const extra=living.route(url.pathname,req.method,user,req.method==='GET'?Object.fromEntries(url.searchParams):body);if(extra!==undefined)return json(200,extra);
     if(url.pathname==='/api/me'&&req.method==='GET')return json(200,publicUser(user));
     if(url.pathname==='/api/config'&&req.method==='GET')return json(200,{googleClientId:googleClientId(),iceServers:JSON.parse(process.env.ICE_SERVERS_JSON||'[{"urls":"stun:stun.l.google.com:19302"}]')});

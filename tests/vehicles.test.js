@@ -1,6 +1,8 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {database} from '../server/database.js';import {Living} from '../server/living.js';import {step,MAPS} from '../shared/world.js';
+import {canVehicleReverse} from '../shared/catalog.js';
 function setup(balance){const db=database(':memory:');db.prepare('INSERT INTO users(id,username,password) VALUES(?,?,?)').run('a','A','x');const players=new Map([['a',{id:'a',room:'lungomare',x:0,y:0}]]),living=new Living(db,{players,blocked:()=>false});living.route('/api/state','GET',{id:'a'},{});db.prepare('UPDATE player_state SET balance=? WHERE user_id=?').run(balance,'a');return {db,living,players};}
+test('HUD veicolo: la retromarcia è mostrata solo sui mezzi che la supportano',()=>{for(const id of ['auto','a-500','cabrio','furgone','scooter','m-50','m-epoca','m-xadv','monopattino'])assert.equal(canVehicleReverse(id),true,id+' supporta la retromarcia');for(const id of ['m-enduro','m-naked','m-cruiser','m-sport','b-bmx','b-mtb'])assert.equal(canVehicleReverse(id),false,id+' non deve mostrare la retromarcia');});
 test('Mezzi: sblocco, noleggio, saldo e mezzo ripreso al rientro',()=>{
  const {living,players}=setup(300),me=players.get('a'),call=(p,b)=>living.route('/api/vehicle/'+p,'POST',{id:'a'},b);
  assert.throws(()=>call('use',{id:'monopattino'}),/sblocca/);
@@ -36,4 +38,10 @@ test('Guida scooter: il freno inserisce la retromarcia solo quasi da fermo',()=>
  step(p,{drive:true,steer:0,throttle:0,brake:1},.05);assert.ok(p.vel>0,'lo scooter frena prima di arretrare');
  let reverse=false;for(let i=0;i<30;i++){step(p,{drive:true,steer:0,throttle:0,brake:1},.05);reverse||=p.vel<0;}
  assert.ok(reverse,'lo scooter può arretrare lentamente dopo la frenata');assert.ok(p.vel>=-1.21,'la retromarcia dello scooter resta lenta');
+});
+
+test('Guida moto: la frenata non attiva la retromarcia ereditata dalla classe scooter',()=>{
+ const p={room:'lungomare',x:MAPS.lungomare.spawn.x+5,y:MAPS.lungomare.spawn.y,vehicle:'m-enduro',heading:0,direction:0,vel:3};
+ for(let i=0;i<40;i++)step(p,{drive:true,steer:0,throttle:0,brake:1},.05);
+ assert.ok(p.vel>=0&&p.vel<.1,'la moto si arresta senza invertire la marcia');
 });

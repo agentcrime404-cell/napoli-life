@@ -26,19 +26,19 @@ const rings=ids=>{const segs=ids.map(i=>ways.get(i)).filter(Boolean).map(w=>w.n.
 const centroid=p=>[p.reduce((s,q)=>s+q[0],0)/p.length,p.reduce((s,q)=>s+q[1],0)/p.length];
 const num=v=>{const n=parseFloat(String(v||'').replace(',','.'));return Number.isFinite(n)?n:undefined;};
 // ---- uscita ----
-const map={origin:{lat:lat0,lon:lon0},bbox,scale:'1:1 (1 m del gioco = 1 m reale)',attribution:'© OpenStreetMap contributors (ODbL) · https://www.openstreetmap.org/copyright',source:'OpenStreetMap via Overpass API',downloaded:bbox.scaricato,
+const map={origin:{lat:lat0,lon:lon0},bbox,scale:'1:1 (1 m del gioco = 1 m reale)',attribution:'© OpenStreetMap contributors (ODbL) · https://www.openstreetmap.org/copyright',source:bbox.fonte||'OpenStreetMap via Overpass API',downloaded:bbox.scaricato,
  buildings:[],roads:[],coast:[],piers:[],harbour:[],water:[],squares:[],parks:[],beaches:[],pois:[],trees,signals,bus,landmarks:[]};
 const bld=(p,t,extra={})=>{if(p.length<3)return;const lv=num(t['building:levels']),h=num(t.height);map.buildings.push({p,lv:lv||(h?Math.max(1,Math.round(h/3.2)):undefined),h:h||undefined,name:t.name,kind:t.building&&t.building!=='yes'?t.building:undefined,amenity:t.amenity,shop:t.shop,tourism:t.tourism,historic:t.historic,col:t['building:colour']||t.colour,roof:t['roof:shape'],rcol:t['roof:colour'],mat:t['building:material'],part:t['building:part']?1:undefined,...extra});};
 const ROADW={motorway:14,trunk:13,primary:12,secondary:10,tertiary:8,residential:6,unclassified:6,service:4,living_street:5,pedestrian:6,footway:2.5,steps:2.5,path:2,cycleway:2.5,track:3};
 const coastWays=[];
 for(const w of ways.values()){const t=w.t,p=pts(w);if(p.length<2)continue;
- if((t.building||t['building:part'])&&closed(p))bld(p.slice(0,-1),t);
- else if(t.highway){const area=t.area==='yes'&&closed(p);if(area&&(t.highway==='pedestrian'||t.highway==='footway'))map.squares.push({p:p.slice(0,-1),name:t.name});else map.roads.push({p,k:t.highway,name:t.name,w:num(t.width)||ROADW[t.highway]||5,sur:t.surface,br:t.bridge?1:undefined,tn:t.tunnel?1:undefined,ow:t.oneway==='yes'?1:undefined,lanes:num(t.lanes)});}
+ if((t.building||t['building:part'])&&closed(p))bld(p.slice(0,-1),t,{osm:'way/'+w.id});
+ else if(t.highway){if(t.highway==='corridor'||t.highway==='elevator'||(t.indoor&&t.indoor!=='no'))continue;const area=t.area==='yes'&&closed(p);if(area&&(t.highway==='pedestrian'||t.highway==='footway'))map.squares.push({p:p.slice(0,-1),name:t.name,osm:'way/'+w.id});else map.roads.push({p,k:t.highway,name:t.name,w:num(t.width)||ROADW[t.highway]||5,sur:t.surface,br:t.bridge?1:undefined,tn:t.tunnel?1:undefined,ow:t.oneway==='yes'?1:undefined,lanes:num(t.lanes),osm:'way/'+w.id});}
  else if(t.natural==='coastline')coastWays.push(w);
  else if(['pier','breakwater','groyne','quay'].includes(t.man_made))map.piers.push({p,k:t.man_made,area:closed(p),name:t.name});
  else if(t.leisure==='marina'||t.landuse==='harbour')map.harbour.push({p,name:t.name});
  else if(t.natural==='water'||t.natural==='bay')map.water.push({p,name:t.name});
- else if(t.place==='square'&&closed(p))map.squares.push({p:p.slice(0,-1),name:t.name});
+ else if(t.place==='square'&&closed(p))map.squares.push({p:p.slice(0,-1),name:t.name,osm:'way/'+w.id});
  else if(t.natural==='beach'&&closed(p))map.beaches.push({p:p.slice(0,-1),name:t.name});
  else if((t.leisure==='park'||t.leisure==='garden'||t.leisure==='pitch'||['grass','forest','recreation_ground'].includes(t.landuse))&&closed(p))map.parks.push(p.slice(0,-1));
  // attività su un'area (edificio, negozio, ristorante…) → punto al centro
@@ -50,12 +50,14 @@ for(const w of ways.values()){const t=w.t,p=pts(w);if(p.length<2)continue;
   chains.sort((a,b)=>b.length-a.length).forEach((ch,ci)=>{let pl=ch.map(r=>nodes.get(r)).filter(Boolean).map(q=>P(q[0],q[1]));if(ci===0){// la costa principale serve anche per il panorama: si tiene solo il tratto da Posillipo a oltre Castel dell'Ovo
    let i0=pl.findIndex(q=>q[0]>=-4700);i0=Math.max(0,i0-1);let i1=pl.findIndex((q,i)=>i>i0&&q[0]>3100);i1=i1<0?pl.length:i1+1;pl=pl.slice(i0,i1);}
    else if(!pl.some(q=>q[0]>X0&&q[0]<X1&&q[1]>Y0&&q[1]<Y1))return;map.coast.push(pl);});}
-for(const r of rels){const outer=rings(r.mem.filter(m=>m.role==='outer'||m.role==='').map(m=>m.ref));for(const ring of outer){const p=ring.slice(0,-1);if(r.t.building)bld(p,r.t,{rel:1});else if(r.t.natural==='water')map.water.push({p,name:r.t.name});else if(r.t.leisure==='park'||r.t.leisure==='garden')map.parks.push(p);}}
+for(const r of rels){const outer=rings(r.mem.filter(m=>m.role==='outer'||m.role==='').map(m=>m.ref));for(const ring of outer){const p=ring.slice(0,-1);if(r.t.building)bld(p,r.t,{rel:1,osm:'relation/'+r.id});else if(r.t.natural==='water')map.water.push({p,name:r.t.name});else if(r.t.leisure==='park'||r.t.leisure==='garden')map.parks.push(p);}}
 for(const n of npois){const t=n.t,[x,y]=n.x!==undefined?[n.x,n.y]:P(n.lat,n.lon);map.pois.push({x:Math.round(x*10)/10,y:Math.round(y*10)/10,name:t.name,amenity:t.amenity,shop:t.shop,tourism:t.tourism,historic:t.historic,leisure:t.leisure,place:t.place,cuisine:t.cuisine,osm:n.id,real:t.name?1:undefined});}
+// Etichette locali del gioco restano separate dal nome OSM, che rimane intatto per tracciabilità e attribuzione.
+for(const [osm,label] of [['way/1365095986','Chalet del Golfo'],['node/2508856019','Chalet del Golfo']]){const b=map.buildings.find(q=>q.osm===osm),p=map.pois.find(q=>q.osm===osm);if(b)b.displayName=label;if(p)p.displayName=label;}
 // ---- punti di riferimento da verificare sulla mappa vera ----
-const L=[['Fontana del Sebeto',/^Fontana del Sebeto$/],['Largo Sermoneta',/^Largo Sermoneta$/],['Castel dell\'Ovo',/^Castel dell'Ovo$/],['Borgo Marinari',/^Borgo Marinari$/],['Piazzetta Marinari',/^Piazzetta Marinari$/],['Piazza Sannazaro',/^Piazza Jacopo Sannazaro$/],['Piazzetta del Leone (Mergellina)',/Piazzetta del Leone/],['Villa Comunale',/^Villa Comunale$/],['Pontile di Castel dell\'Ovo',/^Pontile di Castel dell'Ovo$/]];
+const L=[['Fontana del Sebeto',/^Fontana del Sebeto$/],['Largo Sermoneta',/^Largo Sermoneta$/],['Castel dell\'Ovo',/^Castel dell'Ovo$/],['Borgo Marinari',/^Borgo Marinari$/],['Piazzetta Marinari',/^Piazzetta Marinari$/],['Piazza Sannazaro',/^Piazza Jacopo Sannazaro$/],['Piazzetta del Leone (Mergellina)',/^Piazzetta (?:del )?Leone(?: a Mergellina)?$/i],['Villa Comunale',/^Villa Comunale$/],['Pontile di Castel dell\'Ovo',/^Pontile di Castel dell'Ovo$/]];
 const named=[];for(const w of ways.values())if(w.t.name){const p=pts(w);if(p.length)named.push({name:w.t.name,p:centroid(p),osm:'way/'+w.id,t:w.t});}for(const n of npois)if(n.t.name)named.push({name:n.t.name,p:n.x!==undefined?[n.x,n.y]:P(n.lat,n.lon),osm:n.id,t:n.t});
-for(const [label,re] of L){const f=named.find(q=>re.test(q.name));if(f)map.landmarks.push({name:label,x:Math.round(f.p[0]),y:Math.round(f.p[1]),osm:f.osm});else map.landmarks.push({name:label,missing:true});}
+for(const [label,re] of L){const area=map.squares.find(q=>re.test(q.name||'')),f=area?{p:centroid(area.p),osm:area.osm}:named.find(q=>re.test(q.name));if(f)map.landmarks.push({name:label,x:Math.round(f.p[0]),y:Math.round(f.p[1]),osm:f.osm});else map.landmarks.push({name:label,missing:true});}
 for(const street of ['Via Francesco Caracciolo','Via Partenope','Via Mergellina','Riviera di Chiaia','Via Eldorado']){const rs=map.roads.filter(r=>r.name===street);if(rs.length){const all=rs.flatMap(r=>r.p),c=centroid(all);map.landmarks.push({name:street,x:Math.round(c[0]),y:Math.round(c[1]),osm:'strada ('+rs.length+' tratti)',lunghezza:Math.round(rs.reduce((s,r)=>s+r.p.slice(1).reduce((a,q,i)=>a+Math.hypot(q[0]-r.p[i][0],q[1]-r.p[i][1]),0),0))});}}
 console.log('palazzi',map.buildings.length,'(con piani/altezza:',map.buildings.filter(b=>b.lv||b.h).length+')','strade',map.roads.length,'costa',map.coast.length,'moli',map.piers.length,'porto',map.harbour.length,'piazze',map.squares.length,'parchi',map.parks.length,'spiagge',map.beaches.length,'alberi',map.trees.length,'attività',map.pois.length,'con nome',map.pois.filter(p=>p.name).length);
 // ---- griglia di calpestabilità (1 cella = 1 m): 0 = mare o palazzo, 1 = si cammina ----

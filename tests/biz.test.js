@@ -22,9 +22,9 @@ test('Locali: si compra quello in cui si è entrati, un solo proprietario, la ca
  B.route('/api/biz/buy','POST',o,{});assert.equal(bal('o'),10000-BIZ.price.shop);assert.equal(B.view(o).mine.length,1);
  assert.throws(()=>B.route('/api/biz/buy','POST',c,{}),/già un proprietario/);
  buy('c','zaino-tanica');assert.equal(B.row(shop.id).cassa,Math.round(25*BIZ.cut),'20% della spesa nella cassa');
- buy('c','zaino-tanica',true);assert.equal(B.row(shop.id).cassa,Math.round(25*BIZ.cut),'un furto non porta soldi alla cassa');
- buy('o','zaino-birra');assert.equal(B.row(shop.id).cassa,Math.round(25*BIZ.cut),'la proprietaria non si paga da sola');
- const before=bal('o');B.route('/api/biz/collect','POST',o,{door:shop.id});assert.equal(bal('o'),before+5);assert.equal(B.row(shop.id).cassa,0);
+ buy('c','zaino-tanica',true);assert.equal(B.row(shop.id).cassa,Math.round(50*BIZ.cut),'il vecchio flag furto non rende gratuito l’acquisto né blocca l’incasso');
+ buy('o','zaino-birra');assert.equal(B.row(shop.id).cassa,Math.round(50*BIZ.cut),'la proprietaria non aumenta la cassa comprando dal proprio locale');
+ const before=bal('o');B.route('/api/biz/collect','POST',o,{door:shop.id});assert.equal(bal('o'),before+10);assert.equal(B.row(shop.id).cassa,0);
  assert.throws(()=>B.route('/api/biz/collect','POST',c,{door:shop.id}),/Non è un tuo locale/);
  const b2=bal('o');B.route('/api/biz/sell','POST',o,{door:shop.id});assert.equal(bal('o'),b2+Math.round(BIZ.price.shop*BIZ.sell));assert.equal(B.row(shop.id),undefined);
 });

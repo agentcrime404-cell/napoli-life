@@ -493,6 +493,7 @@ body.in-cockpit #hud .actions{display:none!important}
 body.in-cockpit #joystick{opacity:0;pointer-events:none!important}
 body.in-moto-cockpit #joystick{opacity:0;pointer-events:none!important}
 body.in-moto-cockpit #hud .actions{display:none!important}
+body.is3d.in-moto-cockpit #drive-hud .dh-speed{display:none}
 #pregame .pg-stage{position:absolute;left:50%;top:50%;width:min(100vw,165.3vh);aspect-ratio:1536/929;transform:translate(-50%,-50%);background:url(/assets/sfondo-pregame-v4.webp) 0 0/100% 100% no-repeat;z-index:0}
 @media not ((max-width:700px) and (orientation:portrait)){#pregame.pg-photo .pg-menu{position:absolute;z-index:1;margin:0;left:calc(50% + (63.4/100 - .5)*min(100vw,165.3vh));top:calc(50% + (38.4/100 - .5)*min(100vw,165.3vh)/1.6534);width:calc(.338*min(100vw,165.3vh));gap:calc(.0072*min(100vw,165.3vh))}
 #pregame.pg-photo .pg-menu button{height:calc(.0785*min(100vw,165.3vh));font-size:calc(.0158*min(100vw,165.3vh));border-radius:calc(.011*min(100vw,165.3vh))}

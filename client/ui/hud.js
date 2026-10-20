@@ -5,6 +5,8 @@ const paths={
  friends:'M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6M2 20v-2a7 7 0 0 1 14 0v2M17 5a3 3 0 0 1 0 6M18 14a5 5 0 0 1 4 5',
  chat:'M4 4h16v12H9l-5 4V4M8 9h.01M12 9h.01M16 9h.01',
  mic:'M9 5a3 3 0 0 1 6 0v7a3 3 0 0 1-6 0V5M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8',
+ events:'M7 3v4M17 3v4M4 8h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1M8 12h3M8 16h3M14 12h2M14 16h2',
+ shop:'M3 4h2l2.2 11.2a2 2 0 0 0 2 1.6h7.9a2 2 0 0 0 1.9-1.4L21 8H6M10 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2M17 21a1 1 0 1 0 0-2 1 1 0 0 0 0 2',
  hand:'M7 12V6a2 2 0 0 1 4 0v5-7a2 2 0 0 1 4 0v7-5a2 2 0 0 1 4 0v8l-2 7H9l-6-7a2 2 0 0 1 3-3l3 3',
  run:'M15 6a2 2 0 1 0 0-4 2 2 0 0 0 0 4M5 9l5-2 5 4 5 1M11 8l-3 7-5 5M8 15l6 1 2 6',
  bag:'M9 5V4a3 3 0 0 1 6 0v1M6 9a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v12H6V9M8 14h8v4H8v-4M10 9h4M6 13H4v6h2M18 13h2v6h-2',
@@ -31,11 +33,18 @@ export function installHUD(ctx){
  if(window.HUMANA_3D){
   const socialBar=document.querySelector('.social'),actions=document.querySelector('.actions');
   for(const id of ['voice','friends','settings']){const b=$(id);b.setAttribute('aria-label',b.getAttribute('aria-label')||b.textContent.trim());socialBar.append(b);}
-  // La chat resta nella barra sociale: nel gruppo delle azioni invade il salto
-  // e può intercettare il pollice durante il movimento.
-  socialBar.append($('chat-toggle'));
+  const quick=(id,label,glyph,action)=>{const b=document.createElement('button'),caption=document.createElement('span');b.id=id;b.type='button';b.className='hud-quick';b.title=label;b.setAttribute('aria-label',label);b.append(icon(glyph));caption.textContent=label;b.append(caption);b.addEventListener('click',()=>{try{Promise.resolve(action()).catch(e=>notify(e.message));}catch(e){notify(e.message);}});return b;};
+  const events=quick('quick-events','Eventi','events',()=>livingUI.events()),shop=quick('quick-shop','Negozio','shop',()=>window.humanaBag?window.humanaBag():livingUI.inventory());
+  socialBar.append(events,shop);
+  // Un'unica barra contestuale raccoglie social e scorciatoie del gioco.
+  // Le azioni mantengono gli handler originali: cambia solo la disposizione.
+  for(const id of ['chat-toggle','friends','voice','quick-events','quick-shop','inventory','phone'])socialBar.append($(id)||socialBar.querySelector('#'+id));
+  socialBar.append($('settings'));
+  $('profile').setAttribute('aria-label','Apri profilo giocatore');
+  const portrait=$('hud-avatar');portrait.tabIndex=0;portrait.setAttribute('role','button');portrait.setAttribute('aria-label','Apri il profilo del personaggio');portrait.title='Apri profilo';portrait.addEventListener('click',profile);portrait.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();profile();}});
   $('chat-toggle').setAttribute('aria-label','Apri o chiudi chat');
   for(const [id,label] of [['profile','Profilo'],['friends','Amici'],['voice','Microfono'],['interact','Interagisci'],['inventory','Inventario'],['phone','Telefono']])$(id).setAttribute('aria-label',label);
+  $('settings').setAttribute('aria-label','Menu e impostazioni');$('settings').title='Menu e impostazioni';
   $('minimap').width=240;$('minimap').height=240;
  }
  const g=(a,b)=>`linear-gradient(160deg,${a},${b})`;

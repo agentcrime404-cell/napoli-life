@@ -1,0 +1,125 @@
+/* HUD mobile di Napoli Life: barra giocatore, accessi rapidi e mappa leggibili senza coprire il mondo. */
+@media (orientation:landscape) and (max-height:560px){
+ body.is3d{--hud-player-w:clamp(184px,23vw,218px);--hud-map-w:clamp(116px,15vw,142px);--hud-top:calc(8px + var(--safe-top));--hud-bottom:calc(10px + var(--safe-bottom))}
+ body.is3d #hud .identity{position:fixed;left:calc(54px + var(--safe-left));top:var(--hud-top);width:var(--hud-player-w);height:62px;max-width:none;min-width:0;display:flex;gap:7px;padding:5px 7px;border:1px solid #b9d7e549;border-radius:13px;background:rgba(8,24,38,.84);box-shadow:0 4px 16px #00101d88;z-index:32}
+ body.is3d #hud .identity .portrait{display:block!important;width:48px;height:48px;flex:0 0 48px;border:2px solid #54b9fa;box-shadow:0 0 0 2px #0c1726,0 0 10px #2a8cff55;cursor:pointer;touch-action:manipulation}
+ body.is3d #hud .identity .portrait:focus-visible{outline:2px solid #78e2ff;outline-offset:2px}
+ body.is3d #hud .identity .id-main{min-width:0;padding:0;display:grid;grid-template-columns:minmax(0,1fr);align-content:center;gap:1px}
+ body.is3d #hud .identity strong{font-size:12px;line-height:1.1}
+ body.is3d #hud .identity .online-count{display:block;margin:0;color:#79e7ae;font-size:8px;line-height:1.1}
+ body.is3d #hud .identity .level-line{display:flex!important;align-items:center;gap:5px;margin:1px 0 2px}
+ body.is3d #hud .identity .level-line span{font-size:9px}
+ body.is3d #hud .identity .level-line progress{height:5px;max-width:none}
+ body.is3d #hud .identity .wallet{height:14px;gap:7px}
+ body.is3d #hud .identity .wallet span{gap:3px;font-size:9px;line-height:1}
+ body.is3d #hud .identity .wallet svg{width:12px;height:12px}
+ body.is3d #hud .identity #wallet-plus{width:17px;height:17px;min-height:17px;margin-left:auto;font-size:14px}
+ body.is3d #hud-vip,body.is3d #hud #connection{display:none!important}
+
+ body.is3d #hud #settings{position:fixed;left:calc(8px + var(--safe-left));top:var(--hud-top);width:39px;height:39px;min-height:39px;margin:0;padding:0;border:1px solid #ffffff55;border-radius:12px;background:rgba(8,24,38,.84);font-size:20px;z-index:34}
+ body.is3d #hud .social{position:fixed;left:calc(62px + var(--safe-left) + var(--hud-player-w));right:calc(10px + var(--safe-right) + var(--hud-map-w) + 10px);top:var(--hud-top);bottom:auto;display:flex;flex-wrap:nowrap;align-items:flex-start;justify-content:flex-start;gap:4px;max-height:none;overflow:visible;padding:0;z-index:33}
+ body.is3d #hud .social button{position:relative;flex:0 0 clamp(39px,4.6vw,46px);width:clamp(39px,4.6vw,46px);height:44px;min-height:44px;margin:0;padding:3px 1px 2px;display:grid;grid-template-rows:23px 11px;align-content:center;justify-items:center;gap:1px;border:1px solid #ffffff36;border-radius:10px;background:rgba(8,24,38,.78);box-shadow:0 3px 10px #0005;color:#f4f8fc;touch-action:manipulation}
+ body.is3d #hud .social button svg{width:19px;height:19px;stroke-width:1.9}
+ body.is3d #hud .social button svg.art{width:16px;height:23px}
+ body.is3d #hud .social button span{position:static!important;display:block;width:auto;height:auto;max-width:100%;overflow:hidden;clip:auto;clip-path:none;white-space:nowrap;text-overflow:ellipsis;font-size:7px;line-height:10px;font-weight:700;color:#dce9f2}
+ body.is3d #hud .social #profile{display:none!important}
+ body.is3d #hud .social #settings{position:fixed;left:calc(8px + var(--safe-left));top:var(--hud-top);flex:none}
+ body.is3d #hud .social #quick-events,body.is3d #hud .social #quick-shop{font:inherit}
+ body.is3d #hud .social button.selected{border-color:#61c5ff;background:#103750;box-shadow:0 0 0 1px #3ebaff55,0 3px 10px #0005}
+
+ body.is3d #hud aside.map{position:fixed;left:auto;right:calc(8px + var(--safe-right));top:var(--hud-top);bottom:auto;width:var(--hud-map-w);height:130px;padding:4px;border:1px solid #b9d7e549;border-radius:13px;background:rgba(8,24,38,.84);box-shadow:0 4px 16px #00101d88;overflow:hidden;z-index:30}
+ body.is3d #hud aside.map .map-head{position:absolute;left:6px;right:6px;top:4px;bottom:auto;display:flex;justify-content:space-between;gap:4px;margin:0;padding:0;background:transparent;font-size:9px;line-height:14px}
+ body.is3d #hud aside.map .map-head #area{display:block;max-width:66%;font-size:9px;font-weight:800}
+ body.is3d #hud aside.map .map-head #world-clock{font-size:8px}
+ body.is3d #hud aside.map .map-head #online{display:none}
+ body.is3d #hud aside.map .map-view{position:absolute;left:4px;right:4px;top:21px;bottom:20px;width:auto;height:auto;margin:0}
+ body.is3d #hud aside.map canvas{display:block;width:100%;height:100%;aspect-ratio:auto;border:1px solid #ffffff50;border-radius:8px;box-shadow:none;cursor:pointer}
+ body.is3d #hud aside.map .map-view button{width:18px;height:18px;min-height:18px;bottom:2px;padding:0;border-radius:6px;background:#071521d9;font-size:11px}
+ body.is3d #map-minus{left:2px}body.is3d #map-plus{right:2px}
+ body.is3d #hud #map-open{position:absolute!important;left:50%;right:auto;top:auto;bottom:2px;transform:translateX(-50%);display:block!important;width:auto;height:16px;min-height:16px;padding:0 6px;border:0;border-radius:5px;background:transparent;color:#dcebf5;font-size:8px;line-height:16px;white-space:nowrap;z-index:2}
+
+ body.is3d #cam3d{position:fixed;left:auto;right:calc(10px + var(--safe-right));top:calc(var(--hud-top) + 136px);bottom:auto;transform:none;display:flex;flex-direction:row;gap:4px;align-items:center;z-index:29}
+ body.is3d #cam3d button{width:32px;height:32px;min-height:32px;padding:0;border:1px solid #ffffff45;border-radius:9px;background:rgba(8,24,38,.78);font-size:14px}
+ body.is3d #cam3d button svg{width:17px;height:17px}
+ body.is3d #cam3d .cam-label{left:auto;right:0;top:34px;transform:none;padding:2px 5px;border-radius:6px;background:#071521c9;font-size:8px;white-space:nowrap}
+
+ body.is3d #job-hud{position:fixed;left:calc(8px + var(--safe-left));right:auto;top:calc(var(--hud-top) + 69px);bottom:auto;transform:none;display:flex;align-items:center;gap:7px;width:min(236px,calc(100vw - 180px));max-width:calc(100vw - 180px);min-height:48px;padding:6px 8px;border:1px solid #c8e6f33b;border-left:3px solid #ffcf45;border-radius:9px;background:rgba(8,24,38,.78);box-shadow:0 4px 12px #0005;color:#f5f8fb;font:inherit;z-index:28;cursor:pointer}
+ body.is3d #job-hud[hidden]{display:none!important}
+ body.is3d #job-hud .arrow{flex:0 0 17px;display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#d99f1c;color:#101d28;font-size:12px;font-style:normal;font-weight:900;line-height:1}
+ body.is3d #job-hud .job-hud-copy{display:grid;min-width:0;gap:2px}
+ body.is3d #job-hud .job-hud-copy b{overflow:hidden;color:#fff;font-size:10px;line-height:1.1;text-overflow:ellipsis;white-space:nowrap}
+ body.is3d #job-hud .job-hud-copy small{overflow:hidden;color:#c5d5e1;font-size:8px;line-height:1.1;text-overflow:ellipsis;white-space:nowrap}
+ body.is3d #job-hud .job-hud-open{display:grid;place-items:center;flex:0 0 21px;width:21px;height:24px;min-height:24px;margin-left:auto;padding:0;border:0;background:transparent;color:#e7f3fa;font-size:22px;line-height:1}
+ body.is3d #job-hud.active-job{border-left-color:#51d69a}
+ body.is3d #job-hud.late{border-left-color:#ff6b68}
+
+ body.is3d #hud #joystick{left:calc(14px + var(--safe-left));bottom:var(--hud-bottom);width:clamp(106px,14vh,124px);height:clamp(106px,14vh,124px);border-color:#ffffffa8;background:radial-gradient(circle,rgba(159,204,226,.12) 0 37%,rgba(7,22,35,.48) 39% 100%);box-shadow:0 4px 15px #0007;z-index:27}
+ body.is3d #hud #joystick>div{width:42%;height:42%;border:1.5px solid #ffffffeb;background:radial-gradient(circle at 34% 27%,#edf8ff,#8fa6bb 76%,#60778b);box-shadow:0 3px 10px #0009}
+ body.is3d #hud .actions{position:fixed;left:auto;right:calc(12px + var(--safe-right));top:auto;bottom:var(--hud-bottom);width:116px;height:112px;display:block;z-index:31}
+ body.is3d #hud .actions button{position:absolute;display:grid;place-items:center;width:48px;height:48px;min-height:48px;margin:0;padding:3px;border:1px solid #ffffffa8;border-radius:50%;background:rgba(8,24,38,.76);box-shadow:0 3px 12px #0006;color:#f4f9fd;font-size:20px;line-height:1;touch-action:none}
+ body.is3d #hud .actions button svg{width:23px;height:23px}
+ body.is3d #hud .actions button span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ body.is3d #hud .actions #interact{right:0;bottom:0;width:56px;height:56px;min-height:56px;font-size:24px;opacity:0;transform:scale(.8);pointer-events:none;transition:opacity .15s,transform .15s,border-color .15s}
+ body.is3d #hud .actions #interact.available{opacity:1;transform:none;pointer-events:auto;border-color:#f6d270;box-shadow:0 0 0 2px #f6d27044,0 4px 13px #0007}
+ body.is3d #hud .actions #jump{right:0;top:0;width:46px;height:46px;min-height:46px}
+ body.is3d #hud .actions #run{right:62px;bottom:3px;width:48px;height:48px;min-height:48px}
+ body.is3d #hud .actions #run[aria-pressed="true"]{border-color:#53e69b;background:rgba(18,78,56,.94);box-shadow:0 0 0 2px #53e69b55,0 0 16px #44d98f99}
+ body.is3d.in-vehicle #hud #joystick,body.is3d.in-vehicle #hud .actions #jump,body.is3d.in-vehicle #hud .actions #run,body.is3d.in-vehicle #hud .actions #interact{display:none!important}
+ body.is3d.in-vehicle #drive-hud{left:50%;right:auto;bottom:var(--hud-bottom);transform:translateX(-50%);max-width:calc(100vw - 270px)}
+ body.is3d.in-vehicle .drive-controls{z-index:33}
+ body.is3d.in-vehicle .dh-steer{left:calc(14px + var(--safe-left));bottom:var(--hud-bottom)}
+ body.is3d.in-vehicle .dh-pedals{right:calc(12px + var(--safe-right));bottom:var(--hud-bottom)}
+ body.is3d #chat{max-width:min(380px,48vw);z-index:40}
+ body.is3d #toast{z-index:41}
+}
+
+@media (orientation:landscape) and (max-height:560px) and (max-width:760px){
+ body.is3d{--hud-player-w:clamp(154px,25vw,184px);--hud-map-w:clamp(104px,16vw,118px)}
+ body.is3d #hud .identity{left:calc(48px + var(--safe-left));height:58px;gap:5px;padding:4px}
+ body.is3d #hud .identity .portrait{width:42px;height:42px;flex-basis:42px}
+ body.is3d #hud .social{left:calc(54px + var(--safe-left) + var(--hud-player-w));right:calc(8px + var(--safe-right) + var(--hud-map-w) + 8px);gap:2px}
+ body.is3d #hud .social button{flex-basis:clamp(31px,5vw,37px);width:clamp(31px,5vw,37px);height:38px;min-height:38px;grid-template-rows:22px 9px;padding:2px 0}
+ body.is3d #hud .social button svg{width:17px;height:17px}
+ body.is3d #hud .social button span{font-size:6px;line-height:8px}
+ body.is3d #hud #settings{width:35px;height:35px;min-height:35px}
+ body.is3d #hud aside.map{height:114px}
+ body.is3d #cam3d{top:calc(var(--hud-top) + 119px)}
+ body.is3d #job-hud{top:calc(var(--hud-top) + 64px);min-height:43px;max-width:calc(100vw - 152px)}
+ body.is3d #hud #joystick{width:100px;height:100px}
+ body.is3d #hud .actions{width:106px;height:104px}
+ body.is3d #hud .actions #interact{width:52px;height:52px;min-height:52px}
+ body.is3d #hud .actions #jump{width:42px;height:42px;min-height:42px}
+ body.is3d #hud .actions #run{right:57px;width:44px;height:44px;min-height:44px}
+}
+
+@media (orientation:landscape) and (max-height:370px){
+ body.is3d #hud .identity{height:52px}
+ body.is3d #hud .identity .portrait{width:38px;height:38px;flex-basis:38px}
+ body.is3d #hud aside.map{height:102px}
+ body.is3d #cam3d{top:calc(var(--hud-top) + 107px)}
+ body.is3d #job-hud{top:calc(var(--hud-top) + 57px);min-height:39px}
+ body.is3d #hud #joystick{width:88px;height:88px}
+ body.is3d #hud .actions{bottom:calc(7px + var(--safe-bottom));transform:scale(.9);transform-origin:right bottom}
+}
+
+@media(prefers-reduced-motion:reduce){body.is3d #hud .social button,body.is3d #job-hud,body.is3d #hud .actions button{transition:none}}
+
+
+/* Correzione guida: pedali separati e completamente entro la safe area, anche sui browser Android con barre visibili. */
+@media (pointer:coarse){
+ body.is3d.in-vehicle .drive-controls{position:fixed;inset:0;z-index:38;pointer-events:none}
+ body.is3d.in-vehicle .dh-steer{left:calc(16px + var(--safe-left));right:auto;top:auto;bottom:calc(24px + var(--safe-bottom));width:clamp(126px,17vw,168px);height:68px;pointer-events:auto}
+ body.is3d.in-vehicle .dh-pedals{left:auto;right:calc(18px + var(--safe-right));top:auto;bottom:calc(24px + var(--safe-bottom));display:flex;flex-direction:column;align-items:center;gap:8px;padding:0;border:0;background:transparent;box-shadow:none;pointer-events:none}
+ body.is3d.in-vehicle .dh-pedals button{width:clamp(54px,7vh,62px);height:clamp(54px,7vh,62px);min-height:54px;flex:0 0 auto;pointer-events:auto}
+ body.is3d.in-vehicle #hud .actions{left:calc(16px + var(--safe-left));right:auto;top:calc(74px + var(--safe-top));bottom:auto;display:flex;gap:7px}
+ body.is3d.in-vehicle #hud .actions #phone,body.is3d.in-vehicle #hud .actions #inventory{width:38px;height:38px;min-height:38px}
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:500px){
+ body.is3d.in-vehicle .dh-steer{bottom:calc(14px + var(--safe-bottom));width:clamp(118px,16vw,148px);height:60px}
+ body.is3d.in-vehicle .dh-steer-track{height:52px}
+ body.is3d.in-vehicle .dh-steer-thumb{width:38px;height:38px}
+ body.is3d.in-vehicle .dh-pedals{right:calc(20px + var(--safe-right));bottom:calc(14px + var(--safe-bottom));gap:5px}
+ body.is3d.in-vehicle .dh-pedals button{width:clamp(48px,12vh,56px);height:clamp(48px,12vh,56px);min-height:48px}
+ body.is3d.in-vehicle #drive-hud{left:50%;right:auto;top:auto;bottom:calc(18px + var(--safe-bottom));transform:translateX(-50%);max-width:calc(100vw - 300px)}
+ body.is3d.in-vehicle #hud .actions{left:calc(14px + var(--safe-left));top:calc(62px + var(--safe-top))}
+}

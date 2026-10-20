@@ -1,12 +1,25 @@
 // Zona "Mergellina" di HUMANA life 3D: mappa vera da OpenStreetMap (© OpenStreetMap contributors, ODbL).
 // La griglia (1 cella = 1 m) dice dove si cammina: niente palazzi né mare; i pontili sono calpestabili.
-export const NAPOLI={data:null,grid:null,x0:0,y0:0,w:0,h:0};
+export const NAPOLI={data:null,grid:null,x0:0,y0:0,w:0,h:0,driveRoadCells:null};
 const BUILDING_CELL=48;
 const decode=b64=>typeof Buffer!=='undefined'?new Uint8Array(Buffer.from(b64,'base64')):Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
-export function setNapoli(data){const g=data.grid;Object.assign(NAPOLI,{data,grid:decode(g.bits),x0:g.x0,y0:g.y0,w:g.w,h:g.h,tunnels:[],buildingIndex:new Map(),places:null,parkedVehicles:null,services:null,villas:null});carveTunnels();indexBuildings();}
+export function setNapoli(data){const g=data.grid;Object.assign(NAPOLI,{data,grid:decode(g.bits),x0:g.x0,y0:g.y0,w:g.w,h:g.h,tunnels:[],buildingIndex:new Map(),driveRoadCells:null,places:null,parkedVehicles:null,services:null,villas:null});carveTunnels();indexBuildings();indexRoadSurfaces();}
 // Gallerie vere (Galleria della Vittoria, delle Quattro Giornate, di Posillipo...): il corridoio si può percorrere a piedi e in auto,
 // gli edifici sopra il tracciato non si disegnano (la collina è il tubo) e ogni carreggiata larga al massimo 7 m.
 const NOT_CAR=new Set(['footway','steps','path','cycleway','pedestrian']);
+const ROAD_CELL=32;
+function indexRoadSurfaces(){
+ const drive=new Map();for(const road of NAPOLI.data?.roads||[]){if(NOT_CAR.has(road.k))continue;const P=road.p||[],halfWidth=Math.max(1,(Number(road.w)||5)/2);for(let i=1;i<P.length;i++){const a=P[i-1],b=P[i],dx=b[0]-a[0],dy=b[1]-a[1],l2=dx*dx+dy*dy;if(l2<.01)continue;const padding=halfWidth+1.25,segment={ax:a[0],ay:a[1],dx,dy,l2,halfWidth,minX:Math.min(a[0],b[0])-padding,maxX:Math.max(a[0],b[0])+padding,minY:Math.min(a[1],b[1])-padding,maxY:Math.max(a[1],b[1])+padding};for(let cx=Math.floor(segment.minX/ROAD_CELL);cx<=Math.floor(segment.maxX/ROAD_CELL);cx++)for(let cy=Math.floor(segment.minY/ROAD_CELL);cy<=Math.floor(segment.maxY/ROAD_CELL);cy++){const key=cx+','+cy;let list=drive.get(key);if(!list)drive.set(key,list=[]);list.push(segment);}}
+ }
+ NAPOLI.driveRoadCells=drive;
+}
+function nearestRoadPoint(index,x,y){if(!index)return null;const cx=Math.floor(x/ROAD_CELL),cy=Math.floor(y/ROAD_CELL);let best=Infinity,point=null;for(let ox=-3;ox<=3;ox++)for(let oy=-3;oy<=3;oy++)for(const s of index.get((cx+ox)+','+(cy+oy))||[]){const t=Math.max(0,Math.min(1,((x-s.ax)*s.dx+(y-s.ay)*s.dy)/s.l2)),px=s.ax+s.dx*t,py=s.ay+s.dy*t,dx=x-px,dy=y-py,d2=dx*dx+dy*dy;if(d2<best){best=d2;point={x:px,y:py,distance:Math.sqrt(d2)};}}return point;}
+function nearestRoadDistance(index,x,y){return nearestRoadPoint(index,x,y)?.distance??Infinity;}
+export function napoliNearestRoadPoint(x,y){return nearestRoadPoint(NAPOLI.driveRoadCells,x,y);}
+function onRoadSurface(index,x,y,limit){if(!index)return false;const cx=Math.floor(x/ROAD_CELL),cy=Math.floor(y/ROAD_CELL);for(let ox=-1;ox<=1;ox++)for(let oy=-1;oy<=1;oy++)for(const s of index.get((cx+ox)+','+(cy+oy))||[]){if(x<s.minX||x>s.maxX||y<s.minY||y>s.maxY)continue;const t=Math.max(0,Math.min(1,((x-s.ax)*s.dx+(y-s.ay)*s.dy)/s.l2)),dx=x-(s.ax+s.dx*t),dy=y-(s.ay+s.dy*t),allowed=limit(s);if(dx*dx+dy*dy<=allowed*allowed)return true;}return false;}
+// Veicoli seguono le carreggiate OSM; se un salvataggio li lascia fuori strada,
+// consentiamo solo i passi che li riportano verso la carreggiata, così non restano intrappolati.
+export function napoliVehicleStand(x,y,r=.55,fromX=null,fromY=null){if(!napoliStand(x,y,Math.max(.2,Math.min(1.25,r))))return false;const clearance=Math.max(.35,Math.min(1.25,Number(r)||.55));if(onRoadSurface(NAPOLI.driveRoadCells,x,y,s=>Math.max(.4,s.halfWidth-clearance+.28)))return true;if(!Number.isFinite(fromX)||!Number.isFinite(fromY))return false;return nearestRoadDistance(NAPOLI.driveRoadCells,x,y)+.06<nearestRoadDistance(NAPOLI.driveRoadCells,fromX,fromY);}
 function carveTunnels(){const D=NAPOLI.data,T=NAPOLI.tunnels,cand=[];
  for(const r of D.roads||[]){if(!r.tn||NOT_CAR.has(r.k)||(r.w||5)<5)continue;let len=0;for(let i=1;i<r.p.length;i++)len+=Math.hypot(r.p[i][0]-r.p[i-1][0],r.p[i][1]-r.p[i-1][1]);if(len<60)continue;
   r.len=len;cand.push(r);}
@@ -93,7 +106,7 @@ export function napoliPlaces(){if(NAPOLI.places)return NAPOLI.places;const out={
  while(extras.length<MAX_EXTRA){let bi=-1,bd=GAP_STOP;for(let i=0;i<cand.length;i++)if(dist[i]>bd){bd=dist[i];bi=i;}if(bi<0)break;const c=cand[bi];const k=extras.length,fromPool=pool[k];const to=fromPool?fromPool.to:EXTRA_MIX[H('extra'+k)%EXTRA_MIX.length];const d={x:c.x,y:c.y,to,t:fromPool?.t||to,real:false,i:100000+k,extra:true};extras.push(d);put(d);
   for(let i=0;i<cand.length;i++){const dd=Math.hypot(cand[i].x-c.x,cand[i].y-c.y);if(dd<dist[i])dist[i]=dd;}dist[bi]=-1;}
  // 3) porte definitive (id stabili: gli stessi sul server e sul client)
- kept.sort((x,y)=>x.i-y.i).forEach((d,n)=>{const names=NAMES[d.to];const id=d.extra?'mx'+(d.i-100000):'m'+d.i,nm=d.real?d.p.name:names[H(id+':'+d.t)%names.length];
+ kept.sort((x,y)=>x.i-y.i).forEach((d,n)=>{const names=NAMES[d.to];const id=d.extra?'mx'+(d.i-100000):'m'+d.i,nm=d.real?(d.p.displayName||d.p.name):names[H(id+':'+d.t)%names.length];
   out.doors.push({id,name:nm,x:d.x,y:d.y,exitX:d.x,exitY:d.y,to:d.to,kind:d.t,real:!!d.real,osm:d.real?d.p.osm:undefined,fantasy:!d.real});
   if(d.t==='bank'){const a=near(d.x+1.4,d.y);if(a)out.props.push({id:'matmb'+n,kind:'atm',x:a.x,y:a.y,r:.35});}});
  {const vs=napoliVillas();vs.forEach((v,i)=>{if(v.door&&!out.doors.some(d=>Math.hypot(d.x-v.door.x,d.y-v.door.y)<MIN_GAP))out.doors.push({id:'mv'+i+'v',name:v.name,x:v.door.x,y:v.door.y,exitX:v.door.x,exitY:v.door.y,to:'ospiti-villa',kind:'villa',real:false,fantasy:true});});}
@@ -125,8 +138,16 @@ export function napoliParkedVehicles(){
    acc-=L;
   }
  }
- // Le due Africa Twin davanti allo Chalet del Golfo sono create da merg-extra.js.
- const b=D.buildings?.find(q=>q.name==='Chalet del Golfo');if(b){const xs=b.p.map(q=>q[0]),ys=b.p.map(q=>q[1]),cx=(Math.min(...xs)+Math.max(...xs))/2,cy=(Math.min(...ys)+Math.max(...ys))/2,Wd=Math.max(...ys)-Math.min(...ys)+.6,Dp=Math.max(...xs)-Math.min(...xs)+.4;let i=0;for(let y=cy-Wd/2+1;y<cy+Wd/2-.5;y+=1.15){const x=cx+Dp/2+4.4;if(napoliCell(x,y)&&(i===4||i===9))out.push({id:'ciro-africa-'+i,kind:'parked',v:'m-enduro',x,y,rot:Math.PI+(i%3-1)*.06,r:.55});i++;}}
+ // Le due maxi-enduro di prova sono parcheggiate sul margine della strada
+ // d'accesso allo Chalet, non rivolte verso la facciata. Il riferimento OSM
+ // mantiene i punti sulla viabilità anche se cambia la sagoma del locale.
+ const accessRoad=roads.find(r=>r.osm==='way/243489198');if(accessRoad?.p?.length>3){
+  const parking=[{id:4,segment:1,t:.35},{id:9,segment:3,t:.8}];
+  for(const spot of parking){const a=accessRoad.p[spot.segment],b=accessRoad.p[spot.segment+1],dx=b[0]-a[0],dy=b[1]-a[1],L=Math.hypot(dx,dy)||1,tx=dx/L,ty=dy/L;
+   const x=a[0]+dx*spot.t+ty*1.6,y=a[1]+dy*spot.t-tx*1.6,rot=Math.atan2(ty,tx);
+   if(roadAt(x,y)&&napoliStand(x,y,.55))out.push({id:'ciro-africa-'+spot.id,kind:'parked',v:'m-enduro',x,y,rot,r:.55});
+  }
+ }
  // Anche i motorini accanto ai lampioni sono mezzi reali della scena, non
  // semplice arredo: riproduciamo la stessa selezione deterministica del 3D.
  let n=0,lamps=[];const named=/Caracciolo|Mergellina|Sannazaro|Posillipo|Partenope|Eldorado/;

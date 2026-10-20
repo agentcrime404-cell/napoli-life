@@ -2,23 +2,105 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {register} from 'node:module';
 import * as THREE from '../client/vendor/three/three.module.min.js';
+import {createCanvas} from '@napi-rs/canvas';
 
 // Il client importa i moduli comuni con indirizzi del sito ("/shared/world.js"): in Node si fanno puntare alla cartella shared/ del progetto.
 const ROOT=new URL('../',import.meta.url).href;
 register('data:text/javascript,'+encodeURIComponent(`export async function resolve(s,c,n){return n(s.startsWith('/shared/')?${JSON.stringify(ROOT)}+s.slice(1):s,c);}`));
-const {World3D}=await import('../client/world/world3d.js');
+const {World3D,readWalkCameraPreference,shouldShowLocalAvatar,clampCameraEye}=await import('../client/world/world3d.js');
+import {CollisionGrid} from '../client/world/collision-grid.js';
 
 // Metodi veri del mondo 3D su un oggetto ridotto: solo i campi che servono (niente WebGL, niente pagina).
 function watch(resource){let count=0;resource.addEventListener('dispose',()=>count++);return ()=>count;}
 const tick=()=>new Promise(r=>setImmediate(r));
 async function settle(){for(let i=0;i<6;i++)await tick();}
 function quiet(t){t.mock.method(console,'warn',()=>{});t.mock.method(console,'info',()=>{});return t.mock.method(console,'error',()=>{});}
+function avatarDocument(t){const prior=globalThis.document;globalThis.document={createElement(name){if(name==='canvas')return createCanvas(1,1);return {tagName:name,children:[],append(){}};}};t.after(()=>{if(prior)globalThis.document=prior;else delete globalThis.document;});}
 function world(fields={}){
  const w=Object.create(World3D.prototype),scene=new THREE.Scene(),dynamic=new THREE.Group();scene.add(dynamic);
  return Object.assign(w,{scene,dynamic,static:new THREE.Group(),camera:new THREE.PerspectiveCamera(),players:new Map(),glow:new Set(),poolM:[],realMats:new Map(),toonMats:new Map(),toonify(){},lev:()=>0},fields);
 }
 function prepWorld(compileAsync){const programs=[],w=world();w.gl={info:{programs},compileAsync:(...a)=>compileAsync(w,...a),getContext:()=>({isContextLost:()=>false})};return w;}
 function program(name,{runnable=true}={}){return {name,checked:0,isReady:()=>true,getUniforms(){this.checked++;if(!runnable)this.diagnostics={runnable:false,programLog:'',vertexShader:{log:''},fragmentShader:{log:'ERROR: '+name}};return {};}};}
+
+test('Camera veicolo: moto e auto attivano modalità separate senza abitacolo errato',()=>{
+ const w=Object.assign(Object.create(World3D.prototype),{carMode:'car-cockpit',walkMode:'third'});
+ assert.equal(w.mode({vehicle:'m-enduro'}),'moto-chase','salire su una moto seleziona la camera moto esterna');
+ w.carMode='moto-cockpit';assert.equal(w.mode({vehicle:'m-enduro'}),'moto-cockpit','la prima persona moto resta selezionata sulla moto');
+ assert.equal(w.mode({vehicle:'a-500'}),'car-chase','salire in auto non conserva la visuale moto');
+ assert.equal(w.mode({vehicle:null}),'third','a piedi torna alla camera pedonale');
+});
+
+test('Collisione camera: il rientro verso il giocatore resta morbido ma si ferma prima della facciata',()=>{
+ const from=new THREE.Vector3(0,1.6,0),eye=new THREE.Vector3(0,3.2,8);assert.equal(clampCameraEye(eye,from,2.5),true);assert.ok(Math.abs(eye.distanceTo(from)-2.5)<1e-8);assert.equal(clampCameraEye(eye,from,3),false,'non sposta una camera già entro la distanza sicura');
+ const code=World3D.prototype.draw.toString();assert.match(code,/cameraCollisionIndex\.queryRectInto/,'seleziona solo le impronte edilizie vicine');assert.match(code,/footprints=this\.cameraOccluders/,'riusa il buffer dei collider camera');assert.match(code,/firstBuildingSegmentHit\(from,eye,footprints\)/,'verifica la sagoma OSM precisa prima di arretrare la camera');assert.doesNotMatch(code,/targets=this\.solid;[^]*?targets\.length=0/,'non svuota l’elenco globale dei collider');
+});
+
+test('Camera a piedi: una vecchia prima persona migra una volta a terza persona, poi rispetta la scelta',()=>{
+ const data=new Map([['humana-cam','first']]),storage={getItem:key=>data.get(key)||null,setItem:(key,value)=>data.set(key,String(value))};
+ assert.equal(readWalkCameraPreference(storage),'third','all’ingresso l’avatar resta visibile');
+ assert.equal(data.get('humana-cam-visible-avatar-v2'),'1');
+ data.set('humana-cam','first');
+ assert.equal(readWalkCameraPreference(storage),'first','una scelta esplicita successiva viene mantenuta');
+});
+
+test('Camera: il personaggio locale resta visibile in terza persona e si nasconde solo nelle visuali interne',()=>{
+ assert.equal(shouldShowLocalAvatar('third',false,'',false),true,'a piedi in terza persona mostra il personaggio realistico');
+ assert.equal(shouldShowLocalAvatar('25d',false,'',false),true,'la camera 2.5D non nasconde il giocatore');
+ assert.equal(shouldShowLocalAvatar('first',false,'',true),false,'la prima persona non mostra il modello dentro la camera');
+ assert.equal(shouldShowLocalAvatar('moto-chase',true,'scooter',true),true,'la visuale esterna mostra il pilota');
+ assert.equal(shouldShowLocalAvatar('moto-cockpit',true,'scooter',true),false,'l’abitacolo moto non mostra il corpo dentro la camera');
+ assert.equal(shouldShowLocalAvatar('car-chase',true,'auto',true),true,'la visuale esterna mostra il guidatore');
+ assert.equal(shouldShowLocalAvatar('car-cockpit',true,'auto',true),false,'l’abitacolo auto non mostra il corpo dentro la camera');
+ assert.match(World3D.prototype.draw.toString(),/shouldShowLocalAvatar\(mode,inVehicle,meB,!!meE\.legs\)/,'il renderer usa la stessa regola testata e non un riferimento camera non definito');
+});
+
+test('Mergellina: i riquadri grafici dei palazzi non bloccano marciapiedi calpestabili',()=>{
+ const rect=[.7,-.7,2,.7],w=world({room:'mergellina',col:{c:[],r:[rect]},cameraSolidsByRect:new Map([[rect,{}]])});
+ w.collisionIndex=new CollisionGrid(w.col);
+ const me={room:'mergellina',x:0,y:0},input={x:1,y:0,run:true},walk=(p,i,dt)=>{p.x+=i.x*4.4*dt;p.y+=i.y*4.4*dt;};
+ assert.equal(w.guard(me,input,walk),input,'il server e la griglia OSM applicano il confine preciso del palazzo');
+});
+
+test('Mergellina: le collisioni rettangolari di gameplay restano bloccanti',()=>{
+ const rect=[.7,-.7,2,.7],w=world({room:'mergellina',col:{c:[],r:[rect]},cameraSolidsByRect:new Map()});
+ w.collisionIndex=new CollisionGrid(w.col);
+ const me={room:'mergellina',x:0,y:0},input={x:1,y:0,run:true},walk=(p,i,dt)=>{p.x+=i.x*4.4*dt;p.y+=i.y*4.4*dt;};
+ const guarded=w.guard(me,input,walk);assert.equal(guarded.x,0,'l’ostacolo di gameplay azzera l’asse bloccato');assert.equal(guarded.y,0);
+});
+
+test('Mergellina: la costruzione incompleta non annulla gli input di movimento',()=>{
+ const w=world({room:'mergellina',cur:{loading:true},blocked:()=>true});
+ const me={room:'mergellina',x:0,y:0},input={x:1,y:0,run:true};
+ assert.equal(w.guard(me,input,()=>{}),input,'durante il caricamento decide il server, non la griglia grafica parziale');
+ assert.equal(w.carGuard({...me,vehicle:'auto'},input),input,'anche la guida resta attiva mentre gli ostacoli vengono preparati');
+});
+
+test('Le immagini che non rispondono non possono bloccare il caricamento della città',async t=>{
+ const prior=globalThis.Image;globalThis.Image=class{set src(_value){}};t.after(()=>{if(prior)globalThis.Image=prior;else delete globalThis.Image;});
+ const w=Object.assign(Object.create(World3D.prototype),{imageLoadTimeoutMs:12,url:path=>path});
+ assert.equal(await w.img('yellow_plaster'),null,'un asset che non termina viene considerato mancante');
+ await w.preload();assert.equal(w.fac,null,'le facciate mancanti usano il fallback procedurale');
+ assert.ok(Object.values(w.imgs).every(image=>image===null),'anche le texture secondarie hanno un esito deterministico');
+});
+
+test('Il mondo 3D forza modelli umani realistici e migra la vecchia scelta stilizzata',t=>{
+ const prior=globalThis.localStorage,values=new Map([['humana-avatar2','3d']]);globalThis.localStorage={getItem:key=>values.get(key)||null,setItem:(key,value)=>values.set(key,String(value))};t.after(()=>{if(prior===undefined)delete globalThis.localStorage;else globalThis.localStorage=prior;});
+ const w=Object.assign(Object.create(World3D.prototype),{players:new Map()});assert.equal(w.avatarKind(),'real');assert.equal(values.get('humana-avatar2'),'real');w.setAvatarKind('q3d');assert.equal(values.get('humana-avatar2'),'real','una vecchia richiesta di stile viene normalizzata');
+});
+
+test('Il giocatore attende il modello umano realistico senza mostrare il vecchio avatar cartoon',async t=>{
+ quiet(t);avatarDocument(t);let finish;const w=world({mobile:true,label:()=>new THREE.Group(),blobMat:()=>new THREE.MeshBasicMaterial(),realPerson:()=>new Promise(ok=>finish=ok)});
+ w.avatar({id:'local-player',username:'Ciro',avatar:{look:0}});const e=w.players.get('local-player');assert.equal(e.body,undefined);assert.equal(e.avatarLoading,true);assert.equal(e.fallbackBody,undefined);await settle();
+ const loaded=new THREE.Group();finish({root:loaded,mixer:null,actions:{},legs:[],real:{name:'Male_Adult_11'}});await settle();
+ assert.equal(e.body,loaded,'il GLB realistico diventa il corpo attivo');assert.equal(loaded.parent,e.root);assert.equal(e.avatarLoadFailed,undefined);
+});
+
+test('Se il GLB realistico non si carica, non ricompare alcun avatar stilizzato',async t=>{
+ quiet(t);avatarDocument(t);const w=world({mobile:true,label:()=>new THREE.Group(),blobMat:()=>new THREE.MeshBasicMaterial(),realPerson:()=>Promise.resolve(null)});
+ w.avatar({id:'local-player',username:'Ciro',avatar:{look:0}});const e=w.players.get('local-player');await settle();
+ assert.equal(e.body,undefined);assert.equal(e.avatarLoadFailed,true);assert.equal(e.avatarError,'Modello realistico non disponibile');assert.equal(e.fallbackBody,undefined);
+});
 
 test('Facade detail split by architectural bays preserves the exact geometry attributes',()=>{
  const keys=['pl','bg','gl','sh','ir','dr','fl','ao'],make=()=>Object.fromEntries(keys.map(key=>[key,{p:[],u:[],c:[]} ]));
@@ -39,13 +121,13 @@ function notices(t){const list=[];globalThis.dispatchEvent=e=>{list.push(e.detai
 test('Zone graphics slower than the limit keep waiting, say so with Riprova and resume by themselves',async t=>{
  t.mock.timers.enable({apis:['setTimeout']});quiet(t);fakeDocument(t);
  let finish;const w=prepWorld(()=>new Promise(ok=>{finish=ok;})),z={room:'lungomare'};w.cur=z;
- const done=w.zonePrep(z);assert.equal(z.loading,true);assert.equal(z.stage,'grafica');assert.equal(w.preparing,1);
+ const done=w.zonePrep(z);assert.equal(z.loading,true);assert.equal(z.stage,'grafica');assert.equal(w.preparing,1);assert.equal(w.renderDuringPrep,true,'la scena continua a essere disegnata fin dal primo frame mentre Three.js compila gli shader');
  t.mock.timers.tick(9999);assert.equal(z.slow,false);t.mock.timers.tick(1);
- assert.equal(z.slow,true);assert.equal(z.error,null);assert.equal(z.loading,true);assert.equal(w.preparing,1,'ancora niente disegno');
+ assert.equal(z.slow,true);assert.equal(z.error,null);assert.equal(z.loading,true);assert.equal(w.preparing,1,'shader ancora in preparazione');assert.equal(w.renderDuringPrep,true,'dopo il limite la scena continua a renderizzare in modo progressivo');
  w.loadingStatus(z);const [text,info,button]=w.loadingUI.children;
  assert.equal(text.textContent,'La preparazione della grafica richiede più tempo del solito…');assert.equal(info.hidden,false);assert.equal(button.hidden,false);assert.equal(button.textContent,'Riprova');assert.equal(w.loadingUI.dataset.state,'loading');
  finish();await done;
- assert.equal(z.loading,false);assert.equal(z.slow,false);assert.equal(z.error,null);assert.equal(w.preparing,0);
+ assert.equal(z.loading,false);assert.equal(z.slow,false);assert.equal(z.error,null);assert.equal(w.preparing,0);assert.equal(w.renderDuringPrep,false);
  w.loadingStatus(null);assert.equal(w.loadingUI.hidden,true);
 });
 

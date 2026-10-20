@@ -32,7 +32,11 @@ export class Traffic{
    const check=(x,y,size,isBus)=>{const dx=x-q.x,dy=y-q.y,fwd=dx*fx+dy*fy,lat=Math.abs(-dx*fy+dy*fx);if(lat>1.7+size)return;
     if(fwd>0&&fwd<9+size)limit=Math.min(limit,Math.max(0,(fwd-3.2-size)*1.6));
     else if(isBus&&fwd<0&&fwd>-11)pull=1;};
-   for(const o of list)if(o.c!==c&&Math.cos(o.q.direction-h)>-.35)check(o.q.x+Math.cos(o.q.direction+Math.PI/2)*o.c.side,o.q.y+Math.sin(o.q.direction+Math.PI/2)*o.c.side,.8,false);
+   // The signal owns right-of-way between crossing approaches. Treating a
+   // perpendicular car as a following obstacle makes both approaches brake
+   // at the same junction and can lock the whole ring permanently.
+   const sameApproach=this.lights?.5:-.35;
+   for(const o of list)if(o.c!==c&&Math.cos(o.q.direction-h)>sameApproach)check(o.q.x+Math.cos(o.q.direction+Math.PI/2)*o.c.side,o.q.y+Math.sin(o.q.direction+Math.PI/2)*o.c.side,.8,false);
    if(this.lights)for(const I of INTERSECTIONS){const dx=I.x-q.x,dy=I.y-q.y,fwd=dx*fx+dy*fy;if(fwd<2||fwd>17||Math.abs(-dx*fy+dy*fx)>6)continue;const st=lightState(I,Math.abs(fx)>Math.abs(fy)?'ew':'ns',this.time);
     // linea di arresto a 6 m dal centro: col rosso ci si ferma lì, col giallo ci si ferma solo se si fa in tempo; chi è già nell'incrocio lo libera
     if(fwd>5.5&&(st==='red'||st==='yellow'&&fwd>9))limit=Math.min(limit,Math.max(0,(fwd-6)*1.5));}

@@ -98,7 +98,7 @@ export class Renderer{
   // Traffico: le auto della città si muovono sulle corsie e rispettano autobus, mezzi e persone.
   let busNow=null,traffic=[];if(me.room==='lungomare'&&!FRONT_NOW){busNow=busPosition(this.seconds());(this.traffic??=new Traffic()).update(dt,[{...busNow,bus:true},...players.filter(p=>p.room==='lungomare'&&!p.seat)]);traffic=this.traffic.entities();}
   const extra=me.room==='lungomare'?(FRONT_NOW?this.edgeFence():[{kind:'bus',...busNow},...traffic,...this.borderWalls(),...this.fences(),...this.edgeFence()]):[];
-  const keep=['slot','atm','barberchair','rack','mirror','seat'],artRoom=me.room!=='lungomare'&&this.interiorArt(me.room);const others=[...m.props.filter(p=>!artRoom||keep.includes(p.kind)).map(p=>({...p,depth:p.x+p.y})),...extra.map(e=>({...e,depth:e.depth??e.x+e.y})),...people.map(p=>({...p,kind:'player',depth:p.x+p.y+.03}))].filter(e=>visible(iso(e.x,e.y)));this.seen={m,others};
+  const keep=['slot','atm','barberchair','rack','mirror','seat'],artRoom=me.room!=='lungomare'&&this.interiorArt(me.room);const others=[...m.props.filter(p=>!artRoom||keep.includes(p.kind)).map(p=>({...p,depth:p.x+p.y})),...extra.map(e=>({...e,depth:e.depth??e.x+e.y})),...people.map(p=>({...p,kind:'player',depth:p.x+p.y+.03}))].filter(e=>visible(iso(e.x,e.y))&&!(this.hideLocalAvatar&&e.kind==='player'&&e.id===me.id));this.seen={m,others};
   // Davanti/dietro rispetto al bordo frontale reale della base del palazzo, non al centro del rettangolo.
   if(FRONT_NOW)for(const e of others)e.depth=e.y+(e.kind==='player'?.03:0);
   else for(const e of others)for(const b of builds){const order=this.frontOrder(b,e);if(order<0)e.depth=Math.min(e.depth,b.depth-.01);else if(order>0)e.depth=Math.max(e.depth,b.depth+.01);}
@@ -114,7 +114,7 @@ export class Renderer{
   if(night>.02)for(const lamp of m.props.filter(p=>p.kind==='lamp')){const q=iso(lamp.x,lamp.y);const glow=c.createRadialGradient(q.x,q.y-94,1,q.x,q.y-94,65);glow.addColorStop(0,'#ffeaa899');glow.addColorStop(1,'#ffcf6400');c.fillStyle=glow;c.fillRect(q.x-65,q.y-159,130,130);}
   if(me.room==='club'){for(let i=0;i<4;i++){const q=iso(3+i*3,7+Math.sin(this.time+i)*3);c.fillStyle=['#de42ce30','#3fffe230','#566dff30','#ffd35230'][i];c.beginPath();c.ellipse(q.x,q.y,65,30,0,0,7);c.fill();}}
   // Etichette dei giocatori sopra a tutto, come nell'HUD di riferimento.
-  for(const p of players){const pos=iso(p.x,p.y);if(visible(pos))this.overlay(c,p,me,pos);}
+  for(const p of players){if(this.hideLocalAvatar&&p.id===me.id)continue;const pos=iso(p.x,p.y);if(visible(pos))this.overlay(c,p,me,pos);}
   c.restore();
  }
  // Bordo frontale (sinistro→frontale→destro) della base in coordinate schermo: -1 dietro, 1 davanti, 0 lontano.
@@ -263,6 +263,8 @@ export class Renderer{
    else if(front){c.strokeStyle=st===1?'#f4f1ea':k;c.lineWidth=st===1?2.5:1.5;c.setLineDash(st===1?[2,2]:[]);c.beginPath();c.arc(x,y-62,8,.2*Math.PI,.8*Math.PI);c.stroke();c.setLineDash([]);if(st===2)E(x,y-53,2.5,2.5,k);}}
   if(w.bag){const k=w.bag.color,st=w.bag.style,side=sx>=0?1:-1;if(st===0){if(front){c.strokeStyle=shade(k,-.2);c.lineWidth=2.5;c.beginPath();c.moveTo(x-7,y-62);c.lineTo(x-8,y-40);c.moveTo(x+7,y-62);c.lineTo(x+8,y-40);c.stroke();}else Rr(x-11,y-64,22,24,k,5);}
    else{c.strokeStyle=shade(k,-.25);c.lineWidth=2;if(st!==2&&st!==4){c.beginPath();c.moveTo(x-side*8,y-62);c.lineTo(x+side*12,y-38);c.stroke();}const sz={1:[11,9],2:[14,6],3:[13,14],4:[10,7],5:[14,10],6:[20,12]}[st]||[11,9];Rr(x+side*12-sz[0]/2,y-(st===2?44:38),sz[0],sz[1],k,3);}}
+  if(w.mask&&front){const k=w.mask.color,st=w.mask.style;Rr(x-9,y-63,18,st===2?11:7,k,3);if(st===1){Rr(x-8,y-69,16,5,k,3);}}
+  if(w.gloves){const k=w.gloves.color;E(x-14,y-39,4,5,k);E(x+14,y-39,4,5,k);}
   if(w.watch&&front)Rr(x+(sx>=0?13:-17),y-42,4,3,w.watch.color,1);}
  overlay(c,p,me,pos){
   const top=pos.y-112;const box=this.label(c,p.username,pos.x,top,p.id===me.id?'#baf3ff':'#ffffff','flag');

@@ -1,5 +1,5 @@
-import {turnToward} from './lanes.js';import {NAPOLI,napoliStand,napoliSpawn,napoliPlaces} from './napoli.js';import {STREETS,surface,PAINT,WORLD_SIZE,RESIDENCES,stretch,CITY_SIZE,VILLA_LOTS,VILLA_PARK,TRACK_IN,BUS_STOPS,inPool,fenceBlocked} from './district.js';
-import {ART_K,artName} from './art.js';import {MODE,F,frontBuildings,frontProps,FRONT_SPAWN,isRail,isStair,ROWS} from './front.js';export {MODE,F,isStair,ROWS};import {VEHICLE} from './catalog.js';export {VEHICLE,artName};
+import {turnToward} from './lanes.js';import {NAPOLI,napoliStand,napoliVehicleStand,napoliNearestRoadPoint,napoliSpawn,napoliPlaces} from './napoli.js';import {STREETS,surface,PAINT,WORLD_SIZE,RESIDENCES,stretch,CITY_SIZE,VILLA_LOTS,VILLA_PARK,TRACK_IN,BUS_STOPS,inPool,fenceBlocked} from './district.js';
+import {ART_K,artName} from './art.js';import {MODE,F,frontBuildings,frontProps,FRONT_SPAWN,isRail,isStair,ROWS} from './front.js';export {MODE,F,isStair,ROWS};import {VEHICLE,canVehicleReverse} from './catalog.js';export {VEHICLE,artName};
 // Coordinate logiche in metri; rendering isometrico indipendente dalla fisica.
 export const CHUNK_SIZE=8;
 export const VEHICLE_INTERACTION_RANGE=5;
@@ -128,7 +128,7 @@ for(const b of BUILDINGS.filter(b=>b.enterable!==false)){
  else if(b.interior==='casino'){props.length=0;for(let i=0;i<6;i++)props.push({id:'slot'+i,kind:'slot',x:3+i*2,y:3,r:.45});for(let i=0;i<4;i++)props.push({id:'slotb'+i,kind:'slot',x:4+i*2.6,y:8,r:.45});props.push({id:'cassa',kind:'counter',x:13,y:10,r:1.2});}
  else if(b.interior==='fashion'){props.length=0;for(let i=0;i<4;i++)for(let j=0;j<2;j++)props.push({id:`rack${i}-${j}`,kind:'rack',x:3+i*3.3,y:4+j*4,r:.6});props.push({id:'mirror1',kind:'mirror',x:14,y:3,r:.4},{id:'mirror2',kind:'mirror',x:2,y:11,r:.4},{id:'cassa',kind:'counter',x:13,y:11,r:1.2});}
  else if(b.interior==='barber'){props.length=0;for(let i=0;i<3;i++)props.push({id:'chair'+i,kind:'barberchair',x:4+i*4,y:4,r:.5});props.push({id:'wait',kind:'bench',x:5,y:10,r:.65},{id:'plant',kind:'plant',x:13,y:10,r:.35});}
- else if(b.interior==='villa'){props.length=0;props.push({id:'sofa',kind:'sofa',x:4,y:5,r:.8},{id:'bed',kind:'bed',x:12,y:4,r:.8},{id:'picture',kind:'picture',x:8,y:2,r:.3},{id:'table',kind:'table',x:8,y:8,r:.6},{id:'seat',kind:'seat',x:9.1,y:8,r:.2},{id:'seat2',kind:'seat',x:6.9,y:8,r:.2},{id:'plant',kind:'plant',x:2,y:10,r:.35},{id:'plant2',kind:'plant',x:14,y:10,r:.35},{id:'lamp',kind:'lamp',x:2,y:2,r:.2});}
+  else if(b.interior==='villa'){props.length=0;props.push({id:'sofa',kind:'sofa',x:4,y:5,r:.8},{id:'bed',kind:'bed',x:12,y:4,r:.8},{id:'picture',kind:'picture',x:8,y:2,r:.3},{id:'table',kind:'table',x:8,y:8,r:.6},{id:'seat',kind:'seat',x:9.1,y:8,r:.2},{id:'seat2',kind:'seat',x:6.9,y:8,r:.2},{id:'plant',kind:'plant',x:2,y:10,r:.35},{id:'plant2',kind:'plant',x:14,y:10,r:.35},{id:'lamp',kind:'lamp',x:2,y:2,r:.2},{id:'hangar',kind:'hangar',x:8,y:11.2,r:.35});}
  else if(b.interior==='mall')props.push({id:'counter2',kind:'counter',x:3,y:7,r:1.4},{id:'counter3',kind:'counter',x:13,y:7,r:1.4},{id:'mall-plant',kind:'plant',x:8,y:8,r:.35},{id:'mall-bench',kind:'bench',x:8,y:10,r:.65});
  else for(let i=0;i<4;i++){
   const x=4+(i%2)*7,y=6+Math.floor(i/2)*4;
@@ -137,10 +137,11 @@ for(const b of BUILDINGS.filter(b=>b.enterable!==false)){
  MAPS[b.id]={id:b.id,name:b.name,bounds:{x:0,y:0,w:16,h:14},spawn:{x:8,y:12},buildings:[],props};
 }
 MAPS['ospiti-villa']={id:'ospiti-villa',name:'Villa (ospiti)',bounds:{x:0,y:0,w:16,h:14},spawn:{x:8,y:12},buildings:[],props:[{id:'sofa',kind:'sofa',x:4,y:5,r:.8},{id:'bed',kind:'bed',x:12,y:4,r:.8},{id:'picture',kind:'picture',x:8,y:2,r:.3},{id:'table',kind:'table',x:8,y:8,r:.6},{id:'seat',kind:'seat',x:9.1,y:8,r:.2},{id:'seat2',kind:'seat',x:6.9,y:8,r:.2},{id:'plant',kind:'plant',x:2,y:10,r:.35},{id:'plant2',kind:'plant',x:14,y:10,r:.35},{id:'lamp',kind:'lamp',x:2,y:2,r:.2}]};
+export function registerPersonalVilla(owner){const key=String(owner||'');if(!/^[\w-]{1,80}$/.test(key))throw new Error('Proprietario villa non valido');const id='villa:'+key;if(MAPS[id])return MAPS[id];const base=MAPS['ospiti-villa'];return MAPS[id]={...base,id,name:'Villa privata',privateOwner:key,props:[...base.props.map(p=>({...p})),{id:'hangar',kind:'hangar',x:8,y:11.2,r:.35}]};}
 // Primo piano del centro commerciale: esiste solo dove viene registrato (server e client del 3D). Si sale e si scende con la scala mobile.
 let mallUp=false;export function registerMallFloor(){if(mallUp)return;mallUp=true;MAPS.mall2={id:'mall2',name:'Centro Commerciale Golfo · primo piano',bounds:{x:0,y:0,w:16,h:14},spawn:{x:13,y:10},buildings:[],props:[{id:'c1',kind:'counter',x:8,y:3,r:1.4},{id:'c2',kind:'counter',x:3,y:7,r:1.4},{id:'c3',kind:'counter',x:13,y:6,r:1.4},{id:'p1',kind:'plant',x:2,y:11,r:.35},{id:'b1',kind:'bench',x:7,y:10,r:.65}]};}
 const STAIR={x:14,y:11.2};
-export function doors(room){if(room==='mergellina')return napoliPlaces().doors;if(room==='mall2')return [{id:'down',name:'Scendi al piano terra',x:STAIR.x,y:STAIR.y,to:'mall',spawn:{x:12.6,y:10.4}}];if(room==='mall'&&mallUp)return [{id:'exit',name:'Esci sul Lungomare',x:8,y:13,to:'lungomare'},{id:'up',name:'Sali al primo piano',x:STAIR.x,y:STAIR.y,to:'mall2',spawn:{x:12.6,y:10.4}}];return room==='lungomare'?BUILDINGS.filter(b=>b.enterable!==false).map(b=>({id:b.id,name:b.name,x:b.door.x,y:b.door.y,exitX:b.door.exitX,exitY:b.door.exitY,to:b.id})):[{id:'exit',name:'Esci sul Lungomare',x:8,y:13,to:'lungomare'}];}
+export function doors(room){if(room==='mergellina')return napoliPlaces().doors;if(room==='mall2')return [{id:'down',name:'Scendi al piano terra',x:STAIR.x,y:STAIR.y,to:'mall',spawn:{x:12.6,y:10.4}}];if(room==='mall'&&mallUp)return [{id:'exit',name:'Esci sul Lungomare',x:8,y:13,to:'lungomare'},{id:'up',name:'Sali al primo piano',x:STAIR.x,y:STAIR.y,to:'mall2',spawn:{x:12.6,y:10.4}}];if(room?.startsWith('villa:'))return [{id:'exit',name:'Esci a Mergellina',x:8,y:13,to:'mergellina'}];return room==='lungomare'?BUILDINGS.filter(b=>b.enterable!==false).map(b=>({id:b.id,name:b.name,x:b.door.x,y:b.door.y,exitX:b.door.exitX,exitY:b.door.exitY,to:b.id})):[{id:'exit',name:'Esci sul Lungomare',x:8,y:13,to:'lungomare'}];}
 // Rettangoli [x0,y0,x1,y1] in più che bloccano il passo sul Lungomare: li riempie solo HUMANA life 3D (arena paintball). Nel 2D resta vuoto.
 export const EXTRA_BLOCKS=[];
 export function canStand(room,x,y,r=.25){if(room==='mergellina')return napoliStand(x,y,r);
@@ -173,6 +174,7 @@ export function step(p,input,dt){
  p.moving=Math.hypot(p.x-oldX,p.y-oldY)>.001;p.running=!!input.run&&p.moving;
  if(p.moving)p.direction=Math.atan2(y,x);
 }
+function canVehicleStand(p,x,y,vehicle){if(p.room!=='mergellina')return canStand(p.room,x,y);const id=String(vehicle?.base||vehicle?.id||p.vehicle||''),carLike=/auto|car|sedan|suv|furgone|cabrio|city|gt/i.test(id),clearance=carLike ? .95 : .55;return napoliVehicleStand(x,y,clearance,p.x,p.y);}
 // Guida dei veicoli: il mezzo ha una sua direzione (heading) che ruota gradualmente verso quella richiesta,
 // accelera e frena con dolcezza e si muove sempre lungo la propria direzione (mai di traverso).
 // Sulle strade dritte la direzione si allinea all'asse della strada e il mezzo scivola al centro della corsia di destra.
@@ -184,7 +186,7 @@ function drive(p,x,y,speed,dt,v,rev,controls){
  if(!Number.isFinite(speed)||speed<0)speed=0;
  const vb=v.base||v.id,two=vb==='bici'||vb==='monopattino'||vb==='scooter';if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=Number.isFinite(p.vel)?p.vel:0;
  if(controls?.drive===true){
-  const clamp=(n,a,b)=>Math.max(a,Math.min(b,Number(n)||0)),steer=clamp(controls.steer,-1,1),turn=Math.sign(steer)*Math.pow(Math.abs(steer),1.18),throttle=clamp(controls.throttle,0,1),brake=clamp(controls.brake,0,1),reverseAllowed=['auto','cabrio','furgone','scooter'].includes(vb);
+  const clamp=(n,a,b)=>Math.max(a,Math.min(b,Number(n)||0)),steer=clamp(controls.steer,-1,1),turn=Math.sign(steer)*Math.pow(Math.abs(steer),1.18),throttle=clamp(controls.throttle,0,1),brake=clamp(controls.brake,0,1),vehicleId=String(v.id||p.vehicle),reverseAllowed=canVehicleReverse(vehicleId);
   p.steer=steer;
   const target=brake>.01?(reverseAllowed&&Math.abs(p.vel)<.35?-Math.min(two?1.2:2.2,Math.max(two?.65:1.1,speed*.18))*brake:0):speed*throttle;
   const response=brake>.01?11:throttle>.01?(two?6.4:4.4):3.6;
@@ -194,18 +196,23 @@ function drive(p,x,y,speed,dt,v,rev,controls){
   p.heading=Math.atan2(Math.sin(p.heading),Math.cos(p.heading));p.direction=p.heading;
   if(p.room==='lungomare'&&throttle>.01&&Math.abs(steer)<.08)laneAssist(p,dt);p.direction=p.heading;
   const dx=Math.cos(p.heading)*p.vel*dt,dy=Math.sin(p.heading)*p.vel*dt,oldX=p.x,oldY=p.y;
-  if(canStand(p.room,p.x+dx,p.y+dy)){p.x+=dx;p.y+=dy;}else p.vel=0;
+  if(canVehicleStand(p,p.x+dx,p.y+dy,v)){p.x+=dx;p.y+=dy;}else{p.vel=0;
+   // Se la moto si è fermata appena fuori dalla carreggiata, una piccola correzione
+   // dello sterzo la orienta verso l’asfalto. Non sposta il mezzo e non prevale
+   // sullo sterzo manuale: evita solo che accelerare dritto contro il bordo la lasci bloccata.
+   if(p.room==='mergellina'&&throttle>.01&&Math.abs(steer)<.18){const road=napoliNearestRoadPoint(p.x,p.y);if(road&&road.distance>.2){const towardRoad=Math.atan2(road.y-p.y,road.x-p.x);p.heading=turnToward(p.heading,towardRoad,Math.min(2.1,yawRate*1.35)*dt);p.direction=p.heading;}}
+  }
   p.moving=Math.hypot(p.x-oldX,p.y-oldY)>.001;p.running=false;return;
  }
  p.steer=0;const want=Math.hypot(x,y)>.05;const rate=(two?3.6:2.6)*dt;
- if(rev&&want){if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=(p.vel||0)+Math.max(-9*dt,Math.min(5*dt,-speed*.35-(p.vel||0)));const bx=Math.cos(p.heading)*p.vel*dt,by=Math.sin(p.heading)*p.vel*dt,ox=p.x,oy=p.y;if(canStand(p.room,p.x+bx,p.y+by)){p.x+=bx;p.y+=by;}else p.vel=0;p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.running=false;p.direction=p.heading;return;}
+ if(rev&&want){if(!Number.isFinite(p.heading))p.heading=p.direction||0;p.vel=(p.vel||0)+Math.max(-9*dt,Math.min(5*dt,-speed*.35-(p.vel||0)));const bx=Math.cos(p.heading)*p.vel*dt,by=Math.sin(p.heading)*p.vel*dt,ox=p.x,oy=p.y;if(canVehicleStand(p,p.x+bx,p.y+by,v)){p.x+=bx;p.y+=by;}else p.vel=0;p.moving=Math.hypot(p.x-ox,p.y-oy)>.001;p.running=false;p.direction=p.heading;return;}
  let diff=0;if(want){const d=Math.atan2(y,x);diff=Math.abs(Math.atan2(Math.sin(d-p.heading),Math.cos(d-p.heading)));p.heading=turnToward(p.heading,d,rate);}
  const target=want?speed*(1-.55*Math.min(1,diff/(Math.PI*.6))):0;p.vel+=Math.max(-9*dt,Math.min((two?7:5)*dt,target-p.vel));
  if(p.room==='lungomare'&&want&&diff<.3)laneAssist(p,dt);
  const dx=Math.cos(p.heading)*p.vel*dt,dy=Math.sin(p.heading)*p.vel*dt,oldX=p.x,oldY=p.y;
- if(canStand(p.room,p.x+dx,p.y+dy)){p.x+=dx;p.y+=dy;}
- else if(dx&&canStand(p.room,p.x+dx,p.y)){p.x+=dx;p.vel*=.6;}
- else if(dy&&canStand(p.room,p.x,p.y+dy)){p.y+=dy;p.vel*=.6;}
+ if(canVehicleStand(p,p.x+dx,p.y+dy,v)){p.x+=dx;p.y+=dy;}
+ else if(dx&&canVehicleStand(p,p.x+dx,p.y,v)){p.x+=dx;p.vel*=.6;}
+ else if(dy&&canVehicleStand(p,p.x,p.y+dy,v)){p.y+=dy;p.vel*=.6;}
  else p.vel=0;
  p.moving=Math.hypot(p.x-oldX,p.y-oldY)>.001;p.running=false;p.direction=p.heading;}
 // Strade dritte: allinea la direzione all'asse e centra il mezzo nella corsia di destra.
